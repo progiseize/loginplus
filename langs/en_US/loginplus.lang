@@ -1,176 +1,135 @@
-# <LoginPlus>
-# Copyright (C) 2022 ProgiSeize <contact@progiseize.fr>
-
-# This program and files/directory inner it is free software: you can 
-# redistribute it and/or modify it under the terms of the 
-# GNU Affero General Public License (AGPL) as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU AGPL for more details.
-# You should have received a copy of the GNU AGPL
-# along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
-
-# Dolibarr language file - fr_FR - loginplus
-
-Module300316Name = LoginPlus
-
-# TABS
-loginplus_head_customlogin = Apparence Authentification
-loginplus_head_loginmsg = Messages d'accueil
-loginplus_head_doc = Documentation
-
-# PAGE OPTIONS
-loginplus_optionp_title = Modifier la page d'authentification
-loginplus_optionp_success = Configuration sauvegardée
-loginplus_optionp_error = Une erreur est survenue
-loginplus_optionp_norights = Vous ne possédez pas les droits nécéssaires
-loginplus_optionp_nodeladmin = Vous ne pouvez pas supprimer le message d'un administrateur
-loginplus_optionp_copytpl_error = Le template passwordforgotten n'a pas pu être copié vers le thème
-
-
-# COLONNES OPTIONS
-loginplus_option_coltitle_param = Paramètre
-loginplus_option_coltitle_description = Description
-loginplus_option_coltitle_value = Valeur
-
-loginplus_option_activatelogintpl = Activer
-loginplus_option_activatelogintpl_desc = Active les options ci-dessous sur la page d'authentification
-
-loginplus_option_image_title = Choisissez une image
-loginplus_option_image_no_use = Ne pas utiliser d'image
-
-# OPTIONS ARRIERE PLAN
-loginplus_option_background = Options Arrière-plan
-loginplus_option_background_color = Couleur d'arrière-plan
-loginplus_option_background_color_desc = Couleur du fond de la page
-loginplus_option_background_image = Image d'arrière-plan
-loginplus_option_background_image_desc = Image utilisée en arrière plan (voir documentation pour ajouter des images)
-loginplus_option_background_image_none = Aucune image selectionnée
-loginplus_option_background_image_choose = Choisir une image
-loginplus_option_background_image_opacity = Opacité de l'image
-loginplus_option_background_image_opacity_desc = Transparence de l'image d'arrière-plan (Valeur entre 0 et 100)
-
-# OPTIONS FORMES
-loginplus_option_shape = Forme en arrière plan
-loginplus_option_shape_path = Type de forme
-loginplus_option_shape_path_desc = Consulter la documentation pour avoir un aperçu des formes possibles
-loginplus_option_shape_color = Couleur de la forme
-loginplus_option_shape_color_desc = Ne sera pas visible si l'option "Forme en arrière-plan" est vide
-loginplus_option_shape_opacity = Opacité de la forme
-loginplus_option_shape_opacity_desc = Transparence de la forme (Valeur entre 0 et 100)
-
-# NOMS DES FORMES
-loginplus_shape_none = Aucune
-loginplus_shape_rectangle = Rectangles
-loginplus_shape_split = Coupé en 2
-loginplus_shape_split_inv = Coupé en 2 - Inversé
-loginplus_shape_split_plus = Coupé en 2 - Plus grand
-loginplus_shape_split_minus = Coupé en 2 - Plus petit
-loginplus_shape_corner = Coins complets
-loginplus_shape_corner_tl = Haut - Gauche
-loginplus_shape_corner_tr = Haut - Droite
-loginplus_shape_corner_bl = Bas - Gauche
-loginplus_shape_corner_br = Bas - Droite
-loginplus_shape_semicorner = Demi-Coins
-loginplus_shape_semicorner_tl = Haut - Gauche
-loginplus_shape_semicorner_tr = Haut - Droite
-loginplus_shape_semicorner_bl = Bas - Gauche
-loginplus_shape_semicorner_br = Bas - Droite
-loginplus_shape_diagonal = Diagonales
-loginplus_shape_diagonal_asc = Diagonale - Ascendante
-loginplus_shape_diagonal_desc = Diagonale - Descendante
-loginplus_shape_rounded = Arrondis
-loginplus_shape_rounded_bot = Ovale Bas
-
-# OPTIONS LOGINBOX
-loginplus_option_loginbox = Paramètres Boite "LOGIN"
-loginplus_option_loginbox_iconcolor = Couleurs des icônes
-loginplus_option_loginbox_maincolor = Couleur principale
-loginplus_option_loginbox_maincolor_desc = Couleur du texte et du bouton
-loginplus_option_loginbox_secondcolor = Couleur secondaire
-loginplus_option_loginbox_secondcolor_desc = Couleur des icônes, du texte saisi et de survol du bouton et des liens
-
-# OPTIONS SIDEBOX
-loginplus_option_sidebox = Paramètres Boite "IMAGE/TEXTE"
-loginplus_option_sidebox_show = Afficher boite double
-loginplus_option_sidebox_show_desc = Affiche une deuxième boite à coté du login afin d'afficher un texte et/ou une image
-loginplus_option_sidebox_color = Couleur d'arrière-plan
-loginplus_option_sidebox_color_desc = Couleur de fond de la nouvelle "boite"
-loginplus_option_sidebox_image = Image d'arrière-plan
-loginplus_option_sidebox_image_desc = Image utilisée en arrière plan (voir documentation pour ajouter des images)
-loginplus_option_sidebox_image_opacity = Opacité de l'image
-loginplus_option_sidebox_image_opacity_desc = Transparence de l'image (Valeur entre 0 et 100)
-loginplus_option_sidebox_title = Texte titre
-loginplus_option_sidebox_title_color = Couleur du titre
-loginplus_option_sidebox_content = Texte phrase
-loginplus_option_sidebox_content_color = Couleur de la phrase
-loginplus_option_sidebox_contentempty = Laissez vide pour ne pas afficher
-
-# OPTIONS COPYRIGHT
-loginplus_option_copyright = Affichage du copyright
-loginplus_option_copyright_title = Texte du copyright
-loginplus_option_copyright_title_desc = Les thèmes prédéfinis sont réalisés avec des images libres de droits et nécéssitent un copyright. Pour insérer un lien: [le texte de mon lien] - Laissez vide pour ne pas afficher
-loginplus_option_copyright_link = Lien à insérer 
-loginplus_option_copyright_link_desc = Insérer une url commençant par https://
-loginplus_option_copyright_color = Couleur
-loginplus_option_copyright_color_desc = Couleur du copyright
-
-# DOC
-loginplus_optiontitle_doc = Documentation LoginPlus
-loginplus_option_themes = Choisissez un modèle à appliquer
-loginplus_doc_modeles = Modèles prédéfinis
-loginplus_doc_modeles_desc = Les modèles vont appliquer des paramètres prédéfinis. Vous pourrez bien sûr les modifier par la suite à votre guise.<br/> Les images utilisées sont à titre d'exemple. Vous devez suivre la procédure ci-dessous pour afficher des images.
-loginplus_doc_showImages = Afficher une image
-loginplus_doc_showImages_steps = Afin d'afficher une image, plusieurs étapes sont nécéssaires.
-loginplus_doc_showImages_step_1 = 1/ Dans l'onglet Dolibarr, cliquez sur "Documents"
-loginplus_doc_showImages_step_2 = 2/ Dans l'arborescence manuelle, sélectionnez le dossier loginplus et uploadez votre image.
-loginplus_doc_showImages_step_3 = 3/ Lorsque celle-ci est uploadée, cliquez sur le petit icone <span class="fas fa-pencil-alt" title="Modifier"></span>, puis sur éditer.
-loginplus_doc_showImages_step_4 = 4/ Activez l'option "Fichier partagé via un lien" puis enregistrez.
-loginplus_doc_showImages_step_5 = 5/ L'image devrait être visible dans le selecteur d'images.
-
-#MSG
-loginplus_msgTitle = Titre
-loginplus_msgTitle_desc = Donnez un titre à votre message
-loginplus_msgContent = Message
-loginplus_msgContent_desc = Saisissez votre message
-loginplus_msgDate = Date de création
-loginplus_msgDateExpiration = Date d'expiration
-loginplus_msgDateExpiration_desc = Date à laquelle la notification ne sera plus affichée (Date non incluse)
-loginplus_msgAuthor = Auteur
-loginplus_msgTo = Destinataire(s)
-loginplus_msgIsRead = Message Lu
-loginplus_msgNbView = Nombre d'affichages
-loginplus_msg_destgroups = Choisissez le(s) groupe(s) d'utilisateurs à qui vous voulez faire apparaitre ce message
-loginplus_msg_desttags = Choisissez le(s) tag(s) d'utilisateurs à qui vous voulez faire apparaitre ce message
-loginplus_msg_destusers = Choisissez le(s) utilisateur(s) à qui vous voulez faire apparaitre ce message
-loginplus_msgForceView = Forcer l'affichage à la connexion
-loginplus_msgForceView_desc = Par défaut les messages s'affichent jusqu'à être lus. <br>Ce paramètre permet de l'afficher à chaque connexion, jusqu'à expiration
-
-loginplus_msgAdd_users = Ajouter un message pour des utilisateurs spécifiques
-loginplus_msgAdd_groups = Ajouter un message pour un groupe d'utilisateurs
-loginplus_msgAdd_tags = Ajouter un message pour un catégorie d'utilisateurs
-loginplus_msgAdd_all = Ajouter un message pour tous les utilisateurs
-
-loginplus_msgTo_all = Tout le monde
-loginplus_msgTo_groups = Message pour le(s) groupe(s):
-loginplus_msgTo_tags = Message pour le(s) catégorie(s):
-loginplus_msgTo_users = Message pour le(s) utilisateur(s):
-
-loginplus_msg_update = Modifier un message
-
-loginplus_msgerror_emptyType = Vous devez choisir un type de message
-loginplus_msgerror_emptyTitle = Vous devez choisir saisir un titre
-loginplus_msgerror_emptyMsg = Vous devez choisir saisir un message
-loginplus_msgerror_emptyDate = Vous devez choisir saisir une date d'expiration
-loginplus_msgerror_emptyDest = Vous devez choisir un destinataire
-loginplus_msgerror_unknownId = Identifiant inconnu
-loginplus_msgerror_add = Erreur lors de l'ajout du message
-loginplus_msgerror_update = Erreur lors de la mise à jour du message
-
-loginplus_msg_confirmDelete = Êtes vous sûr(e) de vouloir supprimer ce message ?
-loginplus_msg_isDelete = Message supprimé
-loginplus_msg_isAdded = Message ajouté
-loginplus_msg_isUpdated = Message modifié
+Module300316Name=LoginPlus
+loginplus_head_customlogin=Apparence Authentification
+loginplus_head_loginmsg=Messages d'accueil
+loginplus_head_doc=Documentation
+loginplus_optionp_title=Modifier la page d'authentification
+loginplus_optionp_success=Configuration sauvegardée
+loginplus_optionp_error=Une erreur est survenue
+loginplus_optionp_norights=Vous ne possédez pas les droits nécéssaires
+loginplus_optionp_nodeladmin=Vous ne pouvez pas supprimer le message d'un administrateur
+loginplus_optionp_copytpl_error=Le template passwordforgotten n'a pas pu être copié vers le thème
+loginplus_option_coltitle_param=Paramètre
+loginplus_option_coltitle_description=Description
+loginplus_option_coltitle_value=Valeur
+loginplus_option_activatelogintpl=Activer
+loginplus_option_activatelogintpl_desc=Active les options ci-dessous sur la page d'authentification
+loginplus_option_image_title=Choisissez une image
+loginplus_option_image_no_use=Ne pas utiliser d'image
+loginplus_option_background=Options Arrière-plan
+loginplus_option_background_color=Couleur d'arrière-plan
+loginplus_option_background_color_desc=Couleur du fond de la page
+loginplus_option_background_image=Image d'arrière-plan
+loginplus_option_background_image_desc=Image utilisée en arrière plan (voir documentation pour ajouter des images)
+loginplus_option_background_image_none=Aucune image selectionnée
+loginplus_option_background_image_choose=Choisir une image
+loginplus_option_background_image_opacity=Opacité de l'image
+loginplus_option_background_image_opacity_desc=Transparence de l'image d'arrière-plan (Valeur entre 0 et 100)
+loginplus_option_shape=Forme en arrière plan
+loginplus_option_shape_path=Type de forme
+loginplus_option_shape_path_desc=Consulter la documentation pour avoir un aperçu des formes possibles
+loginplus_option_shape_color=Couleur de la forme
+loginplus_option_shape_color_desc=Ne sera pas visible si l'option "Forme en arrière-plan" est vide
+loginplus_option_shape_opacity=Opacité de la forme
+loginplus_option_shape_opacity_desc=Transparence de la forme (Valeur entre 0 et 100)
+loginplus_shape_none=Aucune
+loginplus_shape_rectangle=Rectangles
+loginplus_shape_split=Coupé en 2
+loginplus_shape_split_inv=Coupé en 2 - Inversé
+loginplus_shape_split_plus=Coupé en 2 - Plus grand
+loginplus_shape_split_minus=Coupé en 2 - Plus petit
+loginplus_shape_corner=Coins complets
+loginplus_shape_corner_tl=Haut - Gauche
+loginplus_shape_corner_tr=Haut - Droite
+loginplus_shape_corner_bl=Bas - Gauche
+loginplus_shape_corner_br=Bas - Droite
+loginplus_shape_semicorner=Demi-Coins
+loginplus_shape_semicorner_tl=Haut - Gauche
+loginplus_shape_semicorner_tr=Haut - Droite
+loginplus_shape_semicorner_bl=Bas - Gauche
+loginplus_shape_semicorner_br=Bas - Droite
+loginplus_shape_diagonal=Diagonales
+loginplus_shape_diagonal_asc=Diagonale - Ascendante
+loginplus_shape_diagonal_desc=Diagonale - Descendante
+loginplus_shape_rounded=Arrondis
+loginplus_shape_rounded_bot=Ovale Bas
+loginplus_option_loginbox=Paramètres Boite "LOGIN"
+loginplus_option_loginbox_iconcolor=Couleurs des icônes
+loginplus_option_loginbox_maincolor=Couleur principale
+loginplus_option_loginbox_maincolor_desc=Couleur du texte et du bouton
+loginplus_option_loginbox_secondcolor=Couleur secondaire
+loginplus_option_loginbox_secondcolor_desc=Couleur des icônes, du texte saisi et de survol du bouton et des liens
+loginplus_option_sidebox=Paramètres Boite "IMAGE/TEXTE"
+loginplus_option_sidebox_show=Afficher boite double
+loginplus_option_sidebox_show_desc=Affiche une deuxième boite à coté du login afin d'afficher un texte et/ou une image
+loginplus_option_sidebox_color=Couleur d'arrière-plan
+loginplus_option_sidebox_color_desc=Couleur de fond de la nouvelle "boite"
+loginplus_option_sidebox_image=Image d'arrière-plan
+loginplus_option_sidebox_image_desc=Image utilisée en arrière plan (voir documentation pour ajouter des images)
+loginplus_option_sidebox_image_opacity=Opacité de l'image
+loginplus_option_sidebox_image_opacity_desc=Transparence de l'image (Valeur entre 0 et 100)
+loginplus_option_sidebox_title=Texte titre
+loginplus_option_sidebox_title_color=Couleur du titre
+loginplus_option_sidebox_content=Texte phrase
+loginplus_option_sidebox_content_color=Couleur de la phrase
+loginplus_option_sidebox_contentempty=Laissez vide pour ne pas afficher
+loginplus_option_copyright=Affichage du copyright
+loginplus_option_copyright_title=Texte du copyright
+loginplus_option_copyright_title_desc=Les thèmes prédéfinis sont réalisés avec des images libres de droits et nécéssitent un copyright. Pour insérer un lien: [le texte de mon lien] - Laissez vide pour ne pas afficher
+loginplus_option_copyright_link=Lien à insérer
+loginplus_option_copyright_link_desc=Insérer une url commençant par https://
+loginplus_option_copyright_color=Couleur
+loginplus_option_copyright_color_desc=Couleur du copyright
+loginplus_optiontitle_doc=Documentation LoginPlus
+loginplus_option_themes=Choisissez un modèle à appliquer
+loginplus_doc_modeles=Modèles prédéfinis
+loginplus_doc_modeles_desc=Les modèles vont appliquer des paramètres prédéfinis. Vous pourrez bien sûr les modifier par la suite à votre guise.<br/> Les images utilisées sont à titre d'exemple. Vous devez suivre la procédure ci-dessous pour afficher des images.
+loginplus_doc_showImages=Afficher une image
+loginplus_doc_showImages_steps=Afin d'afficher une image, plusieurs étapes sont nécéssaires.
+loginplus_doc_showImages_step_1=1/ Dans l'onglet Dolibarr, cliquez sur "Documents"
+loginplus_doc_showImages_step_2=2/ Dans l'arborescence manuelle, sélectionnez le dossier loginplus et uploadez votre image.
+loginplus_doc_showImages_step_3=3/ Lorsque celle-ci est uploadée, cliquez sur le petit icone <span class="fas fa-pencil-alt" title="Modifier"></span>, puis sur éditer.
+loginplus_doc_showImages_step_4=4/ Activez l'option "Fichier partagé via un lien" puis enregistrez.
+loginplus_doc_showImages_step_5=5/ L'image devrait être visible dans le selecteur d'images.
+loginplus_msgTitle=Titre
+loginplus_msgTitle_desc=Donnez un titre à votre message
+loginplus_msgContent=Message
+loginplus_msgContent_desc=Saisissez votre message
+loginplus_msgDate=Date de création
+loginplus_msgDateExpiration=Date d'expiration
+loginplus_msgDateExpiration_desc=Date à laquelle la notification ne sera plus affichée (Date non incluse)
+loginplus_msgAuthor=Auteur
+loginplus_msgTo=Destinataire(s)
+loginplus_msgIsRead=Message Lu
+loginplus_msgNbView=Nombre d'affichages
+loginplus_msg_destgroups=Choisissez le(s) groupe(s) d'utilisateurs à qui vous voulez faire apparaitre ce message
+loginplus_msg_desttags=Choisissez le(s) tag(s) d'utilisateurs à qui vous voulez faire apparaitre ce message
+loginplus_msg_destusers=Choisissez le(s) utilisateur(s) à qui vous voulez faire apparaitre ce message
+loginplus_msgForceView=Forcer l'affichage à la connexion
+loginplus_msgForceView_desc=Par défaut les messages s'affichent jusqu'à être lus. <br>Ce paramètre permet de l'afficher à chaque connexion, jusqu'à expiration
+loginplus_msgAdd_users=Ajouter un message pour des utilisateurs spécifiques
+loginplus_msgAdd_groups=Ajouter un message pour un groupe d'utilisateurs
+loginplus_msgAdd_tags=Ajouter un message pour un catégorie d'utilisateurs
+loginplus_msgAdd_all=Ajouter un message pour tous les utilisateurs
+loginplus_msgTo_all=Tout le monde
+loginplus_msgTo_groups=Message pour le(s) groupe(s):
+loginplus_msgTo_tags=Message pour le(s) catégorie(s):
+loginplus_msgTo_users=Message pour le(s) utilisateur(s):
+loginplus_msg_update=Modifier un message
+loginplus_msgerror_emptyType=Vous devez choisir un type de message
+loginplus_msgerror_emptyTitle=Vous devez choisir saisir un titre
+loginplus_msgerror_emptyMsg=Vous devez choisir saisir un message
+loginplus_msgerror_emptyDate=Vous devez choisir saisir une date d'expiration
+loginplus_msgerror_emptyDest=Vous devez choisir un destinataire
+loginplus_msgerror_unknownId=Identifiant inconnu
+loginplus_msgerror_add=Erreur lors de l'ajout du message
+loginplus_msgerror_update=Erreur lors de la mise à jour du message
+loginplus_msg_confirmDelete=Êtes vous sûr(e) de vouloir supprimer ce message ?
+loginplus_msg_isDelete=Message supprimé
+loginplus_msg_isAdded=Message ajouté
+loginplus_msg_isUpdated=Message modifié
+loginplus_option_maintenance=Maintenance Mode
+loginplus_option_maintenance_desc=Activate maintenance mode. Only admins will be able to login.
+loginplus_option_maintenance_activated=Maintenance mode activated
+loginplus_option_maintenance_msg=Maintenance message
+loginplus_option_maintenance_msg_desc=This text replaces the default "Maintenance mode enabled" text on the login page when maintenance mode is enabled
+loginplus_option_maintenance_activated_nologin=You cannot log in during maintenance mode

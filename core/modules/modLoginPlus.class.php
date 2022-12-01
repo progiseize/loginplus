@@ -69,7 +69,7 @@ class modLoginPlus extends DolibarrModules
         $this->editor_url = 'https://progiseize.fr';
         
         // Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
-        $this->version = '1.4.4';
+        $this->version = '1.5';
         $this->url_last_version = "https://progiseize.fr/modules_info/".get_class($this)."_lastversion.txt";
 
         // Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
@@ -101,7 +101,8 @@ class modLoginPlus extends DolibarrModules
         $this->module_parts = array(
             'css' => array('loginplus/css/loginplus.css'),
             'tpl' => 1,
-            'hooks' => array('all')
+            'hooks' => array('all'),
+            'triggers' => 1
         );
 
         // Data directories to create when module is enabled.

@@ -1,10 +1,13 @@
 # LoginPlus
 
 [comment]: <> (TODO)
-[comment]: <> (Upload des fichiers)
-[comment]: <> (Mode maintenance)
+[comment]: <> (Upload des fichiers + simple)
 
 ***
+### 1.5 (01/12/2022) 
+* NEW - Mode maintenance 
+* FIX - Correction css 
+
 ### 1.4.4 (08/09/2022) 
 * FIX - Correction CSRF / token 
 

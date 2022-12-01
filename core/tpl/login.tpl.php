@@ -28,6 +28,8 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 
 	require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 
+	$langs->load('loginplus@loginplus');
+
 	header('Cache-Control: Public, must-revalidate');
 	header("Content-type: text/html; charset=".$conf->file->character_set_client);
 
@@ -124,8 +126,6 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 						<input type="hidden" name="dol_optimize_smallscreen" id="dol_optimize_smallscreen" value="<?php echo $dol_optimize_smallscreen; ?>" />
 						<input type="hidden" name="dol_no_mouse_hover" id="dol_no_mouse_hover" value="<?php echo $dol_no_mouse_hover; ?>" />
 						<input type="hidden" name="dol_use_jmobile" id="dol_use_jmobile" value="<?php echo $dol_use_jmobile; ?>" />
-
-
 						
 						<div class="fields-group" id="login_line1">
 							<div id="login_right">
@@ -140,7 +140,6 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 								</div>
 
 								<?php if ($captcha):
-
 									$php_self = preg_replace('/[&\?]time=(\d+)/', '', $php_self); // Remove param time
 									if (preg_match('/\?/', $php_self)): $php_self .= '&time='.dol_print_date(dol_now(), 'dayhourlog');
 									else: $php_self .= '?time='.dol_print_date(dol_now(), 'dayhourlog'); endif; ?>
@@ -155,10 +154,8 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 											<img class="inline-block valignmiddle" src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
 											<a class="inline-block valignmiddle captcha-link" href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a>
 										</span>
-										</div>
-										
-									</div>
-									
+										</div>										
+									</div>									
 								<?php endif; ?>
 
 								<?php // MORELOGINCONTENT ?>
@@ -175,20 +172,32 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 										echo $morelogincontent;
 									endif;
 								endif; ?>
-
 							</div>
 						</div>
 
 						<div class="fields-group" id="login_line2">
-
 							<div class="field-row align-center">
 								<input type="submit" class="button" value="&nbsp; <?php echo $langs->trans('Connection'); ?> &nbsp;" tabindex="5" />
 							</div>
-							<div class="field-row align-center center">
-								
-							</div>
+							<div class="field-row align-center center"></div>
 						</div>
 					</form>
+
+					<?php // MODE MAINTENANCE
+					if ($conf->global->LOGINPLUS_ISMAINTENANCE): ?>
+						<div class="loginplus-maintenance-msg">
+							<?php if($conf->global->LOGINPLUS_MAINTENANCETEXT): echo $conf->global->LOGINPLUS_MAINTENANCETEXT;
+							else: echo $langs->trans('loginplus_option_maintenance_activated');
+							endif;?>
+						</div>
+					<?php endif; ?>
+
+					<?php // AFFICHAGE DES MESSAGES D'ERREURS
+					if (GETPOST('maintenance') && GETPOST('noadmin')): ?>
+						<div class="loginplus-error-msg">
+							<?php echo $langs->trans('loginplus_option_maintenance_activated_nologin'); ?>
+						</div>
+					<?php endif; ?>
 
 					<?php // AFFICHAGE DES MESSAGES D'ERREURS
 					if (!empty($_SESSION['dol_loginmesg'])): ?>
@@ -215,14 +224,12 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 			<?php if (!empty($conf->global->MAIN_HTML_FOOTER)): print $conf->global->MAIN_HTML_FOOTER; endif; ?>
 
 			<?php if($conf->global->LOGINPLUS_COPYRIGHT): 
-
 				$copyright_text = $conf->global->LOGINPLUS_COPYRIGHT;
 				if($conf->global->LOGINPLUS_COPYRIGHT_LINK):
 					$copyright_link = '<a href="'.$conf->global->LOGINPLUS_COPYRIGHT_LINK.'" target="_blank">';
 					$copyright_text = str_replace('[', $copyright_link, $copyright_text);
 					$copyright_text = str_replace(']', '</a>', $copyright_text);
 				endif; ?>
-
 				<div id="loginplus-copyright"><?php echo $copyright_text; ?></div>
 			<?php endif; ?>
 		</div>
@@ -244,15 +251,15 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 				print "\n";
 				print "<!-- JS CODE TO ENABLE for google analtics tag -->\n";
 				print "
-							<!-- Global site tag (gtag.js) - Google Analytics -->
-							<script async src=\"https://www.googletagmanager.com/gtag/js?id=".trim($tmptag)."\"></script>
-							<script>
-							window.dataLayer = window.dataLayer || [];
-							function gtag(){dataLayer.push(arguments);}
-							gtag('js', new Date());
+					<!-- Global site tag (gtag.js) - Google Analytics -->
+					<script async src=\"https://www.googletagmanager.com/gtag/js?id=".trim($tmptag)."\"></script>
+					<script>
+					window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
 
-							gtag('config', '".trim($tmptag)."');
-							</script>";
+					gtag('config', '".trim($tmptag)."');
+					</script>";
 				print "\n";
 			endforeach;
 		endif; ?>

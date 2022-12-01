@@ -71,8 +71,10 @@ body#loginplus {background: var(--bg-color);font-family: 'Poppins', sans-serif;p
 #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side.ld-extend {width: 100%;}
 #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side img#loginplus-imglogo {display: block;margin: 16px auto;max-width: 280px;height: auto;}
 
-#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line1 {margin: 24px 64px;}
-#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line2 {margin: 24px 64px }
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side form#login {padding-bottom: 0}
+
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line1 {margin: 24px 64px 8px 64px;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line2 {margin: 8px 64px 24px 64px }
 #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row {margin: 32px 0;position: relative;}
 #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line2 .field-row {margin: 12px 0;}
 #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row label {display: block;font-weight: 700;color: var(--main-color);font-family: 'Poppins', sans-serif;margin-bottom: 2px;}
@@ -90,7 +92,8 @@ body#loginplus {background: var(--bg-color);font-family: 'Poppins', sans-serif;p
 #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=button]#login-submit-button:hover,
 #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=button]#totp-submit-button:hover {background: var(--second-color);}
 
-#loginplus.tpl-1 .loginplus-error-msg {font-size: 13px;color: red;text-align: center;margin-top: -32px;margin-bottom: 32px;font-weight: 600;}
+#loginplus.tpl-1 .loginplus-maintenance-msg {font-size: 13px;color: #f88533;text-align: center;margin: 0 64px 24px 64px;font-weight: 600;border:1px solid #f88533;padding: 12px}
+#loginplus.tpl-1 .loginplus-error-msg {font-size: 13px;color: #fb2a52;text-align: center;margin: 0 64px 24px 64px;font-weight: 600;border:1px solid #fb2a52;padding: 12px}
 
 #loginplus.tpl-1 .loginplus-helplinks {font-size: 13px;}
 #loginplus.tpl-1 .loginplus-helplinks a {color: #999;font-weight: 500;}
@@ -119,10 +122,10 @@ body#loginplus {background: var(--bg-color);font-family: 'Poppins', sans-serif;p
 
 
 
-#loginplus.tpl-1 input.twofactorauth-error {background: #fff !important;border-bottom: 1px solid red !important;}
-#loginplus.tpl-1 .twofactorauth-icon-error {right: 16px;color: red;}
+#loginplus.tpl-1 input.twofactorauth-error {background: #fff !important;border-bottom: 1px solid #fb2a52 !important;}
+#loginplus.tpl-1 .twofactorauth-icon-error {right: 16px;color: #fb2a52;}
 #loginplus.tpl-1 .twofactorauth-error-wrapper {position: relative;}
-#loginplus.tpl-1 .twofactorauth-error-wrapper .twofactorauth-error {position: relative;font-size: 13px;color: red;text-align: center;margin-top: -64px;margin-bottom: 64px;font-weight: 600;background: transparent !important;}
+#loginplus.tpl-1 .twofactorauth-error-wrapper .twofactorauth-error {position: relative;font-size: 13px;color: #fb2a52;text-align: center;margin-top: -64px;margin-bottom: 64px;font-weight: 600;background: transparent !important;}
 
 
 #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line2 {text-align: center;}
@@ -155,8 +158,10 @@ body#loginplus {background: var(--bg-color);font-family: 'Poppins', sans-serif;p
   #loginplus.tpl-1 .loginplus-wrapperbox.ld-one-side {width: 100%;margin: auto 12px;}
   #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side img {max-width: 50%;height: auto;}
 
-  #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line1 {margin: 48px 24px 24px 24px;}
-  #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line2 {margin: 24px 24px }
+  #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line1 {margin: 48px 24px 8px 24px;}
+  #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line2 {margin: 8px 24px 24px 24px }
+
+  #loginplus.tpl-1 .loginplus-error-msg {margin: 0 24px 24px 24px;}
 
 }
 
