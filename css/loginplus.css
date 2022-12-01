@@ -1,0 +1,208 @@
+/* 
+ * Copyright (C) 2022 ProgiSeize <contact@progiseize.fr>
+ *
+ * This program and files/directory inner it is free software: you can 
+ * redistribute it and/or modify it under the terms of the 
+ * GNU Affero General Public License (AGPL) as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU AGPL for more details.
+ *
+ * You should have received a copy of the GNU AGPL
+ * along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+
+.loginplus_adm .liste_titre th {background: #f6f6f6;}
+
+/* -------------------------------------------------------------------------- */
+/*	1. Variables
+/* -------------------------------------------------------------------------- */
+
+body#loginplus {background: var(--bg-color);font-family: 'Poppins', sans-serif;position: relative;}
+
+#loginplus_msg {}
+#loginplus_msg .select2.select2-container {border: 1px solid #ccc;padding: 4px;min-width: 320px;}
+#loginplus_msg .select2-container--default .select2-selection--single {border: none !important;}
+#loginplus_msg .select2-container--focus span.select2-selection.select2-selection--single {border: none !important;}
+#loginplus_msg .select2-container .select2-selection--single .select2-selection__rendered {padding-right: 28px;}
+#loginplus_msg .select2-container--default .select2-selection--single .select2-selection__arrow b {margin-top: 2px;margin-left: -8px;}
+#loginplus_msg button {padding: 12px;margin-left: 6px;cursor: pointer;}
+
+#loginplus .align-center {text-align: center;}
+
+#loginplus.tpl-1 {}
+#loginplus.tpl-1 .loginplus-bgimage {position: absolute;top: 0;left: 0;right: 0;bottom: 0;background-size: cover;opacity: var(--bg-imageopacity);}
+#loginplus.tpl-1 .loginplus-wrapper {min-height: 100vh;display: flex;padding: 48px;box-sizing: border-box;position: relative;}
+#loginplus.tpl-1 .loginplus-wrapper:before {position: absolute;top: 0;right: 0;width: 100%;height: 100%;content: "";display: block;background: var(--shape-color);z-index: 2;clip-path: polygon(100% 100%, 100% 100%, 100% 100%);opacity: var(--shape-opacity);}
+
+#loginplus.tpl-1 .loginplus-wrapper.split:before {clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);}
+#loginplus.tpl-1 .loginplus-wrapper.split_plus:before {clip-path: polygon(35% 0, 100% 0, 100% 100%, 35% 100%);}
+#loginplus.tpl-1 .loginplus-wrapper.split_minus:before {clip-path: polygon(65% 0, 100% 0, 100% 100%, 65% 100%);}
+#loginplus.tpl-1 .loginplus-wrapper.split_inv:before {clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);}
+#loginplus.tpl-1 .loginplus-wrapper.corner_tl:before {clip-path: polygon(100% 0, 0 0, 0 100%);}
+#loginplus.tpl-1 .loginplus-wrapper.corner_tr:before {clip-path: polygon(100% 0, 0 0, 100% 100%);}
+#loginplus.tpl-1 .loginplus-wrapper.corner_br:before {clip-path: polygon(100% 0, 100% 100%, 0 100%);}
+#loginplus.tpl-1 .loginplus-wrapper.corner_bl:before {clip-path: polygon(0 0, 100% 100%, 0 100%);}
+#loginplus.tpl-1 .loginplus-wrapper.semicorner_tl:before {clip-path: polygon(50% 0%, 0% 100%, 0 0);}
+#loginplus.tpl-1 .loginplus-wrapper.semicorner_tr:before {clip-path: polygon(50% 0%, 100% 100%, 100% 0);}
+#loginplus.tpl-1 .loginplus-wrapper.semicorner_br:before {clip-path: polygon(50% 100%, 100% 100%, 100% 0);}
+#loginplus.tpl-1 .loginplus-wrapper.semicorner_bl:before {clip-path: polygon(50% 100%, 0 100%, 0 0);}
+#loginplus.tpl-1 .loginplus-wrapper.diagonal_asc:before {clip-path: polygon(75% 0, 100% 0, 100% 100%, 50% 100%);}
+#loginplus.tpl-1 .loginplus-wrapper.diagonal_desc:before {clip-path: polygon(50% 0, 100% 0, 100% 100%, 75% 100%);}
+#loginplus.tpl-1 .loginplus-wrapper.rounded_bot:before {clip-path: ellipse(100% 30% at 50% 100%);}
+
+#loginplus.tpl-1 .loginplus-wrapperbox {background: #fff;width: 1280px;margin: auto;display: flex;position: relative;z-index: 999;box-shadow: 0 0 42px rgba(0,0,0,0.15);}
+#loginplus.tpl-1 .loginplus-wrapperbox.ld-one-side {width: 640px;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side {width: 50%;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.image-side {background: var(--image-color);position: relative;display: flex;padding: 48px;box-sizing: border-box;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.image-side.ld-hide {display: none;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.image-side .loginplus-img {position: absolute;top: 0;left: 0;right: 0;bottom: 0;background-size: cover;opacity: var(--image-opacity);z-index: 1;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.image-side .loginplus-txt {margin: auto;position: relative;z-index: 2;text-align: center;line-height: 1.5;font-size: 18px;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.image-side .loginplus-txt h2 {font-size: 21px;font-weight: 700;color: var(--txt-titlecolor);text-transform: uppercase;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.image-side .loginplus-txt p {font-size: 18px;font-weight: 400;color: var(--txt-contentcolor);}
+
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side {padding: 32px;box-sizing: border-box;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side.ld-extend {width: 100%;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side img#loginplus-imglogo {display: block;margin: 16px auto;max-width: 280px;height: auto;}
+
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line1 {margin: 24px 64px;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line2 {margin: 24px 64px }
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row {margin: 32px 0;position: relative;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line2 .field-row {margin: 12px 0;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row label {display: block;font-weight: 700;color: var(--main-color);font-family: 'Poppins', sans-serif;margin-bottom: 2px;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row label i {color: var(--second-color);margin-right: 4px;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=text],
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=password] {width: 100%;margin: 0;padding: 12px 0;box-sizing: border-box;background: #fff;font-weight: 400;color: var(--main-color);font-family: 'Poppins', sans-serif;border: none;border-bottom: 1px solid #bbb;font-size: 16px;max-width: 100% !important;transition: all ease-in-out .1s;}
+
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=text]:focus,
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=password]:focus {border-bottom: 1px solid var(--second-color);color: var(--second-color);}
+
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=submit],
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=button]#login-submit-button,
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=button]#totp-submit-button {background: var(--main-color);box-shadow: none;outline: none;border: none;color: #fff;text-transform: uppercase;font-size: 13px;padding: 16px;margin-top: 0;border-radius: 4px;width: auto;height: auto;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=submit]:hover,
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=button]#login-submit-button:hover,
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group .field-row input[type=button]#totp-submit-button:hover {background: var(--second-color);}
+
+#loginplus.tpl-1 .loginplus-error-msg {font-size: 13px;color: red;text-align: center;margin-top: -32px;margin-bottom: 32px;font-weight: 600;}
+
+#loginplus.tpl-1 .loginplus-helplinks {font-size: 13px;}
+#loginplus.tpl-1 .loginplus-helplinks a {color: #999;font-weight: 500;}
+#loginplus.tpl-1 .loginplus-helplinks a:hover {color: var(--second-color);text-decoration: underline;}
+
+#loginplus.tpl-1 .dol-version {position: fixed;bottom: 0;color: rgba(255, 255, 255, 0.75);font-weight: 600;font-size: 11px;text-transform: uppercase;padding: 12px 16px;text-align: center;background: var(--main-color);z-index: 666;right: 0;}
+
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .loginplus-captcha {display: flex;justify-content: center;align-items: center;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .loginplus-captcha img {margin: 0 12px 0 0;}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .loginplus-captcha a {color: var(--main-color);}
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .loginplus-captcha a:hover {color: var(--second-color);}
+
+
+#loginplus.tpl-1 #login_right {padding: 0;width: 100%;text-align: inherit;}
+#loginplus.tpl-1 #login_right .tagtable {display: block;}
+#loginplus.tpl-1 #login_right .tagtable .lgp-flex {display: flex;justify-content: space-between;align-items: flex-end;}
+#loginplus.tpl-1 #login_right .tagtable .lgp-flex .captcha-link {color: var(--main-color);}
+#loginplus.tpl-1 #login_right .tagtable .lgp-flex .captcha-link:hover {color: var(--second-color);}
+#loginplus.tpl-1 .twofactorauth-wrapper-border {border: none;background: transparent;}
+#loginplus.tpl-1 .twofactorauth-choice-wrapper, #loginplus.tpl-1 .twofactorauth-u2f-wrapper, #loginplus.tpl-1 .twofactorauth-totp-wrapper {height: auto;}
+#loginplus.tpl-1 #u2f-submit-wrapper p,
+#loginplus.tpl-1 #totp-submit-wrapper p {width: auto;padding: 0 16px;box-sizing: border-box;text-align: center;font-weight: 500;color: var(--main-color);}
+#loginplus.tpl-1 #totp-submit-wrapper {text-align: center;padding-bottom: 16px;}
+#loginplus.tpl-1 #totp-submit-wrapper input#totp {background: #fff;font-weight: 400;color: var(--main-color);font-family: 'Poppins', sans-serif;border-bottom: 1px solid #bbb;font-size: 18px;max-width: 100% !important;transition: all ease-in-out .1s;}
+#loginplus.tpl-1 #totp-submit-wrapper input#totp:focus {border-bottom: 1px solid var(--main-color);color: var(--main-color);}
+
+
+
+#loginplus.tpl-1 input.twofactorauth-error {background: #fff !important;border-bottom: 1px solid red !important;}
+#loginplus.tpl-1 .twofactorauth-icon-error {right: 16px;color: red;}
+#loginplus.tpl-1 .twofactorauth-error-wrapper {position: relative;}
+#loginplus.tpl-1 .twofactorauth-error-wrapper .twofactorauth-error {position: relative;font-size: 13px;color: red;text-align: center;margin-top: -64px;margin-bottom: 64px;font-weight: 600;background: transparent !important;}
+
+
+#loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line2 {text-align: center;}
+#loginplus.tpl-1 .twofactorauth-cancel-button {text-decoration: none;color: #999;cursor: pointer;display: inline-block;}
+#loginplus.tpl-1 .twofactorauth-cancel-button:hover {text-decoration: underline;color: var(--main-color);cursor: pointer;display: inline-block;}
+
+#loginplus.tpl-1 .loginplus-wrapper #loginplus-copyright {position: absolute;bottom: 0;padding: 12px;font-size: 12px;text-transform: uppercase;right: 0;z-index: 99;color: var(--copyright-color);}
+#loginplus.tpl-1 .loginplus-wrapper #loginplus-copyright a {color: var(--copyright-color);font-weight: 500;}
+#loginplus.tpl-1 .loginplus-wrapper #loginplus-copyright a:hover {color: var(--copyright-color);text-decoration: underline;}
+
+
+@media screen and (max-width: 1400px){
+  #loginplus.tpl-1 .loginplus-wrapperbox {width: 100%;margin: auto 64px;}
+  #loginplus.tpl-1 .loginplus-wrapperbox.ld-one-side {width: 640px;margin: auto;}
+}
+
+@media screen and (max-width: 1260px){
+  #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group {margin: 64px 32px;}
+}
+
+@media screen and (max-width: 980px){
+  #loginplus.tpl-1 .loginplus-wrapper:before {display: none;}
+  #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.image-side {display: none;}
+  #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side {width: 100%;}
+}
+
+@media screen and (max-width: 720px){
+  #loginplus.tpl-1 .loginplus-wrapper {padding: 24px;}
+  #loginplus.tpl-1 .loginplus-wrapperbox {width: 100%;margin: auto;}
+  #loginplus.tpl-1 .loginplus-wrapperbox.ld-one-side {width: 100%;margin: auto 12px;}
+  #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side img {max-width: 50%;height: auto;}
+
+  #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line1 {margin: 48px 24px 24px 24px;}
+  #loginplus.tpl-1 .loginplus-wrapperbox .loginplus-wrapperbox-side.content-side .fields-group#login_line2 {margin: 24px 24px }
+
+}
+
+@media only screen and (max-width: 570px) {
+  div#login_left, div#login_right {max-width: 100% !important;}
+}
+
+.pgsz-remodal .pgsz-flex-wrapper {margin: 0 -6px;display: flex;flex-wrap: wrap;}
+.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal {background: transparent;width: 50%;padding: 6px 6px;box-sizing: border-box;}
+.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img {width: 100%;position: relative;opacity:0.8;transition: opacity 0.1s ease-in-out;cursor: pointer;box-sizing: border-box;}
+.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img.selected {opacity:1;border: 2px solid var(--main-bg-dark);}
+.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img::before {content: "";padding-top: 56.25%;display: block;}
+.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img:hover {opacity:1;}
+
+.ld-mask {opacity: 0.5;}
+
+#pgsz-option #pgsz-loginplus-shapelist {margin: 0;padding: 0;list-style: none;}
+#pgsz-option #pgsz-loginplus-shapelist li {display: flex;}
+#pgsz-option #pgsz-loginplus-shapelist li h4 {margin-top: 0;}
+#pgsz-option #pgsz-loginplus-shapelist li div {margin-right: 16px;}
+#pgsz-option #pgsz-loginplus-shapelist li img {display: block;width: 192px;height: auto;margin: 0;}
+#pgsz-option #pgsz-loginplus-shapelist li p {text-align: center;margin: 3px 0 12px 0;}
+
+#pgsz-option #pgsz-loginplus-themelist {display: flex;flex-wrap: wrap;margin: 0;padding: 0;list-style: none;margin: 0 -12px;}
+#pgsz-option #pgsz-loginplus-themelist li {margin: 0;padding: 0;width: 50%;padding: 12px;box-sizing: border-box;}
+#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview {position: relative;}
+#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview img {max-width: 100%;width: 100%;height: auto;position: relative;z-index: 1;display: block;}
+#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview h3.ld-themename {position: absolute;background: rgba(0, 0, 0, 0.75);bottom: 0;left: 0;right: 0;z-index: 2;margin: 0;padding: 12px;color: #fff;display: none;}
+#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview .ld-themeaction {position: absolute;bottom: 12px;right: 12px;z-index: 3;display: none;}
+
+#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview:hover h3.ld-themename {display: block;}
+#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview:hover .ld-themeaction {display: block;}
+
+@media only screen and (min-width: 1820px) {#pgsz-option #pgsz-loginplus-themelist li {width: 25%;}}
+@media only screen and (max-width: 820px) {
+  #pgsz-option #pgsz-loginplus-themelist li {width: 100%;}
+}
+
+#loginplus-dialog .loginplus-msg {margin-bottom: 12px;}
+#loginplus-dialog .loginplus-msg:last-child {margin-bottom: 0;}
+#loginplus-dialog .loginplus-msglabel {font-weight: 700;}
+#loginplus-dialog .loginplus-msgcontent {}
+#loginplus-dialog .loginplus-msgauthor {font-size: 0.8em;font-style: italic;color: #666;}
+
+
+/***********************************************/
+/***********************************************/
+/***********************************************/
+/***********************************************/
