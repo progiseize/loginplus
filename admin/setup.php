@@ -63,9 +63,12 @@ if ($action == 'set_options'):
     if(GETPOST('token') == $_SESSION['token']):
 
         if(!dolibarr_set_const($db, "LOGINPLUS_ACTIVELOGINTPL",GETPOST('ldo-activatetpl'),'chaine',0,'',$conf->entity)): $error++; endif;
-        if(!dolibarr_set_const($db, "LOGINPLUS_ISMAINTENANCE",GETPOST('ldo-ismaintenance'),'chaine',0,'',$conf->entity)): $error++; endif;
-        if(!dolibarr_set_const($db, "LOGINPLUS_MAINTENANCETEXT",GETPOST('ldo-maintenancetxt','alphanum'),'chaine',0,'',$conf->entity)): $error++; endif;
-
+        
+        if ($user->rights->loginplus->maintenancemode):
+            if(!dolibarr_set_const($db, "LOGINPLUS_ISMAINTENANCE",GETPOST('ldo-ismaintenance'),'chaine',0,'',$conf->entity)): $error++; endif;
+            if(!dolibarr_set_const($db, "LOGINPLUS_MAINTENANCETEXT",GETPOST('ldo-maintenancetxt','alphanum'),'chaine',0,'',$conf->entity)): $error++; endif;
+        endif;
+        
         if(GETPOSTISSET('ldo-activatetpl')):
 
             // DUPLICATA DU TPL
@@ -308,6 +311,7 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_activatelogintpl_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="checkbox" name="ldo-activatetpl" value="1" <?php if($conf->global->LOGINPLUS_ACTIVELOGINTPL): echo 'checked="checked"';endif; ?>></td>
                 </tr>
+                <?php if ($user->rights->loginplus->maintenancemode): ?>
                 <tr class="oddeven pgsz-optiontable-tr">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_maintenance'); ?></td>               
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_maintenance_desc'); ?></td>
@@ -318,7 +322,7 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_maintenance_msg_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="text" name="ldo-maintenancetxt" class="minwidth400" value="<?php echo $conf->global->LOGINPLUS_MAINTENANCETEXT; ?>" ></td>
                 </tr>
-
+                <?php endif; ?>
                 <?php // ARRIERE PLAN ?>
                 <tr class="titre">
                     <td class="nobordernopadding valignmiddle col-title" style="" colspan="3">

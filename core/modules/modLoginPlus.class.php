@@ -210,18 +210,22 @@ class modLoginPlus extends DolibarrModules
         $r=0;
 
         $r++;
-
-        $this->rights[$r][0] = $this->numero + $r;   // Permission id (must not be already used)
+        $this->rights[$r][0] = $this->numero.''.$r;   // Permission id (must not be already used)
         $this->rights[$r][1] = 'Modification de la page d\'authentification';    // Permission label
         $this->rights[$r][3] = 0;                    // Permission by default for new user (0/1)
         $this->rights[$r][4] = 'configurer';             // In php code, permission will be checked by test
 
         $r++;
-
-        $this->rights[$r][0] = $this->numero + $r;   // Permission id (must not be already used)
+        $this->rights[$r][0] = $this->numero.''.$r;   // Permission id (must not be already used)
         $this->rights[$r][1] = 'Gestion des messages d\'accueil';    // Permission label
         $this->rights[$r][3] = 0;                    // Permission by default for new user (0/1)
         $this->rights[$r][4] = 'gerer_messages';             // In php code, permission will be checked by test
+
+        $r++;
+        $this->rights[$r][0] = $this->numero.''.$r;   // Permission id (must not be already used)
+        $this->rights[$r][1] = 'Activer le mode maintenance';    // Permission label
+        $this->rights[$r][3] = 0;                    // Permission by default for new user (0/1)
+        $this->rights[$r][4] = 'maintenancemode';             // In php code, permission will be checked by test
 
         // Add here list of permission defined by an id, a label, a boolean and two constant strings.
         // Example:
