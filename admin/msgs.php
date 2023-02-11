@@ -66,7 +66,7 @@ switch ($action):
                     case 'all': $destlist = $type_destinataire; break;
                     case 'groups': $destlist = $loginmsg->get_usersGroups();break;
                     case 'tags': $destlist = $form->select_all_categories('user', '', 'parent', 64, 0, 1); break;
-                    case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,0,0,0,'',0,'','',1,1);break;
+                    case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,$conf->entity,0,0,'',0,'','',1,1);break;
                 endswitch;
             endif;       
 
@@ -91,7 +91,7 @@ switch ($action):
                 case 'all': $destlist = $type_destinataire; break;
                 case 'groups': $destlist = $loginmsg->get_usersGroups();break;
                 case 'tags': $destlist = $form->select_all_categories('user', '', 'parent', 64, 0, 1); break;
-                case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,0,0,0,'',0,'','',1,1);break;
+                case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,$conf->entity,0,0,'',0,'','',1,1);break;
             endswitch;
 
             if(!$error):
@@ -161,7 +161,7 @@ switch ($action):
                 case 'all': $destlist = $type_destinataire->mode; break;
                 case 'groups': $destlist = $loginmsg->get_usersGroups();break;
                 case 'tags': $destlist = $form->select_all_categories('user', '', 'parent', 64, 0, 1); break;
-                case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,0,0,0,'',0,'','',1,1);break;
+                case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,$conf->entity,0,0,'',0,'','',1,1);break;
             endswitch;
         else:
             setEventMessages("SecurityTokenHasExpiredSoActionHasBeenCanceledPleaseRetry", null, 'warnings');
@@ -209,7 +209,7 @@ switch ($action):
                     case 'all': $destlist = $type_destinataire->mode; break;
                     case 'groups': $destlist = $loginmsg->get_usersGroups();break;
                     case 'tags': $destlist = $form->select_all_categories('user', '', 'parent', 64, 0, 1); break;
-                    case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,0,0,0,'',0,'','',1,1);break;
+                    case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,$conf->entity,0,0,'',0,'','',1,1); break;
                 endswitch;
             endif;
 
@@ -281,7 +281,9 @@ endif;
                     <th></th>
                 </tr>
 
-                <?php foreach($list_loginmessages as $msg_id => $msg): $msg_user->fetch($msg->author);$author_label = $msg_user->getFullName($langs, 0, -1); ?>
+                <?php foreach($list_loginmessages as $msg_id => $msg): 
+
+                    $msg_user->fetch($msg->author); $author_label = $msg_user->getFullName($langs, 0, -1); ?>
 
                 <tr class="oddeven pgsz-optiontable-tr">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $msg->label; ?></td>               
@@ -318,8 +320,8 @@ endif;
                             // UTILISATEURS            
                             case 'users': 
                                 $label_destinataire .= "<br>";                            
-                                foreach ($infos_destinataire->params as $user_id): $user->fetch($user_id);                                
-                                    array_push($tabdest, $user->lastname.' '.$user->firstname);
+                                foreach ($infos_destinataire->params as $user_id): $destinataire = new User($db); $destinataire->fetch($user_id);                                
+                                    array_push($tabdest, $destinataire->lastname.' '.$destinataire->firstname);
                                 endforeach;
                                 $label_destinataire .= implode(', ', $tabdest);
                             break;
@@ -334,7 +336,7 @@ endif;
                     <td class="pgsz-optiontable-fielddesc"><?php echo $author_label; ?></td>
                     <td class="center pgsz-optiontable-field "><?php echo $msg->nb_view; ?></td>
                     <td width="120" class="center">
-                        <?php if(!$user->admin && $msg_user->admin): echo ''; else: ?>
+                        <?php if($user->admin || $msg->author == $user->id && $user->rights->loginplus->gerer_messages): ?>
                             <?php echo '<a class="reposition editfielda paddingrightonly" href="'.$_SERVER['PHP_SELF'].'?msgid='.$msg->rowid.'&action=edit&token='.newToken().'">'.img_edit().'</a> &nbsp; '; ?>
                             <?php echo '<a class="reposition" href="'.$_SERVER['PHP_SELF'].'?msgid='.$msg->rowid.'&action=delete_msg&token='.newToken().'">'.img_delete().'</a>'; ?>
                         <?php endif; ?>

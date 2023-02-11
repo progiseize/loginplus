@@ -228,11 +228,14 @@ class LoginMsg {
 	/*****************************************************************/
 	public function getUserMsgs($loguser){
 
+		global $conf;
+
 		$messages = array();
 
 		// ON RECUPERE LES MESSAGES DE TOUT LE MONDE
 		$sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element;
 		$sql .= " WHERE JSON_VALUE(destinataire, '$.mode') = 'all'";
+		$sql .= " AND entity = '".$conf->entity."'";
 		$sql .= " AND (";
 		$sql .= "NOT JSON_CONTAINS(is_read, '{\"userid\":".$loguser->id."}')";
 		$sql .= " OR (force_view = 1 AND date_expiration > '".date('Y-m-d H:i:s')."')";
@@ -245,6 +248,7 @@ class LoginMsg {
 		$user_tags = $loguser->getCategoriesCommon('user'); $i = 0;		
 		$sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element;
 		$sql .= " WHERE JSON_VALUE(destinataire, '$.mode') = 'tags'";
+		$sql .= " AND entity = '".$conf->entity."'";
 		$sql .= " AND (";
 		foreach ($user_tags as $tag): $i++; if($i > 1): $sql .= " OR"; endif;
 			$sql .= " JSON_CONTAINS(destinataire, '\"".$tag."\"', '$.params')";
@@ -262,6 +266,7 @@ class LoginMsg {
 		$ug = new UserGroup($this->db); $user_groups = $ug->listGroupsForUser($loguser->id); $i = 0;
 		$sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element;
 		$sql .= " WHERE JSON_VALUE(destinataire, '$.mode') = 'groups'";
+		$sql .= " AND entity = '".$conf->entity."'";
 		$sql .= " AND (";
 		foreach ($user_groups as $group): $i++; if($i > 1): $sql .= " OR"; endif;
 			$sql .= " JSON_CONTAINS(destinataire, '\"".$group->id."\"', '$.params')";
@@ -279,6 +284,7 @@ class LoginMsg {
 		$sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element;
 		$sql .= " WHERE JSON_VALUE(destinataire, '$.mode') = 'users'";
 		$sql .= " AND JSON_CONTAINS(destinataire, '\"".$loguser->id."\"', '$.params')";
+		$sql .= " AND entity = '".$conf->entity."'";
 		$sql .= " AND (";
 		$sql .= "NOT JSON_CONTAINS(is_read, '{\"userid\":".$loguser->id."}')";
 		$sql .= " OR (force_view = 1 AND date_expiration > '".date('Y-m-d H:i:s')."')";

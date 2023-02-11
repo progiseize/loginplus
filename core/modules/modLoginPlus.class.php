@@ -69,7 +69,7 @@ class modLoginPlus extends DolibarrModules
         $this->editor_url = 'https://progiseize.fr';
         
         // Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
-        $this->version = '1.5';
+        $this->version = '1.5.1';
         $this->url_last_version = "https://progiseize.fr/modules_info/".get_class($this)."_lastversion.txt";
 
         // Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
