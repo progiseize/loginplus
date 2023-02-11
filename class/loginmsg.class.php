@@ -51,6 +51,7 @@ class LoginMsg {
 		$groups = array();
 
 		$sql = "SELECT rowid, nom FROM ".MAIN_DB_PREFIX."usergroup";
+		$sql .= " WHERE entity = '".$conf->entity."'";
 		$sql .= " ORDER BY rowid";
 		$result = $this->db->query($sql);
 
@@ -108,6 +109,7 @@ class LoginMsg {
 		$list_msgs = array();
 
 		$sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element;
+		$sql .= " WHERE entity = '".$conf->entity."'";
 		$sql .= " ORDER BY date_creation";
 		$result = $this->db->query($sql);
 
