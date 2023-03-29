@@ -27,7 +27,7 @@ class ActionsLoginPlus
 	function printLeftBlock($parameters, &$object, &$action, $hookmanager){
 		global $db, $langs, $user, $conf, $_GET;
 		
-		if($_GET['action'] && $_GET['action'] == 'setReadLoginMsg'):
+		if(isset($_GET['action']) && $_GET['action'] == 'setReadLoginMsg'):
 
 			$loginmsg = new LoginMsg($db);
 			$reads_id = explode(',', $_GET['msgsids']);
