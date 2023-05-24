@@ -4,6 +4,11 @@
 [comment]: <> (Upload des fichiers + simple)
 
 ***
+### 1.5.2 (24/05/2023) 
+* MAJ - Mise à jour Descripteur module
+* FIX - Remove skeleton call
+* MAJ - Add DOLPGS CSS
+
 ### 1.5.1 (11/02/2023) 
 * FIX - Correction PHP 8 
 * FIX - Corrections Multicompany (On ne peut plus selectionner les utilisateurs des autre entités depuis l'entité maitre, car les messages ne se voyaient pas. Possibilité de dev pour que cela fonctionne, a l'ajout d'un nouveau message, laisser la possibilité de voir tout les users de chaque entité et verifier les entités a l'ajout du message. Le dupliquer avec l'entité de chaque user si besoin.)

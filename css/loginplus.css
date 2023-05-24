@@ -169,42 +169,6 @@ body#loginplus {background: var(--bg-color);font-family: 'Poppins', sans-serif;p
   div#login_left, div#login_right {max-width: 100% !important;}
 }
 
-.pgsz-remodal .pgsz-flex-wrapper {margin: 0 -6px;display: flex;flex-wrap: wrap;}
-.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal {background: transparent;width: 50%;padding: 6px 6px;box-sizing: border-box;}
-.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img {width: 100%;position: relative;opacity:0.8;transition: opacity 0.1s ease-in-out;cursor: pointer;box-sizing: border-box;}
-.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img.selected {opacity:1;border: 2px solid var(--main-bg-dark);}
-.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img::before {content: "";padding-top: 56.25%;display: block;}
-.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img:hover {opacity:1;}
-
-.ld-mask {opacity: 0.5;}
-
-#pgsz-option #pgsz-loginplus-shapelist {margin: 0;padding: 0;list-style: none;}
-#pgsz-option #pgsz-loginplus-shapelist li {display: flex;}
-#pgsz-option #pgsz-loginplus-shapelist li h4 {margin-top: 0;}
-#pgsz-option #pgsz-loginplus-shapelist li div {margin-right: 16px;}
-#pgsz-option #pgsz-loginplus-shapelist li img {display: block;width: 192px;height: auto;margin: 0;}
-#pgsz-option #pgsz-loginplus-shapelist li p {text-align: center;margin: 3px 0 12px 0;}
-
-#pgsz-option #pgsz-loginplus-themelist {display: flex;flex-wrap: wrap;margin: 0;padding: 0;list-style: none;margin: 0 -12px;}
-#pgsz-option #pgsz-loginplus-themelist li {margin: 0;padding: 0;width: 50%;padding: 12px;box-sizing: border-box;}
-#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview {position: relative;}
-#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview img {max-width: 100%;width: 100%;height: auto;position: relative;z-index: 1;display: block;}
-#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview h3.ld-themename {position: absolute;background: rgba(0, 0, 0, 0.75);bottom: 0;left: 0;right: 0;z-index: 2;margin: 0;padding: 12px;color: #fff;display: none;}
-#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview .ld-themeaction {position: absolute;bottom: 12px;right: 12px;z-index: 3;display: none;}
-
-#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview:hover h3.ld-themename {display: block;}
-#pgsz-option #pgsz-loginplus-themelist li .ld-themepreview:hover .ld-themeaction {display: block;}
-
-@media only screen and (min-width: 1820px) {#pgsz-option #pgsz-loginplus-themelist li {width: 25%;}}
-@media only screen and (max-width: 820px) {
-  #pgsz-option #pgsz-loginplus-themelist li {width: 100%;}
-}
-
-#loginplus-dialog .loginplus-msg {margin-bottom: 12px;}
-#loginplus-dialog .loginplus-msg:last-child {margin-bottom: 0;}
-#loginplus-dialog .loginplus-msglabel {font-weight: 700;}
-#loginplus-dialog .loginplus-msgcontent {}
-#loginplus-dialog .loginplus-msgauthor {font-size: 0.8em;font-style: italic;color: #666;}
 
 
 /***********************************************/

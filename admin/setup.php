@@ -32,10 +32,6 @@ require_once DOL_DOCUMENT_ROOT.'/ecm/class/ecmfiles.class.php';
 
 dol_include_once('./loginplus/lib/loginplus.lib.php');
 
-
-// Change this following line to use the correct relative path from htdocs
-dol_include_once('/module/class/skeleton_class.class.php');
-
 // Protection if external user
 if ($user->societe_id > 0): accessforbidden(); endif;
 if (!$user->rights->loginplus->configurer): accessforbidden(); endif;
@@ -259,9 +255,19 @@ endif;
 /***************************************************
 * VIEW
 ****************************************************/
-llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->transnoentities('Module300316Name'),'','','','',array("/loginplus/js/remodal.js","/loginplus/js/loginplus_config.js"),array("/loginplus/css/remodal.css","/loginplus/css/loginplus.css")); ?>
 
-<div id="pgsz-option" class="loginplus_adm pgsz-theme-<?php echo $conf->theme; ?>">
+$array_js = array(
+    '/loginplus/js/remodal.js',
+    '/loginplus/js/loginplus_config.js'
+);
+$array_css = array(
+    '/loginplus/css/remodal.css',
+    '/loginplus/css/dolpgs.css'
+);
+
+llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->transnoentities('Module300316Name'),'','','','',$array_js,$array_css,'','loginplus setup'); ?>
+
+<div class="dolpgs-main-wrapper logplus">
 
     <div class="remodal pgsz-remodal" data-remodal-id="pgsz-pop-image">
 
@@ -271,7 +277,7 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
         <input type="hidden" name="pgsz-target-config" value="<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=">
         
         <h1><?php echo $langs->transnoentities('loginplus_option_image_title'); ?></h1>
-        <div class="pgsz-flex-wrapper">
+        <div class="pgsz-flex-wrapper" style="margin-bottom: 16px;">
 
         <?php foreach ($tab_img as $ld_img): ?>
             <div class="pgsz-flex-remodal">
@@ -279,16 +285,16 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
             </div>
         <?php endforeach; ?>
         </div>
-      <button data-remodal-action="cancel" class="remodal-cancel"><i class="fas fa-times" style="color:#fff"></i> <?php echo $langs->transnoentities('loginplus_option_image_no_use'); ?></button>
+      <button data-remodal-action="cancel" class="dolpgs-btn btn-danger"><i class="fas fa-times"></i> <?php echo $langs->transnoentities('loginplus_option_image_no_use'); ?></button>
     </div>
 
     <?php if(in_array('progiseize', $conf->modules)): ?>
-        <h1><?php echo $langs->transnoentities('loginplus_optionp_title'); ?></h1>
+        <h1 class="has-before"><?php echo $langs->transnoentities('loginplus_optionp_title'); ?></h1>
     <?php else : ?>
         <table class="centpercent notopnoleftnoright table-fiche-title"><tbody><tr class="titre"><td class="nobordernopadding widthpictotitle valignmiddle col-picto"><span class="fas fa-tools valignmiddle widthpictotitle pictotitle" style=""></span></td><td class="nobordernopadding valignmiddle col-title"><div class="titre inline-block"><?php echo $langs->transnoentities('loginplus_optionp_title'); ?></div></td></tr></tbody></table>
     <?php endif; ?>
 
-    <?php $head = loginplusAdminPrepareHead(); dol_fiche_head($head, 'setup','loginplus', 0,'progiseize@progiseize'); ?>
+    <?php $head = loginplusAdminPrepareHead(); dol_fiche_head($head, 'setup','loginplus', 0,'fa-user-lock_fas_#fb2a52'); ?>
 
     <?php if ($user->rights->loginplus->configurer): ?>
 
@@ -298,49 +304,42 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
 
         <?php //var_dump($tab_img); ?>
 
-        <table class="noborder centpercent pgsz-option-table" style="border-top:none;">
+        <h3 class="dolpgs-table-title"><?php echo $langs->trans('Configuration'); ?></h3>
+        <table class="dolpgs-table">
             <tbody>
-
-                <tr class="liste_titre pgsz-optiontable-coltitle" >
-                    <th><?php echo $langs->trans('Parameter'); ?></th>
-                    <th><?php echo $langs->trans('Description'); ?></th>
-                    <th class="right"><?php echo $langs->trans('Value'); ?></th>
+                <tr class="dolpgs-thead noborderside">
+                    <th colspan="3"><?php echo $langs->trans('Options'); ?></th>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_activatelogintpl'); ?></td>               
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_activatelogintpl_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="checkbox" name="ldo-activatetpl" value="1" <?php if($conf->global->LOGINPLUS_ACTIVELOGINTPL): echo 'checked="checked"';endif; ?>></td>
                 </tr>
                 <?php if ($user->rights->loginplus->maintenancemode): ?>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_maintenance'); ?></td>               
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_maintenance_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="checkbox" name="ldo-ismaintenance" value="1" <?php if($conf->global->LOGINPLUS_ISMAINTENANCE): echo 'checked="checked"';endif; ?>></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_maintenance_msg'); ?></td>               
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_maintenance_msg_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="text" name="ldo-maintenancetxt" class="minwidth400" value="<?php echo $conf->global->LOGINPLUS_MAINTENANCETEXT; ?>" ></td>
                 </tr>
                 <?php endif; ?>
+            </tbody>
+            <tbody>
                 <?php // ARRIERE PLAN ?>
-                <tr class="titre">
-                    <td class="nobordernopadding valignmiddle col-title" style="" colspan="3">
-                        <div class="titre inline-block" style="padding:16px 0"><?php echo $langs->trans('loginplus_option_background'); ?></div>
-                    </td>
-                </tr>
-                <tr class="liste_titre pgsz-optiontable-coltitle" >
-                    <th><?php echo $langs->trans('Parameter'); ?></th>
-                    <th><?php echo $langs->trans('Description'); ?></th>
-                    <th class="right"><?php echo $langs->trans('Value'); ?></th>
+                <tr class="dolpgs-thead noborderside">
+                    <th colspan="3"><?php echo $langs->trans('loginplus_option_background'); ?></th>
                 </tr>
 
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_background_color'); ?></td>               
                     <td class="pgsz-optiontable-fielddesc "><?php echo $langs->trans('loginplus_option_background_color_desc'); ?></td>
                     <td class="right pgsz-optiontable-field "><input type="color" name="ldo-bg-color" value="<?php echo ($conf->global->LOGINPLUS_BG_COLOR)?$conf->global->LOGINPLUS_BG_COLOR:'#cccccc'; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_background_image'); ?></td>                
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_background_image_desc'); ?></td>
                     <td class="right pgsz-optiontable-field">
@@ -355,32 +354,25 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                         <input type="hidden" name="ldo-bg-imagekey" value="<?php echo $conf->global->LOGINPLUS_BG_IMAGEKEY; ?>">
                     </td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_background_image_opacity'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_background_image_opacity_desc'); ?></td>
                     <td class="right pgsz-optiontable-field">
                         <input type="number" name="ldo-bg-imageopacity" min="0" max="100" step="1" value="<?php echo $conf->global->LOGINPLUS_BG_IMAGEOPACITY; ?>">
                     </td>
                 </tr>
-
+            </tbody>
+            <tbody>
                 <?php // SHAPE ?>
-                <tr class="titre">
-                    <td class="nobordernopadding valignmiddle col-title" style="" colspan="3">
-                        <div class="titre inline-block" style="padding:16px 0"><?php echo $langs->trans('loginplus_option_shape'); ?></div>
-                    </td>
+                <tr class="dolpgs-thead noborderside">
+                    <th colspan="3"><?php echo $langs->trans('loginplus_option_shape'); ?></th>
                 </tr>
-                <tr class="liste_titre pgsz-optiontable-coltitle" >
-                    <th><?php echo $langs->trans('Parameter'); ?></th>
-                    <th><?php echo $langs->trans('Description'); ?></th>
-                    <th class="right"><?php echo $langs->trans('Value'); ?></th>
-                </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_shape_path'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_shape_path_desc'); ?></td>
                     <td class="right pgsz-optiontable-field">
-
                         <select name="ldo-shape-path" class="pgsz-slct2-simple">
-
                             <option value="no" <?php if($conf->global->LOGINPLUS_SHAPE_PATH == 'no'): echo 'selected'; endif; ?>><?php echo $langs->trans('loginplus_shape_none'); ?></option>
                             <?php foreach($tab_shapes as $id_group => $shapenames): ?>
                                 <optgroup label="<?php echo $langs->trans('loginplus_shape_'.$id_group); ?>">
@@ -389,70 +381,56 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                                     <?php endforeach; ?>
                                 </optgroup>
                             <?php endforeach; ?>
-                        </select>
-                        
+                        </select>                        
                     </td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_shape_color'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_shape_color_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="color" name="ldo-shape-color" value="<?php echo ($conf->global->LOGINPLUS_SHAPE_COLOR)?$conf->global->LOGINPLUS_SHAPE_COLOR:'#263c5c'; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_shape_opacity'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_shape_opacity_desc'); ?></td>
                     <td class="right pgsz-optiontable-field">
                         <input type="number" name="ldo-shape-opacity" min="0" max="100" step="1" value="<?php echo $conf->global->LOGINPLUS_SHAPE_OPACITY; ?>">
                     </td>
                 </tr>
-
+            </tbody>
+            <tbody>
                 <?php // BOX LOGIN :: PAGE LOGIN ?>
-                <tr class="titre">
-                    <td class="nobordernopadding valignmiddle col-title" style="" colspan="3">
-                        <div class="titre inline-block" style="padding:16px 0"><?php echo $langs->trans('loginplus_option_loginbox'); ?></div>
-                    </td>
+                <tr class="dolpgs-thead noborderside">
+                    <th colspan="3"><?php echo $langs->trans('loginplus_option_loginbox'); ?></th>
                 </tr>
-                <tr class="liste_titre pgsz-optiontable-coltitle" >
-                    <th><?php echo $langs->trans('Parameter'); ?></th>
-                    <th><?php echo $langs->trans('Description'); ?></th>
-                    <th class="right"><?php echo $langs->trans('Value'); ?></th>
-                </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_loginbox_maincolor'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_loginbox_maincolor_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="color" name="ldo-main-color" value="<?php echo ($conf->global->LOGINPLUS_MAIN_COLOR)?$conf->global->LOGINPLUS_MAIN_COLOR:'#007b8c'; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_loginbox_secondcolor'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_loginbox_secondcolor_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="color" name="ldo-second-color" value="<?php echo ($conf->global->LOGINPLUS_SECOND_COLOR)?$conf->global->LOGINPLUS_SECOND_COLOR:'#263c5c'; ?>"></td>
                 </tr>
-
-
-
+            </tbody>
+            <tbody>
 
                 <?php // COULEUR PRINCIPALE :: PAGE LOGIN ?>
-                <tr class="titre">
-                    <td class="nobordernopadding valignmiddle col-title" style="" colspan="3">
-                        <div class="titre inline-block" style="padding:16px 0"><?php echo $langs->trans('loginplus_option_sidebox'); ?></div>
-                    </td>
+                <tr class="dolpgs-thead noborderside">
+                    <th colspan="3"><?php echo $langs->trans('loginplus_option_sidebox'); ?></th>
                 </tr>
-                <tr class="liste_titre pgsz-optiontable-coltitle" >
-                    <th><?php echo $langs->trans('Parameter'); ?></th>
-                    <th><?php echo $langs->trans('Description'); ?></th>
-                    <th class="right"><?php echo $langs->trans('Value'); ?></th>
-                </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_show'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_show_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="checkbox" name="ldo-twosides" value="1" <?php if($conf->global->LOGINPLUS_TWOSIDES): echo 'checked="checked"';endif; ?>></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_color'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_color_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="color" name="ldo-img-color" value="<?php echo $conf->global->LOGINPLUS_IMAGE_COLOR; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
                     <td class="bold pgsz-optiontable-fieldname "><?php echo $langs->trans('loginplus_option_sidebox_image'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_image_desc'); ?></td>
                     <td class="right pgsz-optiontable-field">
@@ -465,77 +443,72 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                         <button data-remodal-target="pgsz-pop-image" class="pgsz-slct-img" data-ldtarget="ldo-img-key" data-ldparent="ldo_ikey">Choisir une image</button>
                         <input type="hidden" name="ldo-img-key" value="<?php echo $conf->global->LOGINPLUS_IMAGE_KEY; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_image_opacity'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_image_opacity_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="number" name="ldo-img-opacity" min="0" max="100" step="1" value="<?php echo $conf->global->LOGINPLUS_IMAGE_OPACITY; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_title'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_contentempty'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="text" name="ldo-txt-title" value="<?php echo $conf->global->LOGINPLUS_TXT_TITLE; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_title_color'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_title_color'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="color" name="ldo-txt-titlecolor" value="<?php echo $conf->global->LOGINPLUS_TXT_TITLECOLOR; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_content'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_contentempty'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="text" name="ldo-txt-content" value="<?php echo $conf->global->LOGINPLUS_TXT_CONTENT; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_content_color'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_content_color'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="color" name="ldo-txt-contentcolor" value="<?php echo $conf->global->LOGINPLUS_TXT_CONTENTCOLOR; ?>"></td>
                 </tr>
-
+            </tbody>
+            <tbody>
                 <?php // COPYRIGHT :: PAGE LOGIN ?>
-                <tr class="titre">
-                    <td class="nobordernopadding valignmiddle col-title" style="" colspan="3">
-                        <div class="titre inline-block" style="padding:16px 0"><?php echo $langs->trans('loginplus_option_copyright'); ?></div>
-                    </td>
+                <tr class="dolpgs-thead noborderside">
+                    <th colspan="3"><?php echo $langs->trans('loginplus_option_copyright'); ?></th>
                 </tr>
-                <tr class="liste_titre pgsz-optiontable-coltitle" >
-                    <th><?php echo $langs->trans('Parameter'); ?></th>
-                    <th><?php echo $langs->trans('Description'); ?></th>
-                    <th class="right"><?php echo $langs->trans('Value'); ?></th>
-                </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_copyright_title'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_copyright_title_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="text" name="ldo-copyright" value="<?php echo $conf->global->LOGINPLUS_COPYRIGHT; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_copyright_link'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_copyright_link_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="text" name="ldo-copyright-link" value="<?php echo $conf->global->LOGINPLUS_COPYRIGHT_LINK; ?>"></td>
                 </tr>
-                <tr class="oddeven pgsz-optiontable-tr">
+                <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_copyright_color'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_copyright_color_desc'); ?></td>
                     <td class="right pgsz-optiontable-field"><input type="color" name="ldo-copyright-color" value="<?php echo $conf->global->LOGINPLUS_COPYRIGHT_COLOR; ?>"></td>
                 </tr>
 
-
             </tbody>
         </table>
-        <div class="right" style="padding:16px 0;"><input type="submit" class="button" name="" value="<?php echo $langs->trans('Save'); ?>"></div>
+        <div class="right" ><input type="submit" class="dolpgs-btn btn-primary btn-sm" name="" value="<?php echo $langs->trans('Save'); ?>"></div>
     </form>
 
-    <h2 class="pgsz-title-option"><?php echo $langs->trans('loginplus_option_themes'); ?></h2>
+    <h3 class="dolpgs-table-title"><?php echo $langs->trans('loginplus_option_themes'); ?></h3>
     <form enctype="multipart/form-data" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post" id="">
         <input type="hidden" name="action" value="apply_mod">
         <input type="hidden" name="token" value="<?php echo newtoken(); ?>">
 
-        <ul id="pgsz-loginplus-themelist">
+        <ul class="dolpgs-flex-wrapper" id="loginplus-themelist">
             <?php foreach ($themes as $theme_key => $theme): ?>
-            <li>
+            <li class="dolpgs-flex-item flex-3">
                 <div class="ld-themepreview">
-                    <img src="../img/themes/<?php echo $theme_key.'/'.$theme['preview']; ?>" >
-                    <h3 class="ld-themename"><?php echo $theme['label']; ?></h3>
-                    <button class="ld-themeaction" name="ld_theme" type="submit" value="<?php echo $theme_key; ?>"><?php echo $langs->trans('Apply'); ?></button>
+                    <img src="../img/themes/<?php echo $theme_key.'/'.$theme['preview']; ?>" >                    
+                    <div class="ld-apply-overlay">
+                        <button class="dolpgs-btn" name="ld_theme" type="submit" value="<?php echo $theme_key; ?>"><?php echo $langs->trans('Apply'); ?></button>
+                    </div>                    
                 </div>            
             </li>
             <?php endforeach; ?>

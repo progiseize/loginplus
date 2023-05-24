@@ -55,7 +55,7 @@ class modLoginPlus extends DolibarrModules
         // It is used to group modules by family in module setup page
         $this->family = "Progiseize";
         // Module position in the family
-        $this->module_position = 160;
+        $this->module_position = '016';
         // Gives the possibility to the module, to provide his own family info and position of this family (Overwrite $this->family and $this->module_position. Avoid this)
         //$this->familyinfo = array('myownfamily' => array('position' => '001', 'label' => $langs->trans("MyOwnFamily")));
 
@@ -69,7 +69,7 @@ class modLoginPlus extends DolibarrModules
         $this->editor_url = 'https://progiseize.fr';
         
         // Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
-        $this->version = '1.5.1';
+        $this->version = '1.5.2';
         $this->url_last_version = "https://progiseize.fr/modules_info/".get_class($this)."_lastversion.txt";
 
         // Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
@@ -78,7 +78,7 @@ class modLoginPlus extends DolibarrModules
         // If file is in theme/yourtheme/img directory under name object_pictovalue.png, use this->picto='pictovalue'
         // If file is in module/img directory under name object_pictovalue.png, use this->picto='pictovalue@module'
         $version = explode('.',DOL_VERSION);
-        if($version[0] > 16): $this->picto='fa-users_users_fas_#263c5c';
+        if($version[0] > 16): $this->picto='fa-user-lock_fas_#263c5c';
         else: $this->picto='technic';
         endif;
 
@@ -102,10 +102,19 @@ class modLoginPlus extends DolibarrModules
         //                          'workflow' => array('WORKFLOW_MODULE1_YOURACTIONTYPE_MODULE2'=>array('enabled'=>'! empty($conf->module1->enabled) && ! empty($conf->module2->enabled)', 'picto'=>'yourpicto@mymodule')) // Set here all workflow context managed by module
         //                        );
         $this->module_parts = array(
-            'css' => array('loginplus/css/loginplus.css'),
+            'triggers' => 1,
+            'login' => 0,
+            'substitutions' => 0,
+            'menus' => 0,
+            'theme' => 0,
             'tpl' => 1,
+            'barcode' => 0, 
+            'models' => 0,
+            'css' => array('loginplus/css/loginplus.css'),
+            'js' => array(),
             'hooks' => array('all'),
-            'triggers' => 1
+            'dir' => array(),
+            'workflow' => array(),
         );
 
         // Data directories to create when module is enabled.
@@ -254,7 +263,8 @@ class modLoginPlus extends DolibarrModules
             'enabled'=> '$conf->loginplus->enabled',
             'perms'=> '$user->rights->loginplus->configurer',
             'target'=>'',
-            'user'=> 2
+            'user'=> 2,
+            'prefix' => '<span class="fas fa-user-lock" style="color: #6c6aa8;margin-right:3px;"></span> '
         );
         $r++;
 
@@ -264,7 +274,9 @@ class modLoginPlus extends DolibarrModules
             'titre'=> $this->name,
             'mainmenu'=>'progiseize',
             'leftmenu'=> $this->rights_class,
-            'url'=>'', 'langs'=>'loginplus@loginplus', 'position'=> $this->module_position, 'enabled'=>'1', 'perms'=>'1','target'=>'', 'user'=>2);
+            'url'=>'', 'langs'=>'loginplus@loginplus', 'position'=> $this->module_position, 'enabled'=>'1', 'perms'=>'1','target'=>'', 'user'=>2,
+            'prefix' => '<span class="fas fa-user-lock" style="color: #6c6aa8;margin-right:3px;"></span> '
+        );
         $r++;
 
         $this->menu[$r]=array(

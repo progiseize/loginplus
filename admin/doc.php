@@ -29,10 +29,6 @@ require_once DOL_DOCUMENT_ROOT.'/ecm/class/ecmfiles.class.php';
 
 dol_include_once('./loginplus/lib/loginplus.lib.php');
 
-
-// Change this following line to use the correct relative path from htdocs
-dol_include_once('/module/class/skeleton_class.class.php');
-
 // Protection if external user
 if ($user->societe_id > 0): accessforbidden(); endif;
 if (!$user->rights->loginplus->configurer): accessforbidden(); endif;
@@ -56,36 +52,40 @@ $action = GETPOST('action');
 * VIEW
 ****************************************************/
 
-llxHeader('','Documentation LoginPlus!',''); ?>
-<div id="pgsz-option" class="loginplus_adm pgsz-theme-<?php echo $conf->theme; ?>">
+$array_js = array();
+$array_css = array(
+    '/loginplus/css/dolpgs.css'
+);
+
+llxHeader('',$langs->transnoentities('Documentation').' :: '.$langs->transnoentities('Module300316Name'),'','','','',$array_js,$array_css,'','loginplus doc'); ?>
+
+
+<div class="dolpgs-main-wrapper">
 
 <?php if(in_array('progiseize', $conf->modules)): ?>
-    <h1><?php echo $langs->transnoentities('loginplus_head_doc'); ?></h1>
+    <h1 class="has-before"><?php echo $langs->transnoentities('loginplus_head_doc'); ?></h1>
 <?php else : ?>
     <table class="centpercent notopnoleftnoright table-fiche-title"><tbody><tr class="titre"><td class="nobordernopadding widthpictotitle valignmiddle col-picto"><span class="fas fa-tools valignmiddle widthpictotitle pictotitle" style=""></span></td><td class="nobordernopadding valignmiddle col-title"><div class="titre inline-block"><?php echo $langs->transnoentities('loginplus_head_doc'); ?></div></td></tr></tbody></table>
 <?php endif; ?>
-<?php $head = loginplusAdminPrepareHead(); dol_fiche_head($head, 'doc','loginplus', 0,'progiseize@progiseize'); ?>
+<?php $head = loginplusAdminPrepareHead(); dol_fiche_head($head, 'doc','loginplus', 0,'fa-user-lock_fas_#fb2a52'); ?>
+
+<h3 class="dolpgs-table-title"><?php echo $langs->trans('loginplus_optiontitle_doc'); ?></h3>
+<table class="dolpgs-table">
 
 
-<table class="noborder centpercent pgsz-option-table" style="border-top:none;">
+<table class="dolpgs-table">
     <tbody>
 
-        <?php // ARRIERE PLAN ?>
-        <tr class="titre">
-            <td class="nobordernopadding valignmiddle col-title" style="" colspan="3">
-                <div class="titre inline-block" style="padding:16px 0"><?php echo $langs->trans('loginplus_optiontitle_doc'); ?></div>
-            </td>
-        </tr>
-        <tr class="liste_titre pgsz-optiontable-coltitle">
+        <tr class="dolpgs-thead noborderside">
             <th><?php echo $langs->trans('Parameter'); ?></th>
             <th><?php echo $langs->trans('Description'); ?></th>
         </tr>
 
-        <tr class="oddeven pgsz-optiontable-tr">
+        <tr class="dolpgs-tbody">
             <td class="bold valigntop pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_doc_modeles'); ?></td>                
             <td class="pgsz-optiontable-fielddesc"><?php echo $langs->transnoentities('loginplus_doc_modeles_desc'); ?></td>
         </tr>
-        <tr class="oddeven pgsz-optiontable-tr">
+        <tr class="dolpgs-tbody">
             <td class="bold valigntop pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_doc_showImages'); ?></td>                
             <td class="pgsz-optiontable-fielddesc">
                 <?php echo $langs->trans('loginplus_doc_showImages_steps'); ?>
@@ -98,10 +98,10 @@ llxHeader('','Documentation LoginPlus!',''); ?>
                 </ul>
             </td>
         </tr>
-        <tr class="oddeven pgsz-optiontable-tr">
+        <tr class="dolpgs-tbody">
             <td class="bold valigntop pgsz-optiontable-fieldname"><?php echo $langs->transnoentities('loginplus_option_shape'); ?></td>                
             <td class="pgsz-optiontable-fielddesc">
-                <ul id="pgsz-loginplus-shapelist">
+                <ul id="loginplus-shapelist">
 
                     <?php foreach($tab_shapes as $id_group => $shapenames): ?>
                         <li>

@@ -1,0 +1,258 @@
+/* 
+ * Copyright (C) 2023 ProgiSeize <contact@progiseize.fr>
+ *
+ * This program and files/directory inner it is free software: you can 
+ * redistribute it and/or modify it under the terms of the 
+ * GNU Affero General Public License (AGPL) as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU AGPL for more details.
+ *
+ * You should have received a copy of the GNU AGPL
+ * along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --colorprimary: var(--colorbackhmenu1);
+  --colorsecondary: #6c6aa8;
+  --colorgraylight: #e0e0e0;
+  --colorgraylight2: #ccc;
+  --colorgraylight3: #878787;
+  --colorgraylight4: #696969;
+  --colordanger: #fb2a52;
+  --colorwarning: #f88533;
+  --colorsuccess: #25a580;
+  --colorfillgray: var(--colorbackvmenu1);  
+  --colorfillgray2: #f6f6f6;
+  --colorfull: #fb2a52;
+
+  --colordanger_bg: #ffe6ea;
+  --colorwarning_bg: #ffeadb;
+  --colorsuccess_bg: #e3ffea;
+
+}
+
+/** SPECIFIC **/
+
+/* Shape list */
+#loginplus-shapelist {margin: 0;padding: 0;list-style: none;}
+#loginplus-shapelist li {display: flex;}
+#loginplus-shapelist li h4 {margin-top: 0;}
+#loginplus-shapelist li div {margin-right: 16px;}
+#loginplus-shapelist li img {display: block;width: 192px;height: auto;margin: 0;}
+#loginplus-shapelist li p {text-align: center;margin: 3px 0 12px 0;}
+
+/** Various **/
+.ld-mask {opacity: 0.5;}
+
+/** Remodal list images **/
+.pgsz-remodal h1 {font-size: 18px;color: var(--colorprimary);font-weight: 700;text-transform: uppercase;font-family: 'Poppins', sans-serif;}
+.pgsz-remodal h1::before {display: inline-block;content: "";height: 14px;width: 2px;background: var(--colorfull);margin-bottom: -1px;margin-right: 8px;}
+.pgsz-remodal .pgsz-flex-wrapper {margin: 0 -6px;display: flex;flex-wrap: wrap;}
+.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal {background: transparent;width: 50%;padding: 6px 6px;box-sizing: border-box;}
+.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img {width: 100%;position: relative;opacity:0.8;transition: opacity 0.1s ease-in-out;cursor: pointer;box-sizing: border-box;}
+.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img.selected {opacity:1;border: 2px solid var(--main-bg-dark);}
+.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img::before {content: "";padding-top: 56.25%;display: block;}
+.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img:hover {opacity:1;}
+
+/** Theme list **/
+#loginplus-themelist {flex-wrap: wrap;margin: 0;padding: 0;list-style: none;margin: 0 -12px;}
+#loginplus-themelist li {margin: 0;padding: 12px;box-sizing: border-box;}
+#loginplus-themelist li .ld-themepreview {position: relative;}
+#loginplus-themelist li .ld-themepreview img {max-width: 100%;width: 100%;height: auto;position: relative;z-index: 1;display: block;}
+#loginplus-themelist li .ld-themepreview .ld-apply-overlay {position: absolute;top: 0;left: 0;right: 0;bottom: 0;background: var(--colorprimary);z-index: 2;display: flex;opacity: 0;transition: all .2s ease-in-out}
+#loginplus-themelist li .ld-themepreview .ld-apply-overlay:hover {opacity: 0.9;}
+#loginplus-themelist li .ld-themepreview .ld-apply-overlay button {margin: auto;color: #fff !important;background: transparent;border-color:#fff !important;}
+#loginplus-themelist li .ld-themepreview .ld-apply-overlay button:hover {color: var(--colorprimary) !important;background: #fff;}
+
+@media only screen and (min-width: 1820px) {#loginplus-themelist li {width: 25%;}}
+@media only screen and (max-width: 820px) {
+  #loginplus-themelist li {width: 100%;}
+}
+
+#loginplus-dialog .loginplus-msg {margin-bottom: 12px;}
+#loginplus-dialog .loginplus-msg:last-child {margin-bottom: 0;}
+#loginplus-dialog .loginplus-msglabel {font-weight: 700;}
+#loginplus-dialog .loginplus-msgcontent {}
+#loginplus-dialog .loginplus-msgauthor {font-size: 0.8em;font-style: italic;color: #666;}
+
+/*
+ * dolpgs - progiseize 1.4.1
+*/
+
+
+/*******************************************
+*
+*  CLASSES GENERALES
+* 
+* ******************************************/
+
+/** FONT WEIGHT **/
+.dolpgs-font-regular {font-weight: 400;}
+.dolpgs-font-medium {font-weight: 500;}
+.dolpgs-font-semibold {font-weight: 600;}
+.dolpgs-font-bold {font-weight: 700;}
+.dolpgs-font-extrabold {font-weight: 800;}
+.dolpgs-font-black {font-weight: 900;}
+
+/** DISPLAY **/
+.dolpgs-dnone {display: none;}
+
+.dolpgs-brdrbx {box-sizing: border-box;}
+
+/** COLORS **/
+.dolpgs-color-primary {color: var(--colorprimary);}
+.dolpgs-color-secondary {color: var(--colorsecondary);}
+.dolpgs-color-danger {color: var(--colordanger);}
+.dolpgs-color-warning {color: var(--colorwarning);}
+.dolpgs-color-success {color: var(--colorsuccess);}
+.dolpgs-color-gray {color: var(--colorgraylight3);}
+.dolpgs-color-gray2 {color: var(--colorgraylight2);}
+
+.dolpgs-color-primary-i {color: var(--colorprimary) !important;}
+.dolpgs-color-secondary-i {color: var(--colorsecondary) !important;}
+.dolpgs-color-danger-i {color: var(--colordanger) !important;}
+.dolpgs-color-warning-i {color: var(--colorwarning) !important;}
+.dolpgs-color-success-i {color: var(--colorsuccess) !important;}
+.dolpgs-color-gray-i {color: var(--colorgraylight3) !important;}
+.dolpgs-color-gray2-i {color: var(--colorgraylight2) !important;}
+
+.dolpgs-editlink {color: var(--colorgraylight2) !important;}
+.dolpgs-editlink:hover {color: var(--colorsecondary) !important;}
+
+.field-error {border-color: var(--colordanger) !important;}
+
+/** BACKGROUND **/
+.dolpgs-bg-primary {background: var(--colorprimary) !important;}
+.dolpgs-bg-secondary {background: var(--colorsecondary) !important;}
+.dolpgs-bg-danger {background: var(--colordanger) !important;}
+.dolpgs-bg-warning {background: var(--colorwarning) !important;}
+.dolpgs-bg-success {background: var(--colorsuccess) !important;}
+.dolpgs-bg-gray {background: var(--colorgraylight3) !important;}
+.dolpgs-bg-gray2 {background: var(--colorgraylight2) !important;}
+
+/** BOUTONS **/
+.dolpgs-btn {padding: 8px 12px;background: #fff; border: 1px solid var(--colorprimary);box-sizing: border-box;border-radius: 4px;color: var(--colorprimary);text-decoration: none;text-transform: uppercase;font-weight: 500;font-size: 0.9em;font-family: 'Poppins', sans-serif;cursor: pointer;line-height: normal !important;}
+.dolpgs-btn:hover {background: var(--colorprimary); color: #fff;text-decoration: none;}
+.dolpgs-btn.btn-primary {border: 1px solid var(--colorprimary);color: var(--colorprimary);}
+.dolpgs-btn.btn-primary:hover {background: var(--colorprimary); color: #fff;}
+.dolpgs-btn.btn-secondary {border: 1px solid var(--colorsecondary);color: var(--colorsecondary);}
+.dolpgs-btn.btn-secondary:hover {background: var(--colorsecondary); color: #fff;}
+.dolpgs-btn.btn-warning {border: 1px solid var(--colorwarning);color: var(--colorwarning);}
+.dolpgs-btn.btn-warning:hover {background: var(--colorwarning); color: #fff;}
+.dolpgs-btn.btn-danger {border: 1px solid var(--colordanger);color: var(--colordanger);}
+.dolpgs-btn.btn-danger:hover {background: var(--colordanger); color: #fff;}
+.dolpgs-btn.btn-success {border: 1px solid var(--colorsuccess);color: var(--colorsuccess);}
+.dolpgs-btn.btn-success:hover {background: var(--colorsuccess); color: #fff;}
+.dolpgs-btn.btn-sm {padding: 4px 8px;font-size: 0.85em;}
+
+/** TAGS **/
+.dolpgs-tag {padding: 3px 6px;border: 1px solid var(--colorprimary);box-sizing: border-box;border-radius: 4px;color: var(--colorprimary);text-decoration: none;text-transform: uppercase;font-weight: 600;font-size: 0.8em;font-family: 'Poppins', sans-serif;line-height: normal !important;display: inline-block;}
+.dolpgs-tag.tag-primary {border: 1px solid var(--colorprimary);color: var(--colorprimary);}
+.dolpgs-tag.tag-secondary {border: 1px solid var(--colorsecondary);color: var(--colorsecondary);}
+.dolpgs-tag.tag-warning {border: 1px solid var(--colorwarning);color: var(--colorwarning);}
+.dolpgs-tag.tag-danger {border: 1px solid var(--colordanger);color: var(--colordanger);}
+.dolpgs-tag.tag-success {border: 1px solid var(--colorsuccess);color: var(--colorsuccess);}
+
+/** FLEX WRAPPER **/
+.dolpgs-flex-wrapper {display: flex;flex-wrap: wrap;margin: 0 -16px}
+.dolpgs-flex-wrapper .dolpgs-flex-item {box-sizing: border-box;padding: 16px;}
+.dolpgs-flex-wrapper .dolpgs-flex-item.flex-1 {width: 100%;}
+.dolpgs-flex-wrapper .dolpgs-flex-item.flex-2 {width: 50%;}
+.dolpgs-flex-wrapper .dolpgs-flex-item.flex-3 {width: 33.33%;}
+.dolpgs-flex-wrapper .dolpgs-flex-item.flex-4 {width: 25%;}
+.dolpgs-flex-wrapper .dolpgs-flex-item.flex-5 {width: 20%;}
+
+@media screen and (min-width: 1960px){ .dolpgs-flex-wrapper .dolpgs-flex-item.flex-4 {width: 25%;}}
+@media screen and (max-width: 1460px){ .dolpgs-flex-wrapper .dolpgs-flex-item.flex-4 {width: 50%;}}
+@media screen and (max-width: 660px){ .dolpgs-flex-wrapper .dolpgs-flex-item.flex-4 {width: 100%;}}
+
+/* ZONE DROP */
+.dolpgs-zonedrop {border: 1px dashed var(--colorgraylight);position: relative;background: #fafafa;transition: border .2s ease-in-out;text-align: center;padding: 64px 16px;}
+.dolpgs-zonedrop:hover, .dolpgs-zonedrop.dragged {border: 1px dashed var(--colorsecondary);}
+.dolpgs-zonedrop .zonedrop-text {color: var(--colorgraylight3);transition: color .2s ease-in-out;}
+.dolpgs-zonedrop:hover .zonedrop-text, .dolpgs-zonedrop.dragged .zonedrop-text {color: var(--colorsecondary);}
+.dolpgs-zonedrop .zonedrop-text .zonedrop-file {}
+.dolpgs-zonedrop .zonedrop-text .zonedrop-file .name {font-weight: 500;}
+.dolpgs-zonedrop .zonedrop-text .zonedrop-file .toobig {color: var(--colordanger);font-size: 12px;}
+.dolpgs-zonedrop .zonedrop-text .zonedrop-file i {font-size: 12px;color: var(--colorsuccess);}
+.dolpgs-zonedrop .zonedrop-input {cursor:pointer; position:absolute; top:0; left:0; right:0; bottom:0; opacity:0; width: 100%;}
+
+
+/**/
+.dolpgs-main-wrapper {font-family: 'Poppins',sans-serif;}
+.dolpgs-main-wrapper h1 {font-size: 18px;color: var(--colorprimary);font-weight: 700;text-transform: uppercase;}
+.dolpgs-main-wrapper h1 i {color: var(--colorsecondary);margin-right: 5px;}
+.dolpgs-main-wrapper h1.has-before::before {display: inline-block;content: "";height: 14px;width: 2px;background: var(--colorfull);margin-bottom: -1px;margin-right: 8px;}
+
+.dolpgs-main-wrapper .required {color: var(--colordanger);}
+
+
+/*******************************************
+*
+*  LISTE DES MODULES PROGISEIZE
+* 
+* ******************************************/
+.dolpgs-main-wrapper .module-card {border: 1px solid var(--colorgraylight);border-radius: 3px;}
+.dolpgs-main-wrapper .module-card .module-title {background: var(--colorprimary);margin:0;padding: 96px 16px 16px 16px;position: relative;overflow: hidden;background-size: cover;}
+.dolpgs-main-wrapper .module-card .module-title.progiseize {background: url('../../img/pgsz.jpg');}
+.dolpgs-main-wrapper .module-card .module-title h3 {margin:0;padding: 0;color: #fff;text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);font-size: 1.3em}
+.dolpgs-main-wrapper .module-card .module-title .update-info {position: absolute;top: 16px;right: 0;}
+.dolpgs-main-wrapper .module-card .module-title .update-info span {background: var(--colorsuccess);color: #fff;font-size: 11px;text-transform: uppercase;padding: 4px 8px;border-radius: 3px 0 0 3px;box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);}
+.dolpgs-main-wrapper .module-card .module-title .update-info span i {margin-left: 3px;font-size: 10px;}
+.dolpgs-main-wrapper .module-card .module-title .update-info span.need-update {background: var(--colordanger);}
+.dolpgs-main-wrapper .module-card .module-title.enabled {border-bottom: 5px solid var(--colorsuccess);}
+.dolpgs-main-wrapper .module-card .module-title.disabled {border-bottom: 5px solid var(--colordanger);}
+.dolpgs-main-wrapper .module-card p.module-desc {color: var(--colorgraylight3);margin: 0;padding: 16px 16px;line-height: 1.5;min-height: 100px;box-sizing: border-box;}
+.dolpgs-main-wrapper .module-card .module-infos-list {color: var(--colorprimary);margin: 0;padding: 16px 8px;list-style: none;display: flex;border-top: 1px dashed var(--colorgraylight);align-items: center;}
+.dolpgs-main-wrapper .module-card .module-infos-list .module-info {color: var(--colorprimary);margin: 0 8px;}
+.dolpgs-main-wrapper .module-card .module-infos-list .module-info.module-setup {flex: 1;text-align: right;}
+.dolpgs-main-wrapper .module-card .module-infos-list .module-info.module-setup a {color: var(--colorgraylight2);text-decoration: none;}
+.dolpgs-main-wrapper .module-card .module-infos-list .module-info.module-setup a:hover {color: var(--colorsecondary);}
+
+
+/*******************************************
+*
+*  TABS DOLIBARR
+* 
+* ******************************************/
+.dolpgs-main-wrapper .tabs {margin-top:24px;}
+.dolpgs-main-wrapper .tabs a.tabTitle .imgTabTitle {color: var(--colorfull);}
+.dolpgs-main-wrapper .tabs .tabsElem a {font-family: 'Poppins',sans-serif;font-weight: 400 !important;color: var(--colorprimary) !important;}
+.dolpgs-main-wrapper .tabs .tabsElem a.tabunactive {opacity: 0.8;}
+.dolpgs-main-wrapper .tabs .tabsElem a.tabunactive:hover {opacity: 1;}
+.dolpgs-main-wrapper .tabs .tabsElem.tabsElemActive a {font-weight: 500 !important;color: var(--colorprimary);}
+
+
+/*******************************************
+*
+*  TABLE ENHANCEMENT
+* 
+* ******************************************/
+h3.dolpgs-table-title {color: var(--colorprimary);font-weight: 700;font-size: 1.1em;margin: 16px 0;}
+h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;width: 2px;background: var(--colorfull);margin-bottom: -1px;margin-right: 8px;}
+
+.dolpgs-table {font-family: 'Poppins',sans-serif;border-collapse: collapse;width: 100%;margin-bottom: 24px;}
+.dolpgs-table tbody tr.dolpgs-thead {border: 1px solid var(--colorprimary);}
+.dolpgs-table tbody tr.dolpgs-thead th {border: 1px solid var(--colorprimary);background: var(--colorfillgray2);padding: 12px;color: var(--colorprimary);font-weight: 700;text-transform: uppercase;font-size: 0.9em;font-family: 'Poppins',sans-serif;text-align: left;}
+.dolpgs-table tbody tr.dolpgs-thead.noborderside th {border: none;}
+.dolpgs-table tbody tr.dolpgs-thead th.center {text-align: center;}
+.dolpgs-table tbody tr.dolpgs-thead th.right {text-align: right;}
+.dolpgs-table tbody tr.dolpgs-thead.vtop {vertical-align: top;}
+.dolpgs-table tbody tr.dolpgs-tbody {padding: 16px 12px;border: 1px solid var(--colorprimary);}
+.dolpgs-table tbody tr.dolpgs-tbody.withoutborder {border: none;}
+.dolpgs-table tbody tr.dolpgs-tbody td {padding: 12px;color: var(--colorprimary);font-family: 'Poppins',sans-serif;border-bottom:1px solid var(--colorgraylight2);}
+.dolpgs-table tbody tr.dolpgs-tbody.nopadding td{padding: 0;}
+.dolpgs-table tbody tr.dolpgs-tbody td.center {text-align: center;}
+.dolpgs-table tbody tr.dolpgs-tbody td.right {text-align: right;}
+.dolpgs-table tbody tr.dolpgs-tbody td input {font-family: 'Poppins',sans-serif;}
+.dolpgs-table tbody tr.dolpgs-tbody:last-child td {border-bottom: none !important;}
+.dolpgs-table tbody tr.dolpgs-tbody:hover {background: var(--colorfillgray) !important;}
+.dolpgs-table tbody tr.dolpgs-tbody.vtop {vertical-align: top;}
+.dolpgs-table.dolpgs-nohovertable tbody tr.dolpgs-tbody:hover {background: transparent !important;}
