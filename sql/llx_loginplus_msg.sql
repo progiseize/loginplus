@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS llx_loginplus_msg(
   date_creation datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   author_maj int NOT NULL DEFAULT '0',
   tms datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  force_view tinyint(1) NOT NULL,
+  force_view tinyint(1) NOT NULL DEFAULT '0',
   date_expiration datetime DEFAULT NULL,
   nb_view int NOT NULL DEFAULT '0',
   entity int NOT NULL,

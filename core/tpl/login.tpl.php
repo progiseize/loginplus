@@ -39,8 +39,6 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 	if (GETPOST('dol_no_mouse_hover')) $conf->dol_no_mouse_hover = 1;
 	if (GETPOST('dol_use_jmobile')) $conf->dol_use_jmobile = 1;
 
-
-
 	// If we force to use jmobile, then we reenable javascript
 	if (!empty($conf->dol_use_jmobile)) $conf->use_javascript_ajax = 1;
 
