@@ -24,7 +24,7 @@
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) { print "Error, template page can't be called as URL"; exit;}
 
-if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
+if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 
 	require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 
@@ -55,7 +55,7 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 
 	$disablenofollow = 1;
 	if (!preg_match('/'.constant('DOL_APPLICATION_TITLE').'/', $title)) $disablenofollow = 0;
-	if (!empty($conf->global->MAIN_OPTIMIZEFORTEXTBROWSER)) $disablenofollow = 0;
+	if (!empty(getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER'))) $disablenofollow = 0;
 
 	print top_htmlhead('', $titleofloginpage, 0, 0, $arrayofjs, $arrayofcss, 0, $disablenofollow);
 
@@ -66,17 +66,20 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 	<style type="text/css">
 	:root {
 
-	  --shape-color: <?php echo $conf->global->LOGINPLUS_SHAPE_COLOR; ?>;
-	  --shape-opacity: <?php echo $conf->global->LOGINPLUS_SHAPE_OPACITY / 100; ?>;
-	  --bg-color: <?php echo $conf->global->LOGINPLUS_BG_COLOR; ?>;
-	  --bg-imageopacity: <?php echo $conf->global->LOGINPLUS_BG_IMAGEOPACITY / 100; ?>;
-	  --main-color: <?php echo $conf->global->LOGINPLUS_MAIN_COLOR; ?>;
-	  --second-color: <?php echo $conf->global->LOGINPLUS_SECOND_COLOR; ?>;
-	  --image-opacity: <?php echo $conf->global->LOGINPLUS_IMAGE_OPACITY / 100; ?>;
-	  --image-color: <?php echo $conf->global->LOGINPLUS_IMAGE_COLOR; ?>;
-	  --txt-titlecolor: <?php echo $conf->global->LOGINPLUS_TXT_TITLECOLOR; ?>;
-	  --txt-contentcolor: <?php echo $conf->global->LOGINPLUS_TXT_CONTENTCOLOR; ?>;
-	  --copyright-color: <?php echo $conf->global->LOGINPLUS_COPYRIGHT_COLOR; ?>;
+		--bg-color: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BG_COLOR')); ?>;
+		--shape-color: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_SHAPE_COLOR')); ?>;
+		--main-color: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_MAIN_COLOR')); ?>;
+		--second-color: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_SECOND_COLOR')); ?>;
+		--image-color: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_IMAGE_COLOR')); ?>;
+		--txt-titlecolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_TXT_TITLECOLOR')); ?>;
+		--txt-contentcolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_TXT_CONTENTCOLOR')); ?>;
+		--copyright-color: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_COPYRIGHT_COLOR')); ?>;
+
+		--shape-opacity: <?php echo getDolGlobalInt('LOGINPLUS_SHAPE_OPACITY') / 100; ?>;
+		--bg-imageopacity: <?php echo getDolGlobalInt('LOGINPLUS_BG_IMAGEOPACITY') / 100; ?>;		
+		--image-opacity: <?php echo getDolGlobalInt('LOGINPLUS_IMAGE_OPACITY') / 100; ?>;
+		
+		
 	}
 
 	</style>
@@ -85,24 +88,24 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 
 	<!-- BEGIN PHP CUSTOM TEMPLATE loginplus! LOGIN.TPL.PHP -->
 	<body id="loginplus" class="tpl-1" >
-		<?php if(!empty($conf->global->LOGINPLUS_BG_IMAGEKEY)): ?>
-			<div class="loginplus-bgimage" style="background-image: url('<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo $conf->global->LOGINPLUS_BG_IMAGEKEY; ?>');background-position: center;"></div>
+		<?php if(!empty(getDolGlobalString('LOGINPLUS_BG_IMAGEKEY'))): ?>
+			<div class="loginplus-bgimage" style="background-image: url('<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo getDolGlobalString('LOGINPLUS_BG_IMAGEKEY'); ?>');background-position: center;"></div>
 		<?php endif; ?>
 
-		<div class="loginplus-wrapper <?php if(!empty($conf->global->LOGINPLUS_SHAPE_PATH)): echo $conf->global->LOGINPLUS_SHAPE_PATH; endif; ?>">
-			<div class="loginplus-wrapperbox <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-one-side';endif;?>">
+		<div class="loginplus-wrapper <?php if(!empty(getDolGlobalString('LOGINPLUS_SHAPE_PATH'))): echo getDolGlobalString('LOGINPLUS_SHAPE_PATH'); endif; ?>">
+			<div class="loginplus-wrapperbox <?php if(!getDolGlobalInt('LOGINPLUS_TWOSIDES')): echo 'ld-one-side';endif;?>">
 
-				<div class="loginplus-wrapperbox-side image-side <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-hide';endif;?>">
-					<?php if(!empty($conf->global->LOGINPLUS_IMAGE_KEY)): ?>
-						<div class="loginplus-img" style="background-image: url('<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo $conf->global->LOGINPLUS_IMAGE_KEY; ?>');background-size: cover;background-position: center;"></div>
+				<div class="loginplus-wrapperbox-side image-side <?php if(!getDolGlobalInt('LOGINPLUS_TWOSIDES')): echo 'ld-hide';endif;?>">
+					<?php if(!empty(getDolGlobalString('LOGINPLUS_IMAGE_KEY'))): ?>
+						<div class="loginplus-img" style="background-image: url('<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo getDolGlobalString('LOGINPLUS_IMAGE_KEY'); ?>');background-size: cover;background-position: center;"></div>
 					<?php endif; ?>
 						<div class="loginplus-txt">
-							<?php if(!empty($conf->global->LOGINPLUS_TXT_TITLE)): echo '<h2>'.$conf->global->LOGINPLUS_TXT_TITLE.'</h2>'; endif; ?>
-							<?php if(!empty($conf->global->LOGINPLUS_TXT_CONTENT)): echo '<p>'.$conf->global->LOGINPLUS_TXT_CONTENT.'</p>'; endif; ?>
+							<?php if(!empty(getDolGlobalString('LOGINPLUS_TXT_TITLE'))): echo '<h2>'.getDolGlobalString('LOGINPLUS_TXT_TITLE').'</h2>'; endif; ?>
+							<?php if(!empty(getDolGlobalString('LOGINPLUS_TXT_CONTENT'))): echo '<p>'.getDolGlobalString('LOGINPLUS_TXT_CONTENT').'</p>'; endif; ?>
 						</div>
 				</div>
 
-				<div class="loginplus-wrapperbox-side content-side <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-extend';endif;?>">
+				<div class="loginplus-wrapperbox-side content-side <?php if(!getDolGlobalInt('LOGINPLUS_TWOSIDES')): echo 'ld-extend';endif;?>">
 					<img alt="" src="<?php echo $urllogo; ?>" id="loginplus-imglogo" />
 
 					<form id="login" name="login" method="post" action="<?php echo $php_self; ?>">
@@ -128,13 +131,13 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 						<div class="fields-group" id="login_line1">
 							<div id="login_right">
 								<div class="field-row tagtable">
-									<?php if($conf->global->LOGINPLUS_SHOW_FORMLABELS): ?><label for="username"><i class="fa fa-user"></i> <?php echo $langs->trans("Login"); ?></label><?php endif; ?>
-									<input type="text" id="username" name="username" class="" value="<?php echo dol_escape_htmltag($login); ?>" tabindex="1" autofocus="autofocus" />
+									<?php if(getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')): ?><label for="username"><i class="fa fa-user"></i> <?php echo $langs->trans("Login"); ?></label><?php endif; ?>
+									<input type="text" id="username" name="username" placeholder="<?php echo $langs->trans("Login"); ?>" class="" value="<?php echo dol_escape_htmltag($login); ?>" tabindex="1" autofocus="autofocus" />
 								</div>
 
 								<div class="field-row tagtable">
-									<?php if($conf->global->LOGINPLUS_SHOW_FORMLABELS): ?><label for="password"><i class="fa fa-key"></i> <?php echo $langs->trans("Password"); ?></label><?php endif; ?>
-									<input id="password" placeholder="<?php echo $langs->trans("Password"); ?>" name="password" class="" type="password" value="<?php echo dol_escape_htmltag($password); ?>" tabindex="2" autocomplete="<?php echo empty($conf->global->MAIN_LOGIN_ENABLE_PASSWORD_AUTOCOMPLETE) ? 'off' : 'on'; ?>" />
+									<?php if(getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')): ?><label for="password"><i class="fa fa-key"></i> <?php echo $langs->trans("Password"); ?></label><?php endif; ?>
+									<input id="password" placeholder="<?php echo $langs->trans("Password"); ?>" name="password" class="" type="password" value="<?php echo dol_escape_htmltag($password); ?>" tabindex="2" autocomplete="<?php echo empty(getDolGlobalInt('MAIN_LOGIN_ENABLE_PASSWORD_AUTOCOMPLETE')) ? 'off' : 'on'; ?>" />
 								</div>
 
 								<?php if ($captcha):
@@ -182,9 +185,9 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 					</form>
 
 					<?php // MODE MAINTENANCE
-					if ($conf->global->LOGINPLUS_ISMAINTENANCE): ?>
+					if (getDolGlobalInt('LOGINPLUS_ISMAINTENANCE')): ?>
 						<div class="loginplus-maintenance-msg">
-							<?php if($conf->global->LOGINPLUS_MAINTENANCETEXT): echo $conf->global->LOGINPLUS_MAINTENANCETEXT;
+							<?php if(getDolGlobalString('LOGINPLUS_MAINTENANCETEXT')): echo getDolGlobalString('LOGINPLUS_MAINTENANCETEXT');
 							else: echo $langs->trans('loginplus_option_maintenance_activated');
 							endif;?>
 						</div>
@@ -206,12 +209,12 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 
 					<div class="loginplus-helplinks align-center">	
 						<?php if ($forgetpasslink): $url = DOL_URL_ROOT.'/user/passwordforgotten.php'.$moreparam;
-							if (!empty($conf->global->MAIN_PASSWORD_FORGOTLINK)): $url = $conf->global->MAIN_PASSWORD_FORGOTLINK; endif;
+							if (!empty(getDolGlobalString('MAIN_PASSWORD_FORGOTLINK'))): $url = getDolGlobalString('MAIN_PASSWORD_FORGOTLINK'); endif;
 							echo '<a class="alogin" href="'.dol_escape_htmltag($url).'">'.$langs->trans('PasswordForgotten').'</a>';
 						endif; ?>
 						<?php if ($forgetpasslink && $helpcenterlink): echo ' - '; endif; ?>
 						<?php if ($helpcenterlink): $url = DOL_URL_ROOT.'/support/index.php'.$moreparam;
-							if (!empty($conf->global->MAIN_HELPCENTER_LINKTOUSE)) $url = $conf->global->MAIN_HELPCENTER_LINKTOUSE;
+							if (!empty(getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE'))) $url = getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE');
 							echo '<a class="alogin" href="'.dol_escape_htmltag($url).'" target="_blank">'.$langs->trans('NeedHelpCenter').'</a>';
 						endif; ?>
 					</div>
@@ -219,12 +222,12 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 				</div>
 			</div>
 
-			<?php if (!empty($conf->global->MAIN_HTML_FOOTER)): print $conf->global->MAIN_HTML_FOOTER; endif; ?>
+			<?php if (!empty(getDolGlobalString('MAIN_HTML_FOOTER'))): print getDolGlobalString('MAIN_HTML_FOOTER'); endif; ?>
 
-			<?php if($conf->global->LOGINPLUS_COPYRIGHT): 
-				$copyright_text = $conf->global->LOGINPLUS_COPYRIGHT;
-				if($conf->global->LOGINPLUS_COPYRIGHT_LINK):
-					$copyright_link = '<a href="'.$conf->global->LOGINPLUS_COPYRIGHT_LINK.'" target="_blank">';
+			<?php if(getDolGlobalString('LOGINPLUS_COPYRIGHT')): 
+				$copyright_text = getDolGlobalString('LOGINPLUS_COPYRIGHT');
+				if(getDolGlobalString('LOGINPLUS_COPYRIGHT_LINK')):
+					$copyright_link = '<a href="'.getDolGlobalString('LOGINPLUS_COPYRIGHT_LINK').'" target="_blank">';
 					$copyright_text = str_replace('[', $copyright_link, $copyright_text);
 					$copyright_text = str_replace(']', '</a>', $copyright_text);
 				endif; ?>
@@ -242,9 +245,9 @@ if($conf->global->LOGINPLUS_ACTIVELOGINTPL):
 		endif; ?>
 
 		<?php // Google Analytics
-		if (!empty($conf->google->enabled) && !empty($conf->global->MAIN_GOOGLE_AN_ID)):
+		if (!empty($conf->google->enabled) && !empty(getDolGlobalString('MAIN_GOOGLE_AN_ID'))):
 
-			$tmptagarray = explode(',', $conf->global->MAIN_GOOGLE_AN_ID);
+			$tmptagarray = explode(',', getDolGlobalString('MAIN_GOOGLE_AN_ID'));
 			foreach ($tmptagarray as $tmptag):
 				print "\n";
 				print "<!-- JS CODE TO ENABLE for google analtics tag -->\n";

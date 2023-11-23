@@ -24,22 +24,24 @@ if (! $res && file_exists("../../main.inc.php")): $res=@include '../../main.inc.
 if (! $res && file_exists("../../../main.inc.php")): $res=@include '../../../main.inc.php'; endif;
 
 require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
+require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/security2.lib.php';
-require_once DOL_DOCUMENT_ROOT.'/categories/class/categorie.class.php';
 require_once DOL_DOCUMENT_ROOT.'/ecm/class/ecmdirectory.class.php';
 require_once DOL_DOCUMENT_ROOT.'/ecm/class/ecmfiles.class.php';
-require_once DOL_DOCUMENT_ROOT.'/ecm/class/ecmfiles.class.php';
+include_once DOL_DOCUMENT_ROOT."/core/lib/images.lib.php";
 
 dol_include_once('./loginplus/lib/loginplus.lib.php');
 
 // Protection if external user
-if ($user->societe_id > 0): accessforbidden(); endif;
+if ($user->socid > 0): accessforbidden(); endif;
 if (!$user->rights->loginplus->configurer): accessforbidden(); endif;
 
 
 /*******************************************************************
 * VARIABLES
 ********************************************************************/
+$action = GETPOST('action','aZ09');
+
 $tab_img = loginplusGetShareImages();
 $tab_img = array_column($tab_img, NULL, 'share');
 
@@ -47,96 +49,71 @@ $tab_shapes = loginplusGetShapes();
 $themes = loginplusGetThemes();
 $dir_loginplus = loginplusGetFolder();
 
+$formother = new FormOther($db);
 
 /*******************************************************************
 * ACTIONS
 ********************************************************************/
 
-$action = GETPOST('action');
+// VERIFS TEMPLATE PASSWORD
+$forgetpass_tpl = '../core/tpl/passwordforgotten.tpl.php';
+$theme_forgetpass_tpl = DOL_DOCUMENT_ROOT.'/theme/'.$conf->theme.'/tpl/passwordforgotten.tpl.php';
 
-if ($action == 'set_options'): 
+if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL') > 0 && !file_exists($theme_forgetpass_tpl)):
+    if (!copy($forgetpass_tpl, $theme_forgetpass_tpl)):
+        setEventMessages($langs->trans('loginplus_optionp_copytpl_error'), null, 'errors');
+    endif;
+elseif(!getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL') && file_exists($theme_forgetpass_tpl)): 
+    unlink($theme_forgetpass_tpl);
+endif;
 
-    if(GETPOST('token') == $_SESSION['token']):
+switch($action):
 
-        if(!dolibarr_set_const($db, "LOGINPLUS_ACTIVELOGINTPL",GETPOST('ldo-activatetpl'),'chaine',0,'',$conf->entity)): $error++; endif;
-        
-        if ($user->rights->loginplus->maintenancemode):
-            if(!dolibarr_set_const($db, "LOGINPLUS_ISMAINTENANCE",GETPOST('ldo-ismaintenance'),'chaine',0,'',$conf->entity)): $error++; endif;
+    //
+    case 'setparams':
+
+        // Maintenance
+        if ($user->rights->loginplus->maintenancemode && GETPOSTISSET('ldo-maintenancetxt')):
             if(!dolibarr_set_const($db, "LOGINPLUS_MAINTENANCETEXT",GETPOST('ldo-maintenancetxt','alphanum'),'chaine',0,'',$conf->entity)): $error++; endif;
-        endif;
-        
-        if(GETPOSTISSET('ldo-activatetpl')):
+        endif; 
 
-            // DUPLICATA DU TPL
-            $file_to_copy = '../core/tpl/passwordforgotten.tpl.php';
-            $copy_file = DOL_DOCUMENT_ROOT.'/theme/'.$conf->theme.'/tpl/passwordforgotten.tpl.php';
-            
-            // SI LE FICHIER N'EXISTE PAS DANS LE THEME // ON LE COPIE
-            if(!file_exists($copy_file)):             
-                if (!copy($file_to_copy, $copy_file)):
-                    setEventMessages($langs->trans('loginplus_optionp_copytpl_error'), null, 'errors');
-                endif;
-            endif;
-
-        else:
-            // SUPPRESSION DU TPL
-            $file_to_del = DOL_DOCUMENT_ROOT.'/theme/'.$conf->theme.'/tpl/passwordforgotten.tpl.php';
-
-            if(file_exists($file_to_del)): unlink($file_to_del); endif;
-
-        endif;
-
-        // VERIFICATION ARRIERE PLAN
-        if(!empty(GETPOST('ldo-bg-color'))): $bg_color = GETPOST('ldo-bg-color'); else: $bg_color = '#ffffff'; endif;
-        if(!empty(GETPOST('ldo-bg-imageopacity'))): $bgimage_opacity = GETPOST('ldo-bg-imageopacity'); else: $bgimage_opacity = 0; endif;
-
-        if(!dolibarr_set_const($db, "LOGINPLUS_BG_COLOR",$bg_color,'chaine',0,'',$conf->entity)): $error++; endif;
+        // ARRIERE PLAN
+        if(!dolibarr_set_const($db, 'LOGINPLUS_BG_COLOR',GETPOST('LOGINPLUS_BG_COLOR')?:'ffffff','chaine',0,'',$conf->entity)): $error++; endif;
+        if(!dolibarr_set_const($db, "LOGINPLUS_BG_IMAGEOPACITY",GETPOST('LOGINPLUS_BG_IMAGEOPACITY')?:0,'chaine',0,'',$conf->entity)): $error++; endif;
         if(!dolibarr_set_const($db, "LOGINPLUS_BG_IMAGEKEY",GETPOST('ldo-bg-imagekey'),'chaine',0,'',$conf->entity)): $error++; endif;
-        if(!dolibarr_set_const($db, "LOGINPLUS_BG_IMAGEOPACITY",$bgimage_opacity,'chaine',0,'',$conf->entity)): $error++; endif;
 
-        // VERIFICATION FORME
-        if(!empty(GETPOST('ldo-shape-path'))): $shape_path = GETPOST('ldo-shape-path'); else: $shape_path = 'no'; endif;
-        if(!empty(GETPOST('ldo-shape-color'))): $shape_color = GETPOST('ldo-shape-color'); else: $shape_color = '#000000'; endif;
-        if(!empty(GETPOST('ldo-shape-opacity'))): $shape_opacity = GETPOST('ldo-shape-opacity'); else: $shape_opacity = 0; endif;
-
-        if(!dolibarr_set_const($db, "LOGINPLUS_SHAPE_PATH",$shape_path,'chaine',0,'',$conf->entity)): $error++; endif;
-        if(!dolibarr_set_const($db, "LOGINPLUS_SHAPE_COLOR",$shape_color,'chaine',0,'',$conf->entity)): $error++; endif;
-        if(!dolibarr_set_const($db, "LOGINPLUS_SHAPE_OPACITY",$shape_opacity,'chaine',0,'',$conf->entity)): $error++; endif;
-
+        // SHAPE
+        if(!dolibarr_set_const($db, 'LOGINPLUS_SHAPE_COLOR',GETPOST('LOGINPLUS_SHAPE_COLOR')?:'263c5c','chaine',0,'',$conf->entity)): $error++; endif;
+        if(!dolibarr_set_const($db, "LOGINPLUS_SHAPE_OPACITY",GETPOST('LOGINPLUS_SHAPE_OPACITY')?:0,'chaine',0,'',$conf->entity)): $error++; endif;
+        if(!dolibarr_set_const($db, "LOGINPLUS_SHAPE_PATH",(!empty(GETPOST('ldo-shape-path'))?GETPOST('ldo-shape-path'):'no'),'chaine',0,'',$conf->entity)): $error++; endif;
 
         // BOX LOGIN
-        if(!dolibarr_set_const($db, "LOGINPLUS_MAIN_COLOR",GETPOST('ldo-main-color'),'chaine',0,'',$conf->entity)): $error++; endif;
-        if(!dolibarr_set_const($db, "LOGINPLUS_SECOND_COLOR",GETPOST('ldo-second-color'),'chaine',0,'',$conf->entity)): $error++; endif;
+        if(!dolibarr_set_const($db, 'LOGINPLUS_MAIN_COLOR',GETPOST('LOGINPLUS_MAIN_COLOR')?:'007b8c','chaine',0,'',$conf->entity)): $error++; endif;
+        if(!dolibarr_set_const($db, 'LOGINPLUS_SECOND_COLOR',GETPOST('LOGINPLUS_SECOND_COLOR')?:'263c5c','chaine',0,'',$conf->entity)): $error++; endif;
 
         // BOX TXT IMG
-        if(!empty(GETPOST('ldo-img-opacity'))): $image_opacity = GETPOST('ldo-img-opacity'); else: $image_opacity = 0; endif;
-        if(!empty(GETPOST('ldo-txt-titlecolor'))): $title_color = GETPOST('ldo-txt-titlecolor'); else: $title_color = '#000000'; endif;
-        if(!empty(GETPOST('ldo-txt-contentcolor'))): $content_color = GETPOST('ldo-txt-contentcolor'); else: $content_color = '#000000'; endif;
-
-        if(!dolibarr_set_const($db, "LOGINPLUS_TWOSIDES",GETPOST('ldo-twosides'),'chaine',0,'',$conf->entity)): $error++; endif;
-
-        if(!dolibarr_set_const($db, "LOGINPLUS_IMAGE_COLOR",GETPOST('ldo-img-color'),'chaine',0,'',$conf->entity)): $error++; endif;    
-        if(!dolibarr_set_const($db, "LOGINPLUS_IMAGE_KEY",GETPOST('ldo-img-key'),'chaine',0,'',$conf->entity)): $error++; endif;
-        if(!dolibarr_set_const($db, "LOGINPLUS_IMAGE_OPACITY",$image_opacity,'chaine',0,'',$conf->entity)): $error++; endif;
-
+        if(!dolibarr_set_const($db, "LOGINPLUS_IMAGE_COLOR",GETPOST('LOGINPLUS_IMAGE_COLOR')?:'263c5c','chaine',0,'',$conf->entity)): $error++; endif;
         if(!dolibarr_set_const($db, "LOGINPLUS_TXT_TITLE",trim(GETPOST('ldo-txt-title')),'chaine',0,'',$conf->entity)): $error++; endif;
-        if(!dolibarr_set_const($db, "LOGINPLUS_TXT_TITLECOLOR",trim($title_color),'chaine',0,'',$conf->entity)): $error++; endif;
+        if(!dolibarr_set_const($db, "LOGINPLUS_TXT_TITLECOLOR",GETPOST('LOGINPLUS_TXT_TITLECOLOR')?:'000000','chaine',0,'',$conf->entity)): $error++; endif;
         if(!dolibarr_set_const($db, "LOGINPLUS_TXT_CONTENT",trim(GETPOST('ldo-txt-content')),'chaine',0,'',$conf->entity)): $error++; endif;
-        if(!dolibarr_set_const($db, "LOGINPLUS_TXT_CONTENTCOLOR",trim($content_color),'chaine',0,'',$conf->entity)): $error++; endif;
+        if(!dolibarr_set_const($db, "LOGINPLUS_TXT_CONTENTCOLOR",GETPOST('LOGINPLUS_TXT_CONTENTCOLOR')?:'000000','chaine',0,'',$conf->entity)): $error++; endif;
+        if(!dolibarr_set_const($db, "LOGINPLUS_IMAGE_OPACITY",GETPOST('LOGINPLUS_IMAGE_OPACITY')?:0,'chaine',0,'',$conf->entity)): $error++; endif;
+        if(!dolibarr_set_const($db, "LOGINPLUS_IMAGE_KEY",GETPOST('ldo-img-key'),'chaine',0,'',$conf->entity)): $error++; endif;
 
+        // COPYRIGHT
+        if(!dolibarr_set_const($db, "LOGINPLUS_COPYRIGHT_COLOR",GETPOST('LOGINPLUS_COPYRIGHT_COLOR')?:'3e3e3e','chaine',0,'',$conf->entity)): $error++; endif;
         if(!dolibarr_set_const($db, "LOGINPLUS_COPYRIGHT",trim(GETPOST('ldo-copyright')),'chaine',0,'',$conf->entity)): $error++; endif;
         if(!dolibarr_set_const($db, "LOGINPLUS_COPYRIGHT_LINK",GETPOST('ldo-copyright-link'),'chaine',0,'',$conf->entity)): $error++; endif;
-        if(!dolibarr_set_const($db, "LOGINPLUS_COPYRIGHT_COLOR",GETPOST('ldo-copyright-color'),'chaine',0,'',$conf->entity)): $error++; endif;
+        
 
         if(!$error):$db->commit(); setEventMessages($langs->trans('loginplus_optionp_success'), null, 'mesgs');
         else: $db->rollback(); setEventMessages($langs->trans('loginplus_optionp_error'), null, 'errors');
         endif;
-    else:
-        setEventMessages($langs->trans('SecurityTokenHasExpiredSoActionHasBeenCanceledPleaseRetry'), null, 'warnings');
-    endif;
-elseif ($action == 'apply_mod'): 
 
-    if(GETPOST('token') == $_SESSION['token']):
+    break;
+
+    // todo
+    case 'apply_mod':
 
         $db->begin();
         $error = 0;
@@ -245,10 +222,9 @@ elseif ($action == 'apply_mod'):
         if(!$error): loginplusApplyTheme($params); $db->commit();
         else: $db->rollback(); setEventMessages('Une erreur est survenue', null, 'errors');
         endif;
-    else:
-        setEventMessages($langs->trans('SecurityTokenHasExpiredSoActionHasBeenCanceledPleaseRetry'), null, 'warnings');
-    endif;
-endif;
+    break;
+
+endswitch;
 
 // $form=new Form($db);
 
@@ -265,11 +241,14 @@ $array_css = array(
     '/loginplus/css/dolpgs.css'
 );
 
-llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->transnoentities('Module300316Name'),'','','','',$array_js,$array_css,'','loginplus setup'); ?>
+llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->transnoentities('Module300316Name'),'','','','',$array_js,$array_css,'','loginplus setup'); 
+
+$linkback = '';
+print load_fiche_titre($langs->trans("loginplus_optionp_title"), $linkback, 'title_setup'); ?>
 
 <div class="dolpgs-main-wrapper logplus">
 
-    <div class="remodal pgsz-remodal" data-remodal-id="pgsz-pop-image">
+    <div class="remodal loginplus-remodal" data-remodal-id="pgsz-pop-image">
 
         <button data-remodal-action="close" class="remodal-close"></button>
         <input type="hidden" name="pgsz-target-name" value="">
@@ -279,28 +258,33 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
         <h1><?php echo $langs->transnoentities('loginplus_option_image_title'); ?></h1>
         <div class="pgsz-flex-wrapper" style="margin-bottom: 16px;">
 
-        <?php foreach ($tab_img as $ld_img): ?>
-            <div class="pgsz-flex-remodal">
-                <div class="pgsz-flex-remodal-img" data-ldkey="<?php echo $ld_img->share; ?>" style="background: url('<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo $ld_img->share; ?>') center no-repeat;background-size: cover;"></div>
-            </div>
-        <?php endforeach; ?>
+        <?php if(!empty($tab_img)): ?>
+            <?php foreach ($tab_img as $ld_img): ?>
+                <div class="pgsz-flex-remodal">
+                    <div class="pgsz-flex-remodal-img" data-ldkey="<?php echo $ld_img->share; ?>" style="background: url('<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo $ld_img->share; ?>') center no-repeat;background-size: cover;"></div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+                <p class="lp-modal-noimg">
+                    <?php echo $langs->trans('loginplus_doc_showImages_steps'); ?><br/><br/>                    
+                    <?php echo $langs->transnoentities('loginplus_doc_showImages_step_1'); ?><br/>
+                    <?php echo $langs->transnoentities('loginplus_doc_showImages_step_2'); ?><br/>
+                    <?php echo $langs->transnoentities('loginplus_doc_showImages_step_3'); ?><br/>
+                    <?php echo $langs->transnoentities('loginplus_doc_showImages_step_4'); ?><br/>
+                    <?php echo $langs->transnoentities('loginplus_doc_showImages_step_5'); ?>
+                </p>
+        <?php endif; ?>
         </div>
       <button data-remodal-action="cancel" class="dolpgs-btn btn-danger"><i class="fas fa-times"></i> <?php echo $langs->transnoentities('loginplus_option_image_no_use'); ?></button>
     </div>
-
-    <?php if(in_array('progiseize', $conf->modules)): ?>
-        <h1 class="has-before"><?php echo $langs->transnoentities('loginplus_optionp_title'); ?></h1>
-    <?php else : ?>
-        <table class="centpercent notopnoleftnoright table-fiche-title"><tbody><tr class="titre"><td class="nobordernopadding widthpictotitle valignmiddle col-picto"><span class="fas fa-tools valignmiddle widthpictotitle pictotitle" style=""></span></td><td class="nobordernopadding valignmiddle col-title"><div class="titre inline-block"><?php echo $langs->transnoentities('loginplus_optionp_title'); ?></div></td></tr></tbody></table>
-    <?php endif; ?>
-
+    
     <?php $head = loginplusAdminPrepareHead(); dol_fiche_head($head, 'setup','loginplus', 0,'fa-user-lock_fas_#fb2a52'); ?>
 
     <?php if ($user->rights->loginplus->configurer): ?>
 
     <form enctype="multipart/form-data" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post" id="">
-        <input type="hidden" name="action" value="set_options">
-        <input type="hidden" name="token" value="<?php echo newtoken(); ?>">
+        <input type="hidden" name="action" value="setparams">
+        <input type="hidden" name="token" value="<?php echo newToken(); ?>">
 
         <?php //var_dump($tab_img); ?>
 
@@ -313,19 +297,19 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_activatelogintpl'); ?></td>               
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_activatelogintpl_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="checkbox" name="ldo-activatetpl" value="1" <?php if($conf->global->LOGINPLUS_ACTIVELOGINTPL): echo 'checked="checked"';endif; ?>></td>
+                    <td class="right pgsz-optiontable-field"><?php echo ajax_constantonoff('LOGINPLUS_ACTIVELOGINTPL',array(),$conf->entity,0,0,1); ?></td>
                 </tr>
-                <?php if ($user->rights->loginplus->maintenancemode): ?>
-                <tr class="dolpgs-tbody">
-                    <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_maintenance'); ?></td>               
-                    <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_maintenance_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="checkbox" name="ldo-ismaintenance" value="1" <?php if($conf->global->LOGINPLUS_ISMAINTENANCE): echo 'checked="checked"';endif; ?>></td>
-                </tr>
-                <tr class="dolpgs-tbody">
-                    <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_maintenance_msg'); ?></td>               
-                    <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_maintenance_msg_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="text" name="ldo-maintenancetxt" class="minwidth400" value="<?php echo $conf->global->LOGINPLUS_MAINTENANCETEXT; ?>" ></td>
-                </tr>
+                <?php if ($user->rights->loginplus->maintenancemode && getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL') > 0): ?>                    
+                    <tr class="dolpgs-tbody">
+                        <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_maintenance'); ?></td>               
+                        <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_maintenance_desc'); ?></td>
+                        <td class="right pgsz-optiontable-field"><?php echo ajax_constantonoff('LOGINPLUS_ISMAINTENANCE',array(),$conf->entity,0,0,1); ?></td>
+                    </tr>
+                    <tr class="dolpgs-tbody">
+                        <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_maintenance_msg'); ?></td>               
+                        <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_maintenance_msg_desc'); ?></td>
+                        <td class="right pgsz-optiontable-field"><input type="text" name="ldo-maintenancetxt" class="minwidth400" value="<?php echo getDolGlobalString('LOGINPLUS_MAINTENANCETEXT'); ?>" ></td>
+                    </tr>
                 <?php endif; ?>
             </tbody>
             <tbody>
@@ -337,28 +321,44 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_background_color'); ?></td>               
                     <td class="pgsz-optiontable-fielddesc "><?php echo $langs->trans('loginplus_option_background_color_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field "><input type="color" name="ldo-bg-color" value="<?php echo ($conf->global->LOGINPLUS_BG_COLOR)?$conf->global->LOGINPLUS_BG_COLOR:'#cccccc'; ?>"></td>
+                    <td class="right pgsz-optiontable-field ">
+                        <?php echo $formother->selectColor(getDolGlobalString('LOGINPLUS_BG_COLOR'), 'LOGINPLUS_BG_COLOR','',0); ?>
+                    </td>
                 </tr>
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_background_image'); ?></td>                
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_background_image_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field">
+                    <td class="right pgsz-optiontable-field" >
+
                         <div class="pgsz-img-statut" id="ldo_bgkey">
-                            <?php if($conf->global->LOGINPLUS_BG_IMAGEKEY): ?>
-                                <img src="<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo $conf->global->LOGINPLUS_BG_IMAGEKEY; ?>" style="max-width: 120px;height: auto;" />
-                            <?php else: ?><?php echo $langs->trans('loginplus_option_background_image_none'); ?>
+
+                            <?php if(!empty(getDolGlobalString('LOGINPLUS_BG_IMAGEKEY'))):
+                                $logo_file = new EcmFiles($db);
+                                $logo_file->fetch('','','','',getDolGlobalString('LOGINPLUS_BG_IMAGEKEY'));
+                                $logo_infos = pathinfo($logo_file->filepath.'/'.$logo_file->filename);
+
+                                $imgThumbMini = str_replace('ecm/','',$logo_file->filepath.'/thumbs/'.$logo_infos['filename'].'_mini.'.$logo_infos['extension']);
+                                if(!file_exists($conf->ecm->dir_output.'/'.$imgThumbMini)):
+                                    $imgThumbMini = vignette($conf->ecm->dir_output.'/loginplus/'.$logo_file->filename, '160', '42', '_mini', 50);
+                                endif; ?>
+                                <img style="max-height: 42px; max-width: 100px;border:1px solid #ccc;padding:3px;vertical-align:middle;display:inline;" src="<?php echo DOL_URL_ROOT.'/viewimage.php?modulepart=ecm&amp;file='.urlencode('loginplus/thumbs/'.basename($imgThumbMini)); ?>">
+                            <?php else: echo '<span class="loginplus-no-img">'.$langs->trans('loginplus_option_background_image_none').'</span>'; ?>
                             <?php endif; ?>
+                        </div> 
+
+                        <div style="margin-top:6px"> 
+                            <input type="hidden" name="ldo-bg-imagekey" value="<?php echo getDolGlobalString('LOGINPLUS_BG_IMAGEKEY'); ?>">
+                            <button data-remodal-target="pgsz-pop-image" class="loginplus-btn" data-ldtarget="ldo-bg-imagekey" data-ldparent="ldo_bgkey"><?php echo $langs->trans('loginplus_option_background_image_choose'); ?></button>
                         </div>
-                        
-                        <button data-remodal-target="pgsz-pop-image" class="pgsz-slct-img" data-ldtarget="ldo-bg-imagekey" data-ldparent="ldo_bgkey"><?php echo $langs->trans('loginplus_option_background_image_choose'); ?></button>
-                        <input type="hidden" name="ldo-bg-imagekey" value="<?php echo $conf->global->LOGINPLUS_BG_IMAGEKEY; ?>">
+
                     </td>
                 </tr>
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_background_image_opacity'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_background_image_opacity_desc'); ?></td>
                     <td class="right pgsz-optiontable-field">
-                        <input type="number" name="ldo-bg-imageopacity" min="0" max="100" step="1" value="<?php echo $conf->global->LOGINPLUS_BG_IMAGEOPACITY; ?>">
+                        <input type="range" class="loginplus-rangeslider" name="LOGINPLUS_BG_IMAGEOPACITY" min="0" max="100" step="1" value="<?php echo getDolGlobalInt('LOGINPLUS_BG_IMAGEOPACITY'); ?>" data-slidervalue="#ldo-bg-imageopacity">
+                        <span class="loginplus-rangevalue" id="ldo-bg-imageopacity"><?php echo getDolGlobalInt('LOGINPLUS_BG_IMAGEOPACITY'); ?>%</span>
                     </td>
                 </tr>
             </tbody>
@@ -373,11 +373,11 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_shape_path_desc'); ?></td>
                     <td class="right pgsz-optiontable-field">
                         <select name="ldo-shape-path" class="pgsz-slct2-simple">
-                            <option value="no" <?php if($conf->global->LOGINPLUS_SHAPE_PATH == 'no'): echo 'selected'; endif; ?>><?php echo $langs->trans('loginplus_shape_none'); ?></option>
+                            <option value="no" <?php if(getDolGlobalString('LOGINPLUS_SHAPE_PATH') == 'no'): echo 'selected'; endif; ?>><?php echo $langs->trans('loginplus_shape_none'); ?></option>
                             <?php foreach($tab_shapes as $id_group => $shapenames): ?>
                                 <optgroup label="<?php echo $langs->trans('loginplus_shape_'.$id_group); ?>">
                                     <?php foreach($shapenames as $shape): ?>
-                                        <option value="<?php echo $shape; ?>" <?php if($conf->global->LOGINPLUS_SHAPE_PATH == $shape): echo 'selected'; endif; ?>><?php echo $langs->trans('loginplus_shape_'.$shape); ?></option>
+                                        <option value="<?php echo $shape; ?>" <?php if(getDolGlobalString('LOGINPLUS_SHAPE_PATH') == $shape): echo 'selected'; endif; ?>><?php echo $langs->trans('loginplus_shape_'.$shape); ?></option>
                                     <?php endforeach; ?>
                                 </optgroup>
                             <?php endforeach; ?>
@@ -387,13 +387,16 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_shape_color'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_shape_color_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="color" name="ldo-shape-color" value="<?php echo ($conf->global->LOGINPLUS_SHAPE_COLOR)?$conf->global->LOGINPLUS_SHAPE_COLOR:'#263c5c'; ?>"></td>
+                    <td class="right pgsz-optiontable-field">
+                        <?php echo $formother->selectColor(getDolGlobalString('LOGINPLUS_SHAPE_COLOR'), 'LOGINPLUS_SHAPE_COLOR'); ?>
+                    </td>
                 </tr>
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_shape_opacity'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_shape_opacity_desc'); ?></td>
                     <td class="right pgsz-optiontable-field">
-                        <input type="number" name="ldo-shape-opacity" min="0" max="100" step="1" value="<?php echo $conf->global->LOGINPLUS_SHAPE_OPACITY; ?>">
+                        <input type="range" class="loginplus-rangeslider" name="LOGINPLUS_SHAPE_OPACITY" min="0" max="100" step="1" value="<?php echo getDolGlobalInt('LOGINPLUS_SHAPE_OPACITY'); ?>" data-slidervalue="#ldo-shape-opacity">
+                        <span class="loginplus-rangevalue" id="ldo-shape-opacity"><?php echo getDolGlobalInt('LOGINPLUS_SHAPE_OPACITY'); ?>%</span>
                     </td>
                 </tr>
             </tbody>
@@ -405,17 +408,21 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_loginbox_maincolor'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_loginbox_maincolor_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="color" name="ldo-main-color" value="<?php echo ($conf->global->LOGINPLUS_MAIN_COLOR)?$conf->global->LOGINPLUS_MAIN_COLOR:'#007b8c'; ?>"></td>
+                    <td class="right pgsz-optiontable-field">
+                        <?php echo $formother->selectColor(getDolGlobalString('LOGINPLUS_MAIN_COLOR'), 'LOGINPLUS_MAIN_COLOR'); ?>
+                    </td>
                 </tr>
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_loginbox_secondcolor'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_loginbox_secondcolor_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="color" name="ldo-second-color" value="<?php echo ($conf->global->LOGINPLUS_SECOND_COLOR)?$conf->global->LOGINPLUS_SECOND_COLOR:'#263c5c'; ?>"></td>
+                    <td class="right pgsz-optiontable-field">
+                        <?php echo $formother->selectColor(getDolGlobalString('LOGINPLUS_SECOND_COLOR'), 'LOGINPLUS_SECOND_COLOR'); ?>
+                    </td>
                 </tr>
             </tbody>
             <tbody>
 
-                <?php // COULEUR PRINCIPALE :: PAGE LOGIN ?>
+                <?php // SIDE BOX ?>
                 <tr class="dolpgs-thead noborderside">
                     <th colspan="3"><?php echo $langs->trans('loginplus_option_sidebox'); ?></th>
                 </tr>
@@ -423,50 +430,71 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_show'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_show_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="checkbox" name="ldo-twosides" value="1" <?php if($conf->global->LOGINPLUS_TWOSIDES): echo 'checked="checked"';endif; ?>></td>
+                    <td class="right pgsz-optiontable-field">
+                        <?php echo ajax_constantonoff('LOGINPLUS_TWOSIDES',
+                            array(
+                                'show' => array('.sideboxfield'),
+                                'hide' => array('.sideboxfield'),
+                                )
+                            ); ?>
+                    </td>
                 </tr>
-                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody sideboxfield" style="position: relative;">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_color'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_color_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="color" name="ldo-img-color" value="<?php echo $conf->global->LOGINPLUS_IMAGE_COLOR; ?>"></td>
+                    <td class="right pgsz-optiontable-field">
+                        <?php echo $formother->selectColor(getDolGlobalString('LOGINPLUS_IMAGE_COLOR'), 'LOGINPLUS_IMAGE_COLOR'); ?>
+                    </td>
                 </tr>
-                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody sideboxfield">
                     <td class="bold pgsz-optiontable-fieldname "><?php echo $langs->trans('loginplus_option_sidebox_image'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_image_desc'); ?></td>
                     <td class="right pgsz-optiontable-field">
                         <div class="pgsz-img-statut" id="ldo_ikey">
-                        <?php if($conf->global->LOGINPLUS_IMAGE_KEY): ?>
-                                <img src="<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo $conf->global->LOGINPLUS_IMAGE_KEY; ?>" style="max-width: 120px;height: auto;" />
-                            <?php else:  ?><?php echo $langs->trans('loginplus_option_background_image_none'); ?>
+
+                            <?php if(!empty(getDolGlobalString('LOGINPLUS_IMAGE_KEY'))):
+                                $logo_file = new EcmFiles($db);
+                                $logo_file->fetch('','','','',getDolGlobalString('LOGINPLUS_IMAGE_KEY'));
+                                $logo_infos = pathinfo($logo_file->filepath.'/'.$logo_file->filename);
+
+                                $imgThumbMini = str_replace('ecm/','',$logo_file->filepath.'/thumbs/'.$logo_infos['filename'].'_mini.'.$logo_infos['extension']);
+                                if(!file_exists($conf->ecm->dir_output.'/'.$imgThumbMini)):
+                                    $imgThumbMini = vignette($conf->ecm->dir_output.'/loginplus/'.$logo_file->filename, '160', '42', '_mini', 50);
+                                endif; ?>
+                                <img style="max-height: 42px; max-width: 100px;border:1px solid #ccc;padding:3px;vertical-align:middle;display:inline;" src="<?php echo DOL_URL_ROOT.'/viewimage.php?modulepart=ecm&amp;file='.urlencode('loginplus/thumbs/'.basename($imgThumbMini)); ?>">
+                            <?php else: echo '<span class="loginplus-no-img">'.$langs->trans('loginplus_option_background_image_none').'</span>'; ?>
                             <?php endif; ?>
                         </div>
-                        <button data-remodal-target="pgsz-pop-image" class="pgsz-slct-img" data-ldtarget="ldo-img-key" data-ldparent="ldo_ikey">Choisir une image</button>
-                        <input type="hidden" name="ldo-img-key" value="<?php echo $conf->global->LOGINPLUS_IMAGE_KEY; ?>"></td>
+
+                        <div style="margin-top:6px"> 
+                            <input type="hidden" name="ldo-img-key" value="<?php echo getDolGlobalString('LOGINPLUS_IMAGE_KEY'); ?>">
+                            <button data-remodal-target="pgsz-pop-image" class="loginplus-btn" data-ldtarget="ldo-img-key" data-ldparent="ldo_ikey"><?php echo $langs->trans('loginplus_option_background_image_choose'); ?></button>
+                        </div>
+                    </td>
                 </tr>
-                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody sideboxfield">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_image_opacity'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_image_opacity_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="number" name="ldo-img-opacity" min="0" max="100" step="1" value="<?php echo $conf->global->LOGINPLUS_IMAGE_OPACITY; ?>"></td>
+                    <td class="right pgsz-optiontable-field">
+                        <input type="range" class="loginplus-rangeslider" name="LOGINPLUS_IMAGE_OPACITY" min="0" max="100" step="1" value="<?php echo getDolGlobalInt('LOGINPLUS_IMAGE_OPACITY'); ?>" data-slidervalue="#ldo-img-opacity">
+                        <span class="loginplus-rangevalue" id="ldo-img-opacity"><?php echo getDolGlobalInt('LOGINPLUS_IMAGE_OPACITY'); ?>%</span>
+                    </td>
                 </tr>
-                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody sideboxfield">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_title'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_contentempty'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="text" name="ldo-txt-title" value="<?php echo $conf->global->LOGINPLUS_TXT_TITLE; ?>"></td>
+                    <td class="right pgsz-optiontable-field">
+                        <input type="text" name="ldo-txt-title" id="ldo-txt-title" value="<?php echo getDolGlobalString('LOGINPLUS_TXT_TITLE'); ?>">
+                        <?php echo $formother->selectColor(getDolGlobalString('LOGINPLUS_TXT_TITLECOLOR'), 'LOGINPLUS_TXT_TITLECOLOR'); ?>
+                    </td>
                 </tr>
-                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
-                    <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_title_color'); ?></td>
-                    <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_title_color'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="color" name="ldo-txt-titlecolor" value="<?php echo $conf->global->LOGINPLUS_TXT_TITLECOLOR; ?>"></td>
-                </tr>
-                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
+                <tr class="dolpgs-tbody sideboxfield">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_content'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_contentempty'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="text" name="ldo-txt-content" value="<?php echo $conf->global->LOGINPLUS_TXT_CONTENT; ?>"></td>
-                </tr>
-                <tr class="dolpgs-tbody <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-mask'; endif; ?>">
-                    <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_sidebox_content_color'); ?></td>
-                    <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_sidebox_content_color'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="color" name="ldo-txt-contentcolor" value="<?php echo $conf->global->LOGINPLUS_TXT_CONTENTCOLOR; ?>"></td>
+                    <td class="right pgsz-optiontable-field">
+                        <input type="text" name="ldo-txt-content" value="<?php echo getDolGlobalString('LOGINPLUS_TXT_CONTENT'); ?>">
+                        <?php echo $formother->selectColor(getDolGlobalString('LOGINPLUS_TXT_CONTENTCOLOR'), 'LOGINPLUS_TXT_CONTENTCOLOR'); ?>
+                    </td>
                 </tr>
             </tbody>
             <tbody>
@@ -478,17 +506,19 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_copyright_title'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_copyright_title_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="text" name="ldo-copyright" value="<?php echo $conf->global->LOGINPLUS_COPYRIGHT; ?>"></td>
+                    <td class="right pgsz-optiontable-field"><input type="text" name="ldo-copyright" value="<?php echo getDolGlobalString('LOGINPLUS_COPYRIGHT'); ?>"></td>
                 </tr>
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_copyright_link'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_copyright_link_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="text" name="ldo-copyright-link" value="<?php echo $conf->global->LOGINPLUS_COPYRIGHT_LINK; ?>"></td>
+                    <td class="right pgsz-optiontable-field"><input type="text" name="ldo-copyright-link" value="<?php echo getDolGlobalString('LOGINPLUS_COPYRIGHT_LINK'); ?>"></td>
                 </tr>
                 <tr class="dolpgs-tbody">
                     <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_option_copyright_color'); ?></td>
                     <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_option_copyright_color_desc'); ?></td>
-                    <td class="right pgsz-optiontable-field"><input type="color" name="ldo-copyright-color" value="<?php echo $conf->global->LOGINPLUS_COPYRIGHT_COLOR; ?>"></td>
+                    <td class="right pgsz-optiontable-field">
+                        <?php echo $formother->selectColor(getDolGlobalString('LOGINPLUS_COPYRIGHT_COLOR'), 'LOGINPLUS_COPYRIGHT_COLOR'); ?>
+                    </td>
                 </tr>
 
             </tbody>
@@ -518,5 +548,26 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
 
     <?php endif; ?>
 </div>
+
+<script type="text/javascript">
+    
+    jQuery(document).ready(function(){
+
+        <?php if(!getDolGlobalInt('LOGINPLUS_TWOSIDES')): ?>
+            jQuery('.sideboxfield').hide(100); // DELAY is required for positionning
+        <?php endif; ?>
+
+        let output;
+        jQuery('input[type="range"]').on('input',function(){
+            output = document.querySelector(jQuery(this).data('slidervalue'));
+            output.innerHTML = jQuery(this)[0].value+'%';
+        });
+
+        /*jQuery('input[type="color"]').on('change',function(){
+            console.log(jQuery(this).val());
+        });*/
+    });
+    
+</script>
 
 <?php llxFooter(); $db->close(); ?>

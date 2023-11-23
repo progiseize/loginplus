@@ -24,14 +24,13 @@ if (! $res && file_exists("../../main.inc.php")): $res=@include '../../main.inc.
 
 require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
 
-// ON RECUPERE LA VERSION DE DOLIBARR
-$version = explode('.', DOL_VERSION);
+dol_include_once('./loginplus/class/loginmsg.class.php');
 
 // Load traductions files requiredby by page
 //$langs->load("companies");
 
 // Protection if external user
-if ($user->societe_id > 0): accessforbidden(); endif;
+if ($user->socid > 0): accessforbidden(); endif;
 
 
 /*******************************************************************
@@ -54,7 +53,7 @@ $action = GETPOST('action');
 * VIEW
 ****************************************************/
 
-llxHeader('','LoginPlus',''); ?>
+llxHeader('','LoginPlus','');?>
 
 <!-- CONTENEUR GENERAL -->
 

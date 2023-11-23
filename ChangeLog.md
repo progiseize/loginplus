@@ -4,6 +4,13 @@
 [comment]: <> (Upload des fichiers + simple)
 
 ***
+
+### 1.5.3
+* MAJ - Mise à jour de la page admin "Apparence"
+* MAJ - Conversion $conf->global en getDolGlobal(Int|String)
+* FIX - Correction des erreurs de logs loginMsg::getUserMsgs()
+* NEW - Constante cachée LOGINPLUS_SHOW_FORMLABELS -> mettre à 0 pour masquer les labels
+
 ### 1.5.2 (24/05/2023) 
 * MAJ - Mise à jour Descripteur module
 * FIX - Remove skeleton call

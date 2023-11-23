@@ -247,40 +247,45 @@ class LoginMsg {
 		if($result): while($obj = $this->db->fetch_object($result)): array_push($messages, $obj); endwhile; endif;
 
 		// ON RECUPERE LES MESSAGES DE TAGS
-		$user_tags = $loguser->getCategoriesCommon('user'); $i = 0;		
-		$sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element;
-		$sql .= " WHERE JSON_VALUE(destinataire, '$.mode') = 'tags'";
-		$sql .= " AND entity = '".$conf->entity."'";
-		$sql .= " AND (";
-		foreach ($user_tags as $tag): $i++; if($i > 1): $sql .= " OR"; endif;
-			$sql .= " JSON_CONTAINS(destinataire, '\"".$tag."\"', '$.params')";
-		endforeach;
-		$sql .= ")";
-		$sql .= " AND (";
-		$sql .= "NOT JSON_CONTAINS(is_read, '{\"userid\":".$loguser->id."}')";
-		$sql .= " OR (force_view = 1 AND date_expiration > '".date('Y-m-d H:i:s')."')";
-		$sql .= ")";
+		$user_tags = $loguser->getCategoriesCommon('user'); $i = 0;
+		if(!empty($user_tags)):
+			$sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element;
+			$sql .= " WHERE JSON_VALUE(destinataire, '$.mode') = 'tags'";
+			$sql .= " AND entity = '".$conf->entity."'";
+			$sql .= " AND (";
+			foreach ($user_tags as $tag): $i++; if($i > 1): $sql .= " OR"; endif;
+				$sql .= " JSON_CONTAINS(destinataire, '\"".$tag."\"', '$.params')";
+			endforeach;
+			$sql .= ")";
+			$sql .= " AND (";
+			$sql .= "NOT JSON_CONTAINS(is_read, '{\"userid\":".$loguser->id."}')";
+			$sql .= " OR (force_view = 1 AND date_expiration > '".date('Y-m-d H:i:s')."')";
+			$sql .= ")";
 
-		$result = $this->db->query($sql);
-		if($result): while($obj = $this->db->fetch_object($result)): array_push($messages, $obj); endwhile; endif;
+			$result = $this->db->query($sql);
+			if($result): while($obj = $this->db->fetch_object($result)): array_push($messages, $obj); endwhile; endif;
+		endif;
 
 		// ON RECUPERE LES MESSAGES DE GROUPES
-		$ug = new UserGroup($this->db); $user_groups = $ug->listGroupsForUser($loguser->id); $i = 0;
-		$sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element;
-		$sql .= " WHERE JSON_VALUE(destinataire, '$.mode') = 'groups'";
-		$sql .= " AND entity = '".$conf->entity."'";
-		$sql .= " AND (";
-		foreach ($user_groups as $group): $i++; if($i > 1): $sql .= " OR"; endif;
-			$sql .= " JSON_CONTAINS(destinataire, '\"".$group->id."\"', '$.params')";
-		endforeach;
-		$sql .= ")";
-		$sql .= " AND (";
-		$sql .= "NOT JSON_CONTAINS(is_read, '{\"userid\":".$loguser->id."}')";
-		$sql .= " OR (force_view = 1 AND date_expiration > '".date('Y-m-d H:i:s')."')";
-		$sql .= ")";
+		$ug = new UserGroup($this->db);
+		$user_groups = $ug->listGroupsForUser($loguser->id); $i = 0;
+		if(!empty($user_groups)):
+			$sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element;
+			$sql .= " WHERE JSON_VALUE(destinataire, '$.mode') = 'groups'";
+			$sql .= " AND entity = '".$conf->entity."'";
+			$sql .= " AND (";
+			foreach ($user_groups as $group): $i++; if($i > 1): $sql .= " OR"; endif;
+				$sql .= " JSON_CONTAINS(destinataire, '\"".$group->id."\"', '$.params')";
+			endforeach;
+			$sql .= ")";
+			$sql .= " AND (";
+			$sql .= "NOT JSON_CONTAINS(is_read, '{\"userid\":".$loguser->id."}')";
+			$sql .= " OR (force_view = 1 AND date_expiration > '".date('Y-m-d H:i:s')."')";
+			$sql .= ")";
 
-		$result = $this->db->query($sql);
-		if($result): while($obj = $this->db->fetch_object($result)): array_push($messages, $obj); endwhile; endif;
+			$result = $this->db->query($sql);
+			if($result): while($obj = $this->db->fetch_object($result)): array_push($messages, $obj); endwhile; endif;
+		endif;
 
 		// ON RECUPERE LES MESSAGES UTILISATEURS SPEC.
 		$sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element;

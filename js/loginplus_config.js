@@ -18,14 +18,14 @@
 
 jQuery(document).ready(function($){
 
-	var pop_image = jQuery('[data-remodal-id=pgsz-pop-image]').remodal();
+	let pop_image = jQuery('[data-remodal-id=pgsz-pop-image]').remodal();
 
 	// AU CLIC SUR LE BOUTON DE CHOIX D'IMAGE
-	jQuery(document).on('click','button.pgsz-slct-img',function(){
+	jQuery(document).on('click','button.loginplus-btn',function(){
 		
 		//ON RECUPERE NOM DU CHAMP QU'IL FAUDRA REMPLIR
-		ld_target = jQuery(this).data('ldtarget');
-		ld_id = jQuery(this).data('ldparent');
+		let ld_target = jQuery(this).data('ldtarget');
+		let ld_id = jQuery(this).data('ldparent');
 
 		// ON INSERE LE NOM DU CHAMP DANS LE REMODAL
 		jQuery('input[name="pgsz-target-name"]').val(ld_target);
@@ -34,52 +34,46 @@ jQuery(document).ready(function($){
 	});
 
 	// AU CLIC SUR UNE IMAGE
-	jQuery('.pgsz-remodal').on('click','.pgsz-flex-remodal-img',function(){
+	jQuery('.loginplus-remodal').on('click','.pgsz-flex-remodal-img',function(){
 
 		//ON RECUPERE NOM DU CHAMP QU'IL FAUDRA REMPLIR et l clé à utiliser
-		ld_targeted = jQuery('input[name="pgsz-target-name"]').val();
-		ld_targetkey = jQuery(this).data('ldkey');
-		ld_targetid = jQuery('input[name="pgsz-target-div"]').val();
+		let ld_targeted = jQuery('input[name="pgsz-target-name"]').val();
+		let ld_targetkey = jQuery(this).data('ldkey');
+		let ld_targetid = jQuery('input[name="pgsz-target-div"]').val();
 
 		console.log(ld_targeted,ld_targetkey,ld_targetid);
 
-		ld_imgurl = jQuery('input[name="pgsz-target-config"]').val();
+		let ld_imgurl = jQuery('input[name="pgsz-target-config"]').val();
 
 		// ON REMPLIT LE CHAMP
 		jQuery('input[name="'+ld_targeted+'"]').val(ld_targetkey);
 
 		// ON PLACE L'IMAGE
-		jQuery('#'+ld_targetid+'.pgsz-img-statut').html('<img src="'+ld_imgurl+ld_targetkey+'" style="max-width: 120px;height: auto;" />');
+		jQuery('#'+ld_targetid+'.pgsz-img-statut').html('<img src="'+ld_imgurl+ld_targetkey+'" style="max-height: 42px; max-width: 100px;border:1px solid #ccc;padding:3px;vertical-align:middle;display:inline;" />');
 
 		pop_image.close();
 	});
 
-	jQuery(document).on('cancellation', '.pgsz-remodal', function () {
+	jQuery(document).on('cancellation', '.loginplus-remodal', function () {
 
-		ld_targeted = jQuery('input[name="pgsz-target-name"]').val();
-		ld_targetid = jQuery('input[name="pgsz-target-div"]').val();
-
-		console.log(ld_targeted,ld_targetid);
+		let ld_targeted = jQuery('input[name="pgsz-target-name"]').val();
+		let ld_targetid = jQuery('input[name="pgsz-target-div"]').val();
 
 		jQuery('input[name="'+ld_targeted+'"]').val('');
-		jQuery('#'+ld_targetid+'.pgsz-img-statut').html('Aucune image selectionnée');
+		jQuery('#'+ld_targetid+'.pgsz-img-statut').html('<span class="loginplus-no-img">Aucune image selectionnée</span>');
 	  
 	});
 
 	jQuery('.pgsz-slct2-simple').select2();
 
 	jQuery('input[name="newmsg_forceview"]').on('change',function(){
-
 		if(jQuery(this).prop('checked')){ jQuery('#loginplus-addmsg-datexp').show();
-		} else { jQuery('#loginplus-addmsg-datexp').hide();}
-		
+		} else { jQuery('#loginplus-addmsg-datexp').hide();}		
 	});
 
 	jQuery('input[name="editmsg_forceview"]').on('change',function(){
-
 		if(jQuery(this).prop('checked')){ jQuery('#loginplus-editmsg-datexp').show();
-		} else { jQuery('#loginplus-editmsg-datexp').hide();}
-		
+		} else { jQuery('#loginplus-editmsg-datexp').hide();}		
 	});
 	
 

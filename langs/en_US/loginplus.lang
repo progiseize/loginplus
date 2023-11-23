@@ -133,3 +133,4 @@ loginplus_option_maintenance_activated=Maintenance mode activated
 loginplus_option_maintenance_msg=Maintenance message
 loginplus_option_maintenance_msg_desc=This text replaces the default "Maintenance mode enabled" text on the login page when maintenance mode is enabled
 loginplus_option_maintenance_activated_nologin=You cannot log in during maintenance mode
+loginplus_AddImage=Add image
