@@ -133,3 +133,4 @@ loginplus_option_maintenance_activated=Mode maintenance activé
 loginplus_option_maintenance_msg=Message Maintenance
 loginplus_option_maintenance_msg_desc=Ce texte remplace le texte par défaut "Mode maintenance activé" sur la page de connexion lorsque le mode maintenance sera activé
 loginplus_option_maintenance_activated_nologin=Vous ne pouvez pas vous connecter pendant le mode maintenance
+loginplus_AddImage=Ajouter une image

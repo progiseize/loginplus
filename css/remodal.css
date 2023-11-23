@@ -12,12 +12,12 @@ html.remodal-is-locked{overflow:hidden;touch-action:none}
 .remodal-overlay.remodal-is-opening{animation-name:remodal-overlay-opening-keyframes}
 .remodal-overlay.remodal-is-closing{animation-name:remodal-overlay-closing-keyframes}
 .remodal-wrapper{padding:10px 10px 0}
-.remodal{box-sizing:border-box;width:100%;margin-bottom:10px;padding:35px;transform:translate3d(0,0,0);color:#2b2e38;background:#fff}
+.remodal{box-sizing:border-box;width:100%;margin-bottom:10px;padding:24px;transform:translate3d(0,0,0);color:#2b2e38;background:#fff}
 .remodal.remodal-is-closing,.remodal.remodal-is-opening{animation-duration:.3s;animation-fill-mode:forwards}
 .remodal.remodal-is-opening{animation-name:remodal-opening-keyframes}
 .remodal.remodal-is-closing{animation-name:remodal-closing-keyframes}
 .remodal,.remodal-wrapper:after{vertical-align:middle}
-.remodal-close{position:absolute;top:0;left:0;display:block;overflow:visible;width:35px;height:35px;margin:0;padding:0;cursor:pointer;transition:color .2s;text-decoration:none;color:#95979c;border:0;outline:0;background:0 0}
+.remodal-close{position:absolute;top:6px;right:6px;display:block;overflow:visible;width:35px;height:35px;margin:0;padding:0;cursor:pointer;transition:color .2s;text-decoration:none;color:#95979c;border:0;outline:0;background:0 0}
 .remodal-close:focus,.remodal-close:hover{color:#2b2e38}
 .remodal-close:before{font-family:Arial,"Helvetica CY","Nimbus Sans L",sans-serif!important;font-size:25px;line-height:35px;position:absolute;top:0;left:0;display:block;width:35px;content:"\00d7";text-align:center}
 .remodal-cancel,.remodal-confirm{font:inherit;display:inline-block;overflow:visible;min-width:110px;margin:0;padding:12px 0;cursor:pointer;transition:background .2s;text-align:center;vertical-align:middle;text-decoration:none;border:0;outline:0}

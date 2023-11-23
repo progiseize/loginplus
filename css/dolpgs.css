@@ -51,16 +51,6 @@
 /** Various **/
 .ld-mask {opacity: 0.5;}
 
-/** Remodal list images **/
-.pgsz-remodal h1 {font-size: 18px;color: var(--colorprimary);font-weight: 700;text-transform: uppercase;font-family: 'Poppins', sans-serif;}
-.pgsz-remodal h1::before {display: inline-block;content: "";height: 14px;width: 2px;background: var(--colorfull);margin-bottom: -1px;margin-right: 8px;}
-.pgsz-remodal .pgsz-flex-wrapper {margin: 0 -6px;display: flex;flex-wrap: wrap;}
-.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal {background: transparent;width: 50%;padding: 6px 6px;box-sizing: border-box;}
-.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img {width: 100%;position: relative;opacity:0.8;transition: opacity 0.1s ease-in-out;cursor: pointer;box-sizing: border-box;}
-.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img.selected {opacity:1;border: 2px solid var(--main-bg-dark);}
-.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img::before {content: "";padding-top: 56.25%;display: block;}
-.pgsz-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img:hover {opacity:1;}
-
 /** Theme list **/
 #loginplus-themelist {flex-wrap: wrap;margin: 0;padding: 0;list-style: none;margin: 0 -12px;}
 #loginplus-themelist li {margin: 0;padding: 12px;box-sizing: border-box;}
@@ -256,3 +246,31 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
 .dolpgs-table tbody tr.dolpgs-tbody:hover {background: var(--colorfillgray) !important;}
 .dolpgs-table tbody tr.dolpgs-tbody.vtop {vertical-align: top;}
 .dolpgs-table.dolpgs-nohovertable tbody tr.dolpgs-tbody:hover {background: transparent !important;}
+
+/**/
+.loginplus-rangeslider {-webkit-appearance: none;appearance: none;padding: 0; border:none !important;border-radius: 8px; box-sizing: border-box;outline: none;display: inline-block;height: 12px;opacity: .8;}
+.loginplus-rangeslider:hover {opacity: 1;}
+.loginplus-rangeslider::-ms-track {-webkit-appearance: none;appearance: none;background: #dadada;border-radius: 8px;height: 6px;outline: none;border:none !important;}
+.loginplus-rangeslider::-moz-range-track {-webkit-appearance: none;appearance: none;background: #dadada;border-radius: 8px;height: 6px;outline: none;border:none !important;}
+.loginplus-rangeslider::-webkit-slider-runnable-track {-webkit-appearance: none;appearance: none;background: #dadada;border-radius: 8px;height: 6px;outline: none;border:none !important;}
+.loginplus-rangeslider::-ms-thumb {-webkit-appearance: none;appearance: none;width: 12px;height: 12px;margin-top: -3px;background: var(--colorprimary);outline: none;border-radius: 8px;cursor: pointer;}
+.loginplus-rangeslider::-moz-range-thumb {-webkit-appearance: none;appearance: none;width: 12px;height: 12px;margin-top: -3px;background: var(--colorprimary);outline: none;border-radius: 8px;cursor: pointer;}
+.loginplus-rangeslider::-webkit-slider-thumb {-webkit-appearance: none;appearance: none;width: 12px;height: 12px;margin-top: -3px;background: var(--colorprimary);outline: none;border-radius: 8px;cursor: pointer;}
+.loginplus-rangevalue {width: 36px;display: inline-block;font-size: 0.85em;font-weight: 500}
+
+/** Remodal list images **/
+.loginplus-remodal h1 {font-size: 18px;color: var(--colorprimary);font-weight: 700;text-transform: uppercase;font-family: 'Poppins', sans-serif;margin: 0;text-align: left;}
+.loginplus-remodal h1::before {display: inline-block;content: "";height: 14px;width: 2px;background: var(--colorfull);margin-bottom: -1px;margin-right: 8px;}
+.loginplus-remodal .pgsz-flex-wrapper {margin: 0 -6px;display: flex;flex-wrap: wrap;}
+.loginplus-remodal .pgsz-flex-wrapper .pgsz-flex-remodal {background: transparent;width: 50%;padding: 6px 6px;box-sizing: border-box;}
+.loginplus-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img {width: 100%;position: relative;opacity:0.8;transition: opacity 0.1s ease-in-out;cursor: pointer;box-sizing: border-box;}
+.loginplus-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img.selected {opacity:1;border: 2px solid var(--main-bg-dark);}
+.loginplus-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img::before {content: "";padding-top: 56.25%;display: block;}
+.loginplus-remodal .pgsz-flex-wrapper .pgsz-flex-remodal .pgsz-flex-remodal-img:hover {opacity:1;}
+
+/**/
+.loginplus-btn {padding: 3px 6px;background: var(--colorprimary);box-sizing: border-box;border:none;border-radius: 4px;color: #fff;text-decoration: none;text-transform: uppercase;font-weight: 500;font-size: 0.85em;font-family: 'Poppins', sans-serif;cursor: pointer;line-height: normal !important;outline: none;}
+.loginplus-btn.btn-alt {background: var(--colorsecondary);}
+
+.loginplus-no-img {font-size: 0.85em;font-weight: 500;}
+.lp-modal-noimg {color: #5a5a5a;line-height: 1.5;margin-top: 16px;text-align: left;}

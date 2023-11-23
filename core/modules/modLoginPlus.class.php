@@ -69,8 +69,8 @@ class modLoginPlus extends DolibarrModules
         $this->editor_url = 'https://progiseize.fr';
         
         // Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
-        $this->version = '1.5.2';
-        $this->url_last_version = "https://progiseize.fr/modules_info/".get_class($this)."_lastversion.txt";
+        $this->version = '1.5.3';
+        $this->url_last_version = "https://progiseize.fr/modules_info/lastversion.php?module=".$this->numero;
 
         // Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
         $this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
@@ -78,7 +78,7 @@ class modLoginPlus extends DolibarrModules
         // If file is in theme/yourtheme/img directory under name object_pictovalue.png, use this->picto='pictovalue'
         // If file is in module/img directory under name object_pictovalue.png, use this->picto='pictovalue@module'
         $version = explode('.',DOL_VERSION);
-        if($version[0] > 16): $this->picto='fa-user-lock_fas_#263c5c';
+        if($version[0] > 16): $this->picto='fa-user-lock_fas_#6c6aa8';
         else: $this->picto='technic';
         endif;
 
@@ -112,7 +112,7 @@ class modLoginPlus extends DolibarrModules
             'models' => 0,
             'css' => array('loginplus/css/loginplus.css'),
             'js' => array(),
-            'hooks' => array('all'),
+            'hooks' => array('login'),
             'dir' => array(),
             'workflow' => array(),
         );
