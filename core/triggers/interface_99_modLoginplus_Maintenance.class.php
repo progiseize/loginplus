@@ -100,7 +100,7 @@ class InterfaceMaintenance extends DolibarrTriggers
 			
 			// USER LOGIN
 			case 'USER_LOGIN':
-				if($conf->global->LOGINPLUS_ISMAINTENANCE && !$user->admin):
+				if(getDolGlobalInt('LOGINPLUS_ISMAINTENANCE') && !$user->admin):
 					$_SESSION["urlfrom"] = '/index.php?maintenance=1&noadmin=1';
 					header('Location: '.dol_buildpath('user/logout.php?token='.newtoken(),2));
 				endif;

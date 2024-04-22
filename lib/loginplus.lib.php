@@ -17,6 +17,43 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
  */
 
+/*************************/
+
+
+/**
+ * GET SHAPES INFORMATIONS
+ */
+function lp_getShapeInfos($key = ''){
+
+    $shape_array = array(
+
+        // SQUARES
+        'split' => array('type' => 'clip_path','category' => 'square','invert' => 'split_inv'),
+        'split_plus' => array('type' => 'clip_path','category' => 'square','invert' => 'split_minus'),
+
+        // DIAGONALS
+        'corner_tl' => array('type' => 'clip_path','category' => 'diagonals','invert' => 'corner_tr'),
+        'corner_bl' => array('type' => 'clip_path','category' => 'diagonals','invert' => 'corner_br'),
+
+        // CORNERS
+        'semicorner_tl' => array('type' => 'clip_path','category' => 'corners','invert' => 'semicorner_tr'),
+        'semicorner_bl' => array('type' => 'clip_path','category' => 'corners','invert' => 'semicorner_br'),
+
+        // ASC - DESC
+        'diagonal_desc' => array('type' => 'clip_path','category' => 'diagside','invert' => 'diagonal_desc_inv'),
+        'diagonal_asc' => array('type' => 'clip_path','category' => 'diagside','invert' => 'diagonal_asc_inv'),
+
+        // WAVES - NEW
+        'wave-1' => array('type' => 'svg','category' => 'waves','invert' => 'wave-1-inv'),
+        'wave-2' => array('type' => 'svg','category' => 'waves','invert' => 'wave-2-inv'),
+        'wave-3' => array('type' => 'svg','category' => 'waves','invert' => 'wave-3-inv'),
+    ); 
+
+    if(!$key): return $shape_array;
+    elseif(isset($shape_array[$key])): return $shape_array[$key]; 
+    else: array();
+    endif;
+}
 
 function loginplusGetFolder(){
 
@@ -38,12 +75,37 @@ function loginplusGetFolder(){
 
 function loginplusGetShapes($type = ''){
 
+    $new_shape_array = array(
+
+        // SQUARES
+        'split' => array('type' => 'clip_path','category' => 'square','invert' => 'split_inv'),
+        'split_plus' => array('type' => 'clip_path','category' => 'square','invert' => 'split_minus'),
+
+        // DIAGONALS
+        'corner_tl' => array('type' => 'clip_path','category' => 'diagonals','invert' => 'corner_tr'),
+        'corner_bl' => array('type' => 'clip_path','category' => 'diagonals','invert' => 'corner_br'),
+
+        // CORNERS
+        'semicorner_tl' => array('type' => 'clip_path','category' => 'corners','invert' => 'semicorner_tr'),
+        'semicorner_bl' => array('type' => 'clip_path','category' => 'corners','invert' => 'semicorner_br'),
+
+        // ASC - DESC
+        'diagonal_desc' => array('type' => 'clip_path','category' => 'diagside','invert' => 'diagonal_desc_inv'),
+        'diagonal_asc' => array('type' => 'clip_path','category' => 'diagside','invert' => 'diagonal_asc_inv'),
+
+        // WAVES - NEW
+        'wave-1' => array('type' => 'svg','category' => 'waves','invert' => 'wave-1-inv'),
+        'wave-2' => array('type' => 'svg','category' => 'waves','invert' => 'wave-2-inv'),
+        'wave-3' => array('type' => 'svg','category' => 'waves','invert' => 'wave-3-inv'),
+    );
+
     $tab_shapes = array(
         'rectangle' => array('split','split_plus','split_minus','split_inv'),
         'corner' => array('corner_tl','corner_tr','corner_br','corner_bl'),
         'semicorner' => array('semicorner_tl','semicorner_tr','semicorner_br','semicorner_bl'),
         'diagonal' => array('diagonal_desc','diagonal_asc'),
-        'rounded' => array('rounded_bot')
+        'rounded' => array('rounded_bot'),
+        'new' => array('wave-1','wave-2')
     ); 
 
     if(!$type): return $tab_shapes;
@@ -247,7 +309,7 @@ function loginplusAdminPrepareHead()
     $head[$h][2] = 'doc';
     $h++;
 
-    complete_head_from_modules($conf, $langs, $object, $head, $h, 'loginplus');
+    complete_head_from_modules($conf, $langs, '', $head, $h, 'loginplus');
 
     return $head;
 }

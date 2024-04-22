@@ -21,7 +21,7 @@
 .loginplus_adm .liste_titre th {background: #f6f6f6;}
 
 /* -------------------------------------------------------------------------- */
-/*	1. Variables
+/*  1. Variables
 /* -------------------------------------------------------------------------- */
 
 body#loginplus {background: var(--bg-color);font-family: 'Poppins', sans-serif;position: relative;}
@@ -38,9 +38,22 @@ body#loginplus {background: var(--bg-color);font-family: 'Poppins', sans-serif;p
 
 #loginplus.tpl-1 {}
 #loginplus.tpl-1 .loginplus-bgimage {position: absolute;top: 0;left: 0;right: 0;bottom: 0;background-size: cover;opacity: var(--bg-imageopacity);}
+
+
+#loginplus.tpl-1 .loginplus-shape {position: absolute;top: 0;left: 0;right: 0;bottom: 0;overflow: hidden;}
+#loginplus.tpl-1 .loginplus-shape svg path {fill: var(--shape-color);opacity: var(--shape-opacity);}
+
+#loginplus.tpl-1 .loginplus-shape svg.wave-1 {position: absolute;bottom: 0;}
+#loginplus.tpl-1 .loginplus-shape svg.wave-2 {position: absolute;bottom: 0;}
+#loginplus.tpl-1 .loginplus-shape svg.wave-3 {position: absolute;bottom: 0;}
+#loginplus.tpl-1 .loginplus-shape svg.bars-1 {position: absolute;bottom: 0;}
+#loginplus.tpl-1 .loginplus-shape svg.bars-2 {position: absolute;bottom: 0;}
+#loginplus.tpl-1 .loginplus-shape svg.blob-1 {height: 100%;width:auto;position: absolute;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);}
+#loginplus.tpl-1 .loginplus-shape svg.blob-2 {height: 100%;width:auto;position: absolute;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);}
+
+
 #loginplus.tpl-1 .loginplus-wrapper {min-height: 100vh;display: flex;padding: 48px;box-sizing: border-box;position: relative;}
 #loginplus.tpl-1 .loginplus-wrapper:before {position: absolute;top: 0;right: 0;width: 100%;height: 100%;content: "";display: block;background: var(--shape-color);z-index: 2;clip-path: polygon(100% 100%, 100% 100%, 100% 100%);opacity: var(--shape-opacity);}
-
 #loginplus.tpl-1 .loginplus-wrapper.split:before {clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);}
 #loginplus.tpl-1 .loginplus-wrapper.split_plus:before {clip-path: polygon(35% 0, 100% 0, 100% 100%, 35% 100%);}
 #loginplus.tpl-1 .loginplus-wrapper.split_minus:before {clip-path: polygon(65% 0, 100% 0, 100% 100%, 65% 100%);}

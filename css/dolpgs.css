@@ -219,7 +219,6 @@
 .dolpgs-main-wrapper .tabs .tabsElem a.tabunactive:hover {opacity: 1;}
 .dolpgs-main-wrapper .tabs .tabsElem.tabsElemActive a {font-weight: 500 !important;color: var(--colorprimary);}
 
-
 /*******************************************
 *
 *  TABLE ENHANCEMENT
@@ -274,3 +273,211 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
 
 .loginplus-no-img {font-size: 0.85em;font-weight: 500;}
 .lp-modal-noimg {color: #5a5a5a;line-height: 1.5;margin-top: 16px;text-align: left;}
+
+/***************************************/
+/* DOL ADMIN */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+.doladmin {font-family:'Roboto',sans-serif !important;background: #fbfbfb;margin: -14px -36px -20px -40px;min-height: calc(100vh - 53px);}
+
+#doladmin-content {padding: 24px 40px;}
+#doladmin-content .doladmin-flex-wrapper {display: flex;gap: 24px;}
+#doladmin-content .doladmin-flex-wrapper.wrap {flex-wrap: wrap;gap: 12px;}
+#doladmin-content .doladmin-flex-wrapper.end {justify-content: flex-end;}
+#doladmin-content .doladmin-flex-wrapper .doladmin-card {flex: 1;}
+/*
+#doladmin-content .doladmin-form input[type=color]::-webkit-color-swatch {
+  border-radius: 50%;
+}
+#doladmin-content .doladmin-form input[type=color]::-moz-color-swatch {
+  border-radius: 50%;
+}*/
+
+#doladmin-content .doladmin-form input {font-family:'Roboto',sans-serif !important;}
+#doladmin-content .doladmin-form input.coloris {width: 64px;}
+#doladmin-content .doladmin-form .clr-field button {width: 100%;height: 100%;border-radius: 5px;}
+#doladmin-content .doladmin-form .doladmin-form-buttons {text-align: right;margin-top: 24px;}
+#doladmin-content .doladmin-form .doladmin-form-buttons input[type=submit] {background: var(--colorsecondary);color:#fff;font-weight: 500;padding: 6px 12px;font-family:'Roboto',sans-serif !important;cursor: pointer;}
+#doladmin-content .doladmin-form .doladmin-form-buttons input[type=submit]:hover {background: #000;}
+
+/***************************/
+/***************************/
+
+
+
+
+#doladmin-content .doladmin-flex-wrapper .doladmin-col-menu {flex: 0.5;}
+#doladmin-content .doladmin-flex-wrapper .doladmin-col-params {flex: 1;}
+
+
+#doladmin-content .doladmin-card {background: #fff;border-radius:8px;padding: 24px;box-shadow: rgba(17, 12, 46, 0.05) 0px 0px 16px 0px;margin: 24px 0;}
+#doladmin-content .doladmin-card.card-active {}
+#doladmin-content .card-flex {display: flex;flex-wrap:wrap;justify-content: space-between;align-items: center;}
+
+#doladmin-content .doladmin-card .doladmin-card-icon {padding-right: 24px;color: var(--colorgraylight2);font-size: 1.6em;}
+#doladmin-content .doladmin-card .doladmin-card-icon.icolor-danger {color: var(--colordanger);}
+#doladmin-content .doladmin-card .doladmin-card-icon.icolor-doli {color: var(--colorsecondary);}
+#doladmin-content .doladmin-card .doladmin-card-content {flex: 1;}
+#doladmin-content .doladmin-card .doladmin-card-content .doladmin-card-desc {color: var(--colorgraylight4);}
+#doladmin-content .doladmin-card .doladmin-card-right {padding-left: 24px;}
+
+#doladmin-content .doladmin-card.card-params {margin-bottom: 96px;}
+#doladmin-content .doladmin-card .doladmin-card-title {font-weight: 700;font-size: 1.15em;}
+#doladmin-content .doladmin-card .doladmin-card-title a {color: var(--colorprimary);}
+#doladmin-content .doladmin-card .doladmin-card-title a:hover {color: var(--colorsecondary);}
+#doladmin-content .doladmin-card .doladmin-params-title {font-weight: 700;font-size: 1.3em;}
+#doladmin-content .doladmin-card .doladmin-params-title i {color: var(--colorsecondary);}
+
+#doladmin-content .doladmin-card.card-active .doladmin-card-icon i {color: var(--colorsecondary);}
+#doladmin-content .doladmin-card.card-active .doladmin-card-title a {color: var(--colorprimary);}
+#doladmin-content .doladmin-card.card-active .doladmin-card-title a:hover {color: var(--colorprimary);}
+
+#doladmin-content .doladmin-card .doladmin-table-simple {width: 100%;border-collapse: collapse;}
+#doladmin-content .doladmin-card .doladmin-table-simple tr {}
+#doladmin-content .doladmin-card .doladmin-table-simple td {border-bottom: 1px solid #eee;padding: 12px 0;}
+#doladmin-content .doladmin-card .doladmin-table-simple td.doladmin-table-subtitle {color:var(--colorgraylight3);font-weight: 500;border-bottom: none;}
+#doladmin-content .doladmin-card .doladmin-table-simple td.doladmin-table-subtitle i {color:var(--colorsecondary);}
+#doladmin-content .doladmin-card .doladmin-table-simple td .color-label {padding-right:5px;}
+
+
+#doladmin-sidebar {background: #fff;width: 600px;padding: 32px;box-sizing:border-box;position: fixed;right: 0;top: 53px;bottom: 0;z-index: 9999;box-shadow: rgba(17, 12, 46, 0.2) 0px 0px 100px 0px;overflow-y: scroll;transform: translateX(0);transition: transform 0.4s ease-in;}
+#doladmin-sidebar.side-hidden {transform: translateX(100%);}
+
+#doladmin-sidebar .sidebar-header {display: flex;align-items: flex-start;justify-content: flex-start;}
+#doladmin-sidebar .sidebar-header .sidebar-title {font-weight: bold;font-size: 1.25em;flex: 1;padding: 3px 0;margin-bottom: 12px}
+#doladmin-sidebar .sidebar-header .sidebar-title i {color: var(--colorsecondary);}
+#doladmin-sidebar .sidebar-header .sidebar-close {height: 24px;width: 24px;display: flex;justify-content: center;align-items: center;text-align: center;color: var(--colorgraylight2);cursor: pointer;}
+#doladmin-sidebar .sidebar-header .sidebar-close:hover {color: var(--colorgraylight4);}
+
+
+
+/**********************/
+/**********************/
+.doladmin-slider {}
+.doladmin-slider .doladmin-slides-container {overflow: hidden;position:relative;aspect-ratio: 21/9;}
+.doladmin-slider .doladmin-slides {display: flex;flex-wrap: nowrap; overflow-x: scroll;scroll-behavior: smooth;scroll-snap-type: x mandatory;}
+.doladmin-slider .doladmin-slides .doladmin-slide {flex: 0 0 auto;width: 100%;aspect-ratio: 21/9; position: relative;}
+.doladmin-slider .doladmin-slides .doladmin-slide img {max-width: 100%;height: auto;display: block;box-sizing: border-box;}
+.doladmin-slider .doladmin-slides .doladmin-slide .doladmin-selected {position:absolute;top: 16px;right:0;padding:8px 16px 8px 8px; background: #fff;font-weight: 500; color: var(--colorgraylight3); font-size: 0.85em; text-transform: uppercase;}
+.doladmin-slider .doladmin-slides .doladmin-slide .doladmin-selected i {font-size: 1.2em;color: var(--colorsuccess);}
+
+.doladmin-slider.slide-3 .doladmin-slides {gap: 24px;}
+.doladmin-slider.slide-3 .doladmin-slides-container {overflow: hidden;position:relative;aspect-ratio: 21/3;}
+.doladmin-slider.slide-3 .doladmin-slides .doladmin-slide {flex: 0 0 auto;width: 33.33%;aspect-ratio: 21/9; position: relative;opacity: 0.2;transition: opacity .2s ease-in;}
+.doladmin-slider.slide-3 .doladmin-slides .doladmin-slide.active {opacity: 1;}
+.doladmin-slider.slide-3 .doladmin-slides .doladmin-slide:first-child {margin-left: 33.33%;}
+.doladmin-slider.slide-3 .doladmin-slides .doladmin-slide:last-child {margin-right: 33.33%;}
+
+.doladmin-slider .doladmin-controls {display: flex;justify-content: space-between;gap: 64px;align-items: center;margin-top: 12px;}
+
+.doladmin-slider .doladmin-controls .control-prev,
+.doladmin-slider .doladmin-controls .control-next {font-size: 1.5em;line-height: 42px;cursor: pointer;color: var(--colorgraylight2);}
+.doladmin-slider .doladmin-controls .control-prev:hover,
+.doladmin-slider .doladmin-controls .control-next:hover {color: var(--colorsecondary);}
+
+.doladmin-slider .doladmin-controls .control-bullets {padding: 0;margin:0;list-style: none;display: flex;gap: 16px;}
+.doladmin-slider .doladmin-controls .control-bullets li {background: var(--colorgraylight);width: 12px;height: 12px;border-radius: 50px;}
+.doladmin-slider .doladmin-controls .control-bullets li.active {background: var(--colorsecondary);}
+
+
+/**********************/
+/* PREVIEW - VARS NEED TO BE SET */
+/**********************/
+.doladmin-preview {margin-bottom: 24px;overflow: hidden;aspect-ratio: 21 / 9;background: var(--loginplus-bg-color);position: relative;border: 1px solid var(--colorgraylight2);}
+.doladmin-preview .preview-background {background-position: center;background-size:cover;position: absolute;top: 0;left: 0;right: 0;bottom: 0;opacity: var(--loginplus-bg-imageopacity);z-index: 1;}
+.doladmin-preview .preview-shape {position: absolute;top: 0;left: 0;right: 0;bottom: 0;overflow: hidden;pointer-events: none;z-index: 2;}
+
+/* OLDS SHAPES UPDATE */
+.doladmin-preview .preview-shape.shape-clip {background: var(--loginplus-shape-color);opacity: var(--loginplus-shape-opacity);}
+.doladmin-preview .preview-shape.split {height:100%;width:100%;clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);}
+.doladmin-preview .preview-shape.split.alternate {clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);}
+.doladmin-preview .preview-shape.split_minus {clip-path: polygon(65% 0, 100% 0, 100% 100%, 65% 100%);}
+.doladmin-preview .preview-shape.split_minus.alternate {clip-path: polygon(35% 0, 100% 0, 100% 100%, 35% 100%);}
+.doladmin-preview .preview-shape.corner_tl {clip-path: polygon(100% 0, 0 0, 0 100%);}
+.doladmin-preview .preview-shape.corner_tl.alternate {clip-path: polygon(100% 0, 0 0, 100% 100%);}
+.doladmin-preview .preview-shape.corner_bl {clip-path: polygon(0 0, 100% 100%, 0 100%);}
+.doladmin-preview .preview-shape.corner_bl.alternate {clip-path: polygon(100% 0, 100% 100%, 0 100%);}
+.doladmin-preview .preview-shape.semicorner_tl {clip-path: polygon(50% 0%, 0% 100%, 0 0);}
+.doladmin-preview .preview-shape.semicorner_tl.alternate {clip-path: polygon(50% 0%, 100% 100%, 100% 0);}
+.doladmin-preview .preview-shape.semicorner_bl {clip-path: polygon(50% 100%, 0 100%, 0 0);}
+.doladmin-preview .preview-shape.semicorner_bl.alternate {clip-path: polygon(50% 100%, 100% 100%, 100% 0);}
+.doladmin-preview .preview-shape.diagonal_desc {clip-path: polygon(50% 0, 100% 0, 100% 100%, 75% 100%);}
+.doladmin-preview .preview-shape.diagonal_desc.alternate {clip-path: polygon(0 0, 50% 0, 25% 100%, 0% 100%);}
+.doladmin-preview .preview-shape.diagonal_asc {clip-path: polygon(75% 0, 100% 0, 100% 100%, 50% 100%);}
+.doladmin-preview .preview-shape.diagonal_asc.alternate {clip-path: polygon(0% 0, 25% 0, 50% 100%, 0 100%);}
+.doladmin-preview .preview-shape.circle {height:100%;width:100%;clip-path: circle(21% at 50% 50%);}
+.doladmin-preview .preview-shape.circle.alternate {clip-path: circle(closest-side);}
+
+/* NEW SHAPES SVG */
+.doladmin-preview .preview-shape.shape-svg svg {position: absolute;}
+.doladmin-preview .preview-shape.shape-svg svg path {fill: var(--loginplus-shape-color);opacity: var(--loginplus-shape-opacity);}
+.doladmin-preview .preview-shape.wave-1 svg {bottom: 0;}
+.doladmin-preview .preview-shape.wave-1.alternate svg {transform: rotate(180deg);bottom: inherit;top: 0;}
+.doladmin-preview .preview-shape.wave-2 svg {bottom: 0;}
+.doladmin-preview .preview-shape.wave-2.alternate svg {transform: rotate(180deg);bottom: inherit;top: 0;}
+.doladmin-preview .preview-shape.wave-3 svg {bottom: 0;}
+.doladmin-preview .preview-shape.wave-3.alternate svg {transform: rotate(180deg);bottom: inherit;top: 0;}
+.doladmin-preview .preview-shape.bar-1 svg {bottom: 0;}
+.doladmin-preview .preview-shape.bar-1.alternate svg {transform: rotate(180deg);bottom: inherit;top: 0;}
+.doladmin-preview .preview-shape.bar-2 svg {bottom: 0;}
+.doladmin-preview .preview-shape.bar-2.alternate svg {transform: rotate(180deg);bottom: inherit;top: 0;}
+.doladmin-preview .preview-shape.blob svg {height: 100%;width:auto;left: 50%;top: 0;transform: translateX(-50%);}
+.doladmin-preview .preview-shape.blob.alternate svg {height: 200%;width:auto;left: 50%;top: 0;transform: translateX(-50%) translateY(-25%) rotate(90deg);}
+
+/**/
+.doladmin-preview .preview-global-wrapper {position:relative;z-index:3;min-height: 100%;display: flex;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper {margin:auto;display: flex;box-sizing: border-box;position: relative;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper div.mask {border: 1px dashed rgba(255, 255, 255, 0.5) !important;background: rgba(255, 255, 255, 0.1) !important;}
+
+.doladmin-preview .preview-global-wrapper .preview-wrapper div.preview-boxside {flex: 1;display: flex;align-items: center;justify-content: center;background: var(--loginplus-image-color);border-radius: var(--loginplus-box-radius);padding: 24px;background-size: cover;background-position: center;position: relative;overflow: hidden;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper div.preview-boxside .preview-boximage {background-size: cover;background-position: center;position: absolute;top: 0;left: 0;right: 0;bottom: 0;opacity: var(--loginplus-image-opacity);z-index: 1;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper div.preview-boxside .preview-boxtxt {z-index: 2;text-align: center;font-size: 0.95em;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper div.preview-boxside .preview-boxtxt .preview-title {font-weight: bold;text-transform: uppercase;margin-bottom: 8px;color: var(--loginplus-txt-titlecolor);}
+.doladmin-preview .preview-global-wrapper .preview-wrapper div.preview-boxside .preview-boxtxt .preview-content {color: var(--loginplus-txt-contentcolor);}
+
+.doladmin-preview .preview-global-wrapper .preview-wrapper div.preview-boxlogin {flex: 1;display: flex;align-items: center;justify-content: center;flex-direction: column;background: var(--loginplus-box-background);border-radius: var(--loginplus-box-radius);padding: 24px;}
+
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-logo {margin-bottom: 16px;text-align: center;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-logo img {display:block;max-height:104px;max-width: 80%;margin: 0 auto;}
+
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields {margin: 24px 0;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow {margin-bottom: 12px;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields.loginplus-viewlabel .preview-fieldrow label {display:block;font-size: 0.95em;font-weight: 500;margin-bottom: 4px;color: var(--loginplus-box-labelcolor);}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow label i {padding-right: 7px;color: var(--loginplus-box-iconcolor);}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields.loginplus-viewlabel .preview-fieldrow label i {padding-right: 4px;}
+
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow input[type=text],
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow input[type=password] {outline:none;font-family:'Roboto', sans-serif !important;padding: 6px 0;margin: 0;font-size: 0.95em;color: var(--loginplus-box-inputcolor);background: var(--loginplus-box-inputbackground);border-right:none;border-left:none;border-top:none;border-bottom-width: var(--loginplus-box-inputborder);border-bottom-color:var(--loginplus-box-inputbordercolor);border-bottom-style: solid;transition:all ease-in-out .1s;box-sizing: border-box;border-radius: 0 !important;width: 200px;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow input[type=text]:focus,
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow input[type=password]:focus {outline:none;color: var(--loginplus-box-inputcolorfocus);border-right:none;border-left:none;border-top:none;border-bottom-width: var(--loginplus-box-inputborder) !important;border-bottom-color: var(--loginplus-box-inputbordercolorfocus) !important;border-bottom-style: solid !important;border-radius: 0 !important;}
+.doladmin input:focus:not(.button):not(.buttonwebsite):not(.buttonreset):not(.select2-search__field):not(#top-bookmark-search-input):not(.search_component_input):not(.input-search-takepos){
+  border-bottom-width: 1px !important;
+  border-bottom-color: var(--loginplus-box-inputbordercolorfocus) !important;
+  border-bottom-style: solid !important;
+}
+
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-submit {padding: 6px 12px;font-size: 0.9em;border-radius:4px;background: var(--loginplus-box-submitbackground);color: var(--loginplus-box-submitcolor);cursor: pointer;font-weight: 500;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-submit:hover {background: var(--loginplus-box-submitbackgroundhover);}
+
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-links {font-size: 0.7em;margin-top: 24px;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-links a {color: var(--loginplus-box-linkscolor);}
+
+
+/***/
+.doladmin-preview .preview-global-wrapper.template_one .preview-wrapper {width: 25%;}
+.doladmin-preview .preview-global-wrapper.template_two .preview-wrapper {width: 50%;}
+.doladmin-preview .preview-global-wrapper.template_one .preview-wrapper .mask,
+.doladmin-preview .preview-global-wrapper.template_two .preview-wrapper .mask {aspect-ratio: 10/9}
+
+.doladmin-preview .preview-global-wrapper.template_two .preview-wrapper .preview-boxside {border-top-right-radius:0 !important;border-bottom-right-radius:0 !important;}
+.doladmin-preview .preview-global-wrapper.template_two .preview-wrapper .preview-boxlogin {border-top-left-radius:0 !important;border-bottom-left-radius:0 !important;}
+
+.doladmin-preview .preview-global-wrapper.template_three.box-left {justify-content: flex-start;}
+.doladmin-preview .preview-global-wrapper.template_three.box-center {justify-content: center;}
+.doladmin-preview .preview-global-wrapper.template_three.box-right {justify-content: flex-end;}
+.doladmin-preview .preview-global-wrapper.template_three .preview-wrapper {width: 25%;margin: var(--loginplus-box-margin);}
+
+
+
+/**/
+#doladmin-content .doladmin-selectedfile {margin-top: 8px;font-weight: 500;color: var(--colorgraylight4);}

@@ -30,7 +30,7 @@ require_once DOL_DOCUMENT_ROOT.'/ecm/class/ecmfiles.class.php';
 dol_include_once('./loginplus/lib/loginplus.lib.php');
 
 // Protection if external user
-if ($user->societe_id > 0): accessforbidden(); endif;
+if ($user->socid > 0): accessforbidden(); endif;
 if (!$user->rights->loginplus->configurer): accessforbidden(); endif;
 
 /*******************************************************************

@@ -69,7 +69,7 @@ class modLoginPlus extends DolibarrModules
         $this->editor_url = 'https://progiseize.fr';
         
         // Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
-        $this->version = '1.5.3';
+        $this->version = '2.0.0';
         $this->url_last_version = "https://progiseize.fr/modules_info/lastversion.php?module=".$this->numero;
 
         // Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
@@ -110,7 +110,7 @@ class modLoginPlus extends DolibarrModules
             'tpl' => 1,
             'barcode' => 0, 
             'models' => 0,
-            'css' => array('loginplus/css/loginplus.css'),
+            'css' => array(),
             'js' => array(),
             'hooks' => array('login'),
             'dir' => array(),
@@ -137,16 +137,36 @@ class modLoginPlus extends DolibarrModules
         // List of particular constants to add when module is enabled (key, 'chaine', value, desc, visible, 'current' or 'allentities', deleteonunactive)
         // Example: 
         $this->const = array(
-            0=>array('LOGINPLUS_SHOW_FORMLABELS','chaine',true,'',1),
-            1=>array('LOGINPLUS_BG_COLOR','chaine','#ebebeb','',1),
-            2=>array('LOGINPLUS_SHAPE_PATH','chaine','corner_tr','',1),
-            3=>array('LOGINPLUS_SHAPE_COLOR','chaine','#263c5c','',1),
-            4=>array('LOGINPLUS_SHAPE_OPACITY','chaine','100','',1),
-            5=>array('LOGINPLUS_MAIN_COLOR','chaine','#007b8c','',1),
-            6=>array('LOGINPLUS_SECONDCOLOR','chaine','#263c5c','',1),
+            0 => array('LOGINPLUS_ACTIVELOGINTPL','chaine','0','',1),
+            1 => array('LOGINPLUS_TEMPLATE','chaine','template_','',1),
+            2 => array('LOGINPLUS_BG_COLOR','chaine','#ececec','',1),
+            3 => array('LOGINPLUS_BG_IMAGEKEY','chaine','','',1),
+            4 => array('LOGINPLUS_BG_IMAGEOPACITY','chaine','100','',1),
+            5 => array('LOGINPLUS_SHAPE_PATH','chaine','Wave-1','',1),
+            6 => array('LOGINPLUS_SHAPE_COLOR','chaine','#3c4664','',1),
+            7 => array('LOGINPLUS_BOX_BACKGROUND','chaine','#ffffff','',1),
+            8 => array('LOGINPLUS_BOX_RADIUS','chaine','16','',1),
+            9 => array('LOGINPLUS_BOX_MARGIN','chaine','16','',1),
+            10 => array('LOGINPLUS_BOX_ALIGN','chaine','right','',1),
+            11 => array('LOGINPLUS_SHOW_FORMLABELS','chaine','0','',1),
+            12 => array('LOGINPLUS_BOX_ICONCOLOR','chaine','#3c4664','',1),
+            13 => array('LOGINPLUS_BOX_LABELCOLOR','chaine','#a8a8a8','',1),
+            14 => array('LOGINPLUS_BOX_INPUTCOLOR','chaine','#a8a8a8','',1),
+            15 => array('LOGINPLUS_BOX_INPUTCOLORFOCUS','chaine','#007b8c','',1),
+            16 => array('LOGINPLUS_BOX_INPUTBORDERCOLOR','chaine','#d0d0d0','',1),
+            17 => array('LOGINPLUS_BOX_INPUTBORDERCOLORFOCUS','chaine','#007b8c','',1),
+            18 => array('LOGINPLUS_BOX_SUBMITBACKGROUND','chaine','#3c4664','',1),
+            19 => array('LOGINPLUS_BOX_SUBMITBACKGROUNDHOVER','chaine','#007b8c','',1),
+            20 => array('LOGINPLUS_BOX_SUBMITCOLOR','chaine','#ffffff','',1),
+            21 => array('LOGINPLUS_BOX_LINKSCOLOR','chaine','#bababa','',1),
+            22 => array('LOGINPLUS_IMAGE_KEY','chaine','','',1),
+            23 => array('LOGINPLUS_IMAGE_COLOR','chaine','#3c4664','',1),
+            24 => array('LOGINPLUS_IMAGE_OPACITY','chaine','100','',1),
+            25 => array('LOGINPLUS_TXT_TITLE','chaine','','',1),
+            26 => array('LOGINPLUS_TXT_TITLECOLOR','chaine','#ffffff','',1),
+            27 => array('LOGINPLUS_TXT_CONTENT','chaine','','',1),
+            28 => array('LOGINPLUS_TXT_CONTENTCOLOR','chaine','#bababa','',1),
         );
-
-        
 
         // Array to add new pages in new tabs
         // Example: $this->tabs = array(
@@ -175,10 +195,10 @@ class modLoginPlus extends DolibarrModules
         // 'user'             to add a tab in user view
         $this->tabs = array();
 
-        if (! isset($conf->mymodule) || ! isset($conf->mymodule->enabled))
+        if (! isset($conf->loginplus) || ! isset($conf->loginplus->enabled))
         {
-            $conf->mymodule=new stdClass();
-            $conf->mymodule->enabled=0;
+            $conf->loginplus=new stdClass();
+            $conf->loginplus->enabled=0;
         }
         
         // Dictionaries
@@ -311,12 +331,7 @@ class modLoginPlus extends DolibarrModules
         );
         $r++;
         
-
         // Example to declare a Left Menu entry into an existing Top menu entry:
-        
-        $r++;
-
-
         /*--------------- */
 
         // Add here entries to declare new menus
@@ -387,8 +402,23 @@ class modLoginPlus extends DolibarrModules
         global $conf, $db;
         dolibarr_set_const($db, "CHECKLASTVERSION_EXTERNALMODULE", '1', 'int', 0, '', $conf->entity);
 
-        $this->_load_tables('/loginplus/sql/');
+        // CREATE LOGINPLUSDIR INTO MEDIAS
+        $dirfornewdir = $conf->medias->multidir_output[$conf->entity];
+        $fullpathofdir = $dirfornewdir.'/loginplus';
 
+        if(!is_dir($fullpathofdir.'/loginplus')):
+            $result = dol_mkdir($fullpathofdir, DOL_DATA_ROOT);
+        endif;
+
+        // REMOVE OLD CONST
+        dolibarr_set_const($db, 'LOGINPLUS_SECONDCOLOR','','chaine',0,'',$conf->entity);
+        dolibarr_set_const($db, 'LOGINPLUS_TWOSIDES','','chaine',0,'',$conf->entity);
+        dolibarr_set_const($db, 'LOGINPLUS_MAIN_COLOR','','chaine',0,'',$conf->entity);
+        dolibarr_set_const($db, 'LOGINPLUS_SECOND_COLOR','','chaine',0,'',$conf->entity);
+        dolibarr_set_const($db, 'LOGINPLUS_COPYRIGHT_COLOR','','chaine',0,'',$conf->entity);
+        dolibarr_set_const($db, 'LOGINPLUS_SHAPE_OPACITY','','chaine',0,'',$conf->entity);
+
+        $this->_load_tables('/loginplus/sql/');
         $sql = array();
         return $this->_init($sql, $options);
     }

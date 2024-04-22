@@ -4,6 +4,16 @@
 [comment]: <> (Upload des fichiers + simple)
 
 ***
+### 2.0.0
+* NEW - Nouvelle page de personnalisation
+* REMOVE - Suppression des templates avec Copyright
+* MAJ - Upload plus simple des images (dossier medias)
+* MAJ - Nouvelles options de personnalisation
+
+
+### 1.5.4
+* FIX - Correction erreur log trigger 
+* FIX - Correction erreur log loginplusAdminPrepareHead
 
 ### 1.5.3
 * MAJ - Mise à jour de la page admin "Apparence"
@@ -60,5 +70,5 @@
 * FIX - Mise à jour de sécurité
 
 ### 1.0 (01/12/2021)
-* Module permettant de modifier l'apparence de la page d'autentification de Dolibarr.
+* Module permettant de modifier l'apparence de la page d'authentification de Dolibarr.
 * Compatible TwoFactor.

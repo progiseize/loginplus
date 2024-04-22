@@ -1,0 +1,132 @@
+/* 
+ * Copyright (C) 2022 ProgiSeize <contact@progiseize.fr>
+ *
+ * This program and files/directory inner it is free software: you can 
+ * redistribute it and/or modify it under the terms of the 
+ * GNU Affero General Public License (AGPL) as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU AGPL for more details.
+ *
+ * You should have received a copy of the GNU AGPL
+ * along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body#loginplus {font-family: 'Roboto', sans-serif; background: var(--loginplus-bg-color);}
+
+body#loginplus .loginplus-maintenance-msg {position: fixed;top: 0;left: 0;padding: 8px;font-weight: 500;background: #ffa328;width: 100%;z-index: 4;color: rgba(0, 0, 0, 0.6);text-align: center;box-sizing: border-box;}
+body#loginplus.template_three .loginplus-maintenance-msg {width: 75%;}
+
+/**/
+body#loginplus .loginplus-background {background-position: center;background-size:cover;position: absolute;top: 0;left: 0;right: 0;bottom: 0;opacity: var(--loginplus-bg-imageopacity);z-index: 1;}
+
+/**/
+body#loginplus .loginplus-shape {position: absolute;top: 0;left: 0;right: 0;bottom: 0;overflow: hidden;pointer-events: none;z-index: 2;}
+body#loginplus .loginplus-shape.shape-clip {background: var(--loginplus-shape-color);opacity: var(--loginplus-shape-opacity);}
+body#loginplus .loginplus-shape.split {height:100%;width:100%;clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);}
+body#loginplus .loginplus-shape.split.alternate {clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);}
+body#loginplus .loginplus-shape.split_minus {clip-path: polygon(65% 0, 100% 0, 100% 100%, 65% 100%);}
+body#loginplus .loginplus-shape.split_minus.alternate {clip-path: polygon(35% 0, 100% 0, 100% 100%, 35% 100%);}
+body#loginplus .loginplus-shape.corner_tl {clip-path: polygon(100% 0, 0 0, 0 100%);}
+body#loginplus .loginplus-shape.corner_tl.alternate {clip-path: polygon(100% 0, 0 0, 100% 100%);}
+body#loginplus .loginplus-shape.corner_bl {clip-path: polygon(0 0, 100% 100%, 0 100%);}
+body#loginplus .loginplus-shape.corner_bl.alternate {clip-path: polygon(100% 0, 100% 100%, 0 100%);}
+body#loginplus .loginplus-shape.semicorner_tl {clip-path: polygon(50% 0%, 0% 100%, 0 0);}
+body#loginplus .loginplus-shape.semicorner_tl.alternate {clip-path: polygon(50% 0%, 100% 100%, 100% 0);}
+body#loginplus .loginplus-shape.semicorner_bl {clip-path: polygon(50% 100%, 0 100%, 0 0);}
+body#loginplus .loginplus-shape.semicorner_bl.alternate {clip-path: polygon(50% 100%, 100% 100%, 100% 0);}
+body#loginplus .loginplus-shape.diagonal_desc {clip-path: polygon(50% 0, 100% 0, 100% 100%, 75% 100%);}
+body#loginplus .loginplus-shape.diagonal_desc.alternate {clip-path: polygon(0 0, 50% 0, 25% 100%, 0% 100%);}
+body#loginplus .loginplus-shape.diagonal_asc {clip-path: polygon(75% 0, 100% 0, 100% 100%, 50% 100%);}
+body#loginplus .loginplus-shape.diagonal_asc.alternate {clip-path: polygon(0% 0, 25% 0, 50% 100%, 0 100%);}
+body#loginplus .loginplus-shape.circle {height:100%;width:100%;clip-path: circle(21% at 50% 50%);}
+body#loginplus .loginplus-shape.circle.alternate {clip-path: circle(closest-side);}
+body#loginplus .loginplus-shape.shape-svg svg {position: absolute;}
+body#loginplus .loginplus-shape.shape-svg svg path {fill: var(--loginplus-shape-color);opacity: var(--loginplus-shape-opacity);}
+body#loginplus .loginplus-shape.wave-1 svg {bottom: 0;}
+body#loginplus .loginplus-shape.wave-1.alternate svg {transform: rotate(180deg);bottom: inherit;top: 0;}
+body#loginplus .loginplus-shape.wave-2 svg {bottom: 0;}
+body#loginplus .loginplus-shape.wave-2.alternate svg {transform: rotate(180deg);bottom: inherit;top: 0;}
+body#loginplus .loginplus-shape.wave-3 svg {bottom: 0;}
+body#loginplus .loginplus-shape.wave-3.alternate svg {transform: rotate(180deg);bottom: inherit;top: 0;}
+body#loginplus .loginplus-shape.bar-1 svg {bottom: 0;}
+body#loginplus .loginplus-shape.bar-1.alternate svg {transform: rotate(180deg);bottom: inherit;top: 0;}
+body#loginplus .loginplus-shape.bar-2 svg {bottom: 0;}
+body#loginplus .loginplus-shape.bar-2.alternate svg {transform: rotate(180deg);bottom: inherit;top: 0;}
+body#loginplus .loginplus-shape.blob svg {height: 100%;width:auto;left: 50%;top: 0;transform: translateX(-50%);}
+body#loginplus .loginplus-shape.blob.alternate svg {height: 200%;width:auto;left: 50%;top: 0;transform: translateX(-50%) translateY(-25%) rotate(90deg);}
+
+/**/
+body#loginplus .loginplus-global-wrapper {position:relative;z-index:3;min-height: 100vh;display: flex;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper {margin:auto;display: flex;box-sizing: border-box;position: relative;/*box-shadow: 0 0 125px rgba(0, 0, 0, 0.15);*/}
+
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxside {flex: 1;display: flex;align-items: center;justify-content: center;background: var(--loginplus-image-color);border-radius: var(--loginplus-box-radius);padding: 48px;background-size: cover;background-position: center;position: relative;overflow: hidden;box-sizing: border-box;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxside .loginplus-boximage {background-size: cover;background-position: center;position: absolute;top: 0;left: 0;right: 0;bottom: 0;opacity: var(--loginplus-image-opacity);z-index: 1;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxside .loginplus-boxtxt {z-index: 2;text-align: center;font-size: 0.95em;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxside .loginplus-boxtxt .loginplus-title {font-weight: bold;text-transform: uppercase;margin-bottom: 8px;color: var(--loginplus-txt-titlecolor);}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxside .loginplus-boxtxt .loginplus-content {color: var(--loginplus-txt-contentcolor);}
+
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin {flex: 1;display: flex;align-items: center;justify-content: center;flex-direction: column;background: var(--loginplus-box-background);border-radius: var(--loginplus-box-radius);padding: 48px;box-sizing: border-box;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-boxlogin-logo {}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-boxlogin-logo img {display: block;margin: 8px auto 16px auto;max-width: 240px;height: auto;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin form#login {padding-bottom: 0;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields {margin: 36px 0;flex: 1;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow {margin: 24px 0;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow label {}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields.loginplus-viewlabel .loginplus-fieldrow label {display:block;margin-bottom: 3px;color: var(--loginplus-box-labelcolor);font-weight: 500;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow label i {color: var(--loginplus-box-iconcolor);margin-right: 5px;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow input {width: 320px;font-family: 'Roboto', sans-serif;box-sizing: border-box;background: transparent !important;border: none;outline: none;padding: 8px 0;color: var(--loginplus-box-inputcolor);border-bottom: 1px solid var(--loginplus-box-inputbordercolor);transition: 0.15s ease-in;border-radius: 0;font-weight: 500}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow input:focus, 
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow input:active {border-bottom: 1px solid var(--loginplus-box-inputbordercolorfocus);color: var(--loginplus-box-inputcolorfocus);}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow input::placeholder {color: rgba(200, 200, 200, 0.4);}
+body#loginplus input:focus:not(.button):not(.buttonwebsite):not(.buttonreset):not(.select2-search__field):not(#top-bookmark-search-input):not(.search_component_input):not(.input-search-takepos){border-bottom-width: 1px !important; border-bottom-color: var(--loginplus-box-inputbordercolorfocus) !important; border-bottom-style: solid !important; }
+
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit {text-align: center;padding-top: 8px;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit input[type=submit] {font-family: 'Roboto', sans-serif;padding: 10px 16px;font-size: 1em;border-radius:4px;background: var(--loginplus-box-submitbackground);color: var(--loginplus-box-submitcolor);cursor: pointer;font-weight: 500;transition: 0.05s ease-in;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit input[type=submit]:hover, 
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit input[type=submit]:active {background: var(--loginplus-box-submitbackgroundhover);}
+
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-error-msg {color: #ff000e;margin: 24px 0;font-size: 0.9em;font-weight: 500;border: 1px solid #ff000e;padding: 6px 12px;background: rgba(0, 0, 0, .1);border-radius: 6px;}
+
+body#loginplus .loginplus-helplinks {color: var(--loginplus-box-linkscolor);margin-top: 64px;font-size: 0.85em;}
+body#loginplus .loginplus-helplinks a {color: var(--loginplus-box-linkscolor);}
+
+body#loginplus .loginplus-doliversion {position: absolute;bottom: 6px;right: 16px;z-index: 4;color: rgba(255, 255, 255, 0.6);font-size: 0.85em;font-weight: 500;}
+body#loginplus.template_three.loginbox-align-right .loginplus-doliversion {left: 16px;right: auto;}
+
+
+/**/
+body#loginplus.template_one .loginplus-global-wrapper .loginplus-wrapper {width: auto;}
+body#loginplus.template_one .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin {padding: 48px 64px;}
+
+body#loginplus.template_two .loginplus-global-wrapper .loginplus-wrapper {width: 50%;}
+body#loginplus.template_two .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxside {border-top-right-radius:0 !important;border-bottom-right-radius:0 !important;}
+body#loginplus.template_two .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin {border-top-left-radius:0 !important;border-bottom-left-radius:0 !important;}
+
+
+body#loginplus.template_three .loginplus-global-wrapper.box-left {justify-content: flex-start;}
+body#loginplus.template_three .loginplus-global-wrapper.box-center {justify-content: center;}
+body#loginplus.template_three .loginplus-global-wrapper.box-right {justify-content: flex-end;}
+body#loginplus.template_three .loginplus-global-wrapper .loginplus-wrapper {width: 25%;margin: var(--loginplus-box-margin);}
+
+@media only screen and (max-width: 1720px) {
+  body#loginplus.template_one .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin {padding: 48px;}
+  body#loginplus.template_two .loginplus-global-wrapper .loginplus-wrapper {width: 72%;}
+  body#loginplus.template_three .loginplus-global-wrapper .loginplus-wrapper {width: 33.33%;}
+}
+@media only screen and (max-width: 1220px) {
+
+  body#loginplus.template_two .loginplus-global-wrapper .loginplus-wrapper {width: 96%;}
+  body#loginplus.template_three .loginplus-global-wrapper .loginplus-wrapper {width: auto;}
+}
+
+@media only screen and (max-width: 780px) {
+  body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxside {display: none;}
+  body#loginplus.template_two .loginplus-global-wrapper .loginplus-wrapper {width: auto;}
+}

@@ -30,7 +30,7 @@ dol_include_once('./loginplus/class/loginmsg.class.php');
 dol_include_once('./loginplus/lib/loginplus.lib.php');
 
 // Protection if external user
-if ($user->societe_id > 0): accessforbidden(); endif;
+if ($user->socid > 0): accessforbidden(); endif;
 if (!$user->rights->loginplus->gerer_messages): accessforbidden(); endif;
 
 /*******************************************************************
