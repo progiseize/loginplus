@@ -442,12 +442,15 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
 
 .doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields {margin: 24px 0;}
 .doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow {margin-bottom: 12px;}
-.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields.loginplus-viewlabel .preview-fieldrow label {display:block;font-size: 0.95em;font-weight: 500;margin-bottom: 4px;color: var(--loginplus-box-labelcolor);}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow label {font-size: 0.95em;font-weight: 500;margin-bottom: 4px;color: var(--loginplus-box-labelcolor);}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow label .label-txt {display: none;}
 .doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow label i {padding-right: 7px;color: var(--loginplus-box-iconcolor);}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields.loginplus-viewlabel .preview-fieldrow label {display: block;}
 .doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields.loginplus-viewlabel .preview-fieldrow label i {padding-right: 4px;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields.loginplus-viewlabel .preview-fieldrow label .label-txt {display: inline-block;}
 
 .doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow input[type=text],
-.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow input[type=password] {outline:none;font-family:'Roboto', sans-serif !important;padding: 6px 0;margin: 0;font-size: 0.95em;color: var(--loginplus-box-inputcolor);background: var(--loginplus-box-inputbackground);border-right:none;border-left:none;border-top:none;border-bottom-width: var(--loginplus-box-inputborder);border-bottom-color:var(--loginplus-box-inputbordercolor);border-bottom-style: solid;transition:all ease-in-out .1s;box-sizing: border-box;border-radius: 0 !important;width: 200px;}
+.doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow input[type=password] {outline:none;font-family:'Roboto', sans-serif !important;padding: 6px 0;margin: 0;font-size: 0.95em;color: var(--loginplus-box-inputcolor);background: var(--loginplus-box-inputbackground);border-right:none;border-left:none;border-top:none;border-bottom-width: 1px;border-bottom-color:var(--loginplus-box-inputbordercolor);border-bottom-style: solid;transition:all ease-in-out .1s;box-sizing: border-box;border-radius: 0 !important;width: 200px;}
 .doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow input[type=text]:focus,
 .doladmin-preview .preview-global-wrapper .preview-wrapper .preview-fields .preview-fieldrow input[type=password]:focus {outline:none;color: var(--loginplus-box-inputcolorfocus);border-right:none;border-left:none;border-top:none;border-bottom-width: var(--loginplus-box-inputborder) !important;border-bottom-color: var(--loginplus-box-inputbordercolorfocus) !important;border-bottom-style: solid !important;border-radius: 0 !important;}
 .doladmin input:focus:not(.button):not(.buttonwebsite):not(.buttonreset):not(.select2-search__field):not(#top-bookmark-search-input):not(.search_component_input):not(.input-search-takepos){
@@ -481,3 +484,9 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
 
 /**/
 #doladmin-content .doladmin-selectedfile {margin-top: 8px;font-weight: 500;color: var(--colorgraylight4);}
+
+@media only screen and (max-width: 1620px) {
+  #doladmin-content #loginplusadmin-content {flex-direction: column;}
+  #doladmin-content #loginplusadmin-content .doladmin-col-menu {display:flex;flex-direction: row;flex-wrap: wrap;gap: 24px;}
+  #doladmin-content #loginplusadmin-content .doladmin-col-menu .doladmin-card {min-width: 320px;}
+}

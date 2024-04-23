@@ -259,9 +259,10 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
         $linkback = '<a href="'.DOL_URL_ROOT.'/admin/modules.php?restore_lastsearch_values=1">'.$langs->trans("BackToModuleList").'</a>';
         print load_fiche_titre($langs->trans("loginplus_optionp_title"), $linkback, 'title_setup'); ?>
 
-        <?php //$head = loginplusAdminPrepareHead(); dol_fiche_head($head, 'setup','loginplus', 1); ?>
+        <?php $head = loginplusAdminPrepareHead(); dol_fiche_head($head, 'setup','loginplus', 1); ?>
+        <div style="border-top:1px solid #ccc;"></div>
 
-        <div class="doladmin-flex-wrapper" style="margin-bottom: 16px;">
+        <div class="doladmin-flex-wrapper" style="">
             <!--  -->
             <div class="doladmin-card card-flex">
                 <div class="doladmin-card-icon <?php echo getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')?'icolor-doli':''; ?>"><i class="fas fa-palette"></i></div>
@@ -282,7 +283,7 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
             </div>
         </div>
 
-        <div class="doladmin-flex-wrapper">
+        <div class="doladmin-flex-wrapper" id="loginplusadmin-content">
 
             <!-- COL FOR MENU -->
             <div class="doladmin-col-menu">
@@ -311,8 +312,8 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                 <?php if($optiontype == 'template'): ?>
                 <div class="doladmin-card">
 
-                    <div class="doladmin-params-title"><i class="fas fa-layer-group paddingright"></i> Choix du template</div>
-                    <p class="opacitymedium">Choisissez la structure désirée pour votre page de connexion. Vous pourrez ensuite la personnaliser avec de nombreuses options.</p>
+                    <div class="doladmin-params-title"><i class="fas fa-columns paddingright"></i> <?php echo $langs->trans('loginplus_AdminStructureStepTitle'); ?></div>
+                    <p class="opacitymedium"><?php echo $langs->trans('loginplus_AdminStructureStepLongDesc'); ?></p>
 
                     <div class="doladmin-card-content paddingtop" style="margin-top: 16px;">
                         
@@ -324,7 +325,7 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                                         <div class="doladmin-slide" id="" data-step="<?php echo $slide['position']; ?>" data-inputvalue="<?php echo $templatekey; ?>"><img src="<?php echo $slide['imgurl']; ?>">
                                             <?php if(getDolGlobalString('LOGINPLUS_TEMPLATE') == $templatekey): ?>
                                                 <div class="doladmin-selected" style="">
-                                                    <i class="fas fa-check-circle paddingright"></i> Template actuel
+                                                    <i class="fas fa-check-circle paddingright"></i> <?php echo $langs->trans('loginplus_AdminStructureSelected'); ?>
                                                 </div>
                                             <?php endif; ?>
                                         </div>
@@ -362,8 +363,8 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                 <?php if($optiontype == 'background'): ?>
                 <div class="doladmin-card card-params" >
 
-                    <div class="doladmin-params-title"><i class="fas fa-fill-drip paddingright"></i> Configurer l'arrière plan</div>
-                    <p class="opacitymedium">Maybe you have a custom-styled ordered list you want to show off, or maybe you or any other digital project you might need dummy text for</p>
+                    <div class="doladmin-params-title"><i class="fas fa-fill-drip paddingright"></i> <?php echo $langs->trans('loginplus_AdminBackgroundStepTitle'); ?></div>
+                    <p class="opacitymedium"><?php echo $langs->trans('loginplus_AdminBackgroundStepLongDesc'); ?></p>
 
                     <div class="doladmin-card-content paddingtop" style="margin-top: 16px;">
 
@@ -380,7 +381,7 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                             <table class="doladmin-table-simple">                                
                                 <tbody>
                                     <tr>
-                                        <td class="doladmin-table-subtitle" colspan="2"><i class="fas fa-cog paddingright"></i> Arrière-plan</td>
+                                        <td class="doladmin-table-subtitle" colspan="2"><i class="fas fa-cog paddingright"></i> <?php echo $langs->trans('loginplus_AdminBackgroundStepTitle'); ?></td>
                                     </tr>
                                     <tr>
                                         <td class="bold"><?php echo $langs->trans('loginplus_option_background_color').' '.img_info($langs->trans('loginplus_option_background_color_desc')); ?></td>
@@ -426,7 +427,7 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="bold"><?php echo $langs->trans('ModeAlternatif'); ?></td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_OptionModeAlt'); ?></td>
                                         <td class="right">
                                             <input type="checkbox" name="LOGINPLUS_SHAPE_ALT" value="on" <?php if(getDolGlobalInt('LOGINPLUS_SHAPE_ALT')): echo 'checked="checked"'; endif; ?>>
                                         </td>
@@ -451,8 +452,8 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                 <?php if($optiontype == 'box'): ?>
                 <div class="doladmin-card" >
 
-                    <div class="doladmin-params-title"><i class="fas fa-unlock-alt paddingright"></i> Configurer la boite de connexion</div>
-                    <p class="opacitymedium">Maybe you have a custom-styled ordered list you want to show off, or maybe you or any other digital project you might need dummy text for</p>
+                    <div class="doladmin-params-title"><i class="fas fa-unlock-alt paddingright"></i> <?php echo $langs->trans('loginplus_AdminLoginBoxStepTitle'); ?></div>
+                    <p class="opacitymedium"><?php echo $langs->trans('loginplus_AdminLoginBoxStepLongDesc'); ?></p>
 
                     <div class="doladmin-card-content paddingtop" style="margin-top: 16px;">
 
@@ -470,16 +471,16 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                                 
                                 <tbody>
                                     <tr>
-                                        <td class="doladmin-table-subtitle" colspan="2"><i class="fas fa-cog paddingright"></i> Boîte de connexion</td>
+                                        <td class="doladmin-table-subtitle" colspan="2"><i class="fas fa-cog paddingright"></i> <?php echo $langs->trans('loginplus_AdminLoginBoxStepTitle'); ?></td>
                                     </tr>
                                     <tr>
-                                        <td class="bold">Background Loginbox -ok</td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxBackground'); ?></td>
                                         <td class="right">
                                             <input type="text" class="preview-input coloris color-alpha" data-property="--loginplus-box-background" name="LOGINPLUS_BOX_BACKGROUND" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_BACKGROUND'); ?>" data-coloris>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="bold">Bords arrondis (TPL1 + TPL2 + TPL3) -ok</td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxRadius'); ?></td>
                                         <td class="right">
                                             <input type="range" class="loginplus-rangeslider preview-input" name="LOGINPLUS_BOX_RADIUS" min="0" max="42" step="1" value="<?php echo getDolGlobalInt('LOGINPLUS_BOX_RADIUS'); ?>" data-slidervalue="#ldo-box-radius" data-unit="px" data-suffix="px" data-slideroption="divide|2" data-property="--loginplus-box-radius">
                                             <span class="loginplus-rangevalue" id="ldo-box-radius"><?php echo getDolGlobalInt('LOGINPLUS_BOX_RADIUS'); ?>px</span>
@@ -489,35 +490,36 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                                         <td class="bold">Afficher lien + version dolibarr ? -ok</td>
                                         <td class="right"><?php //echo ajax_constantonoff('LOGINPLUS_SHOW_DOLILINK'); ?></td>
                                     </tr> -->
-
                                     <tr>
-                                        <td class="doladmin-table-subtitle" colspan="2" style="padding-top: 48px;"><i class="fas fa-cog paddingright"></i> Formulaire de connexion</td>
+                                        <td class="doladmin-table-subtitle" colspan="2" style="padding-top: 48px;"><i class="fas fa-cog paddingright"></i> <?php echo $langs->trans('loginplus_AdminLoginBoxForm'); ?></td>
                                     </tr>
                                     <tr>
-                                        <td class="bold">Affichage label</td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxFormShowLabel'); ?></td>
                                         <td class="right">
                                             <div class="doladmin-flex-wrapper wrap end">
-                                                <?php $labelmode = array(0 => 'IconOnly', 1=>'Fulllabel'); 
-                                                echo $form->selectarray('LOGINPLUS_SHOW_FORMLABELS',$labelmode,getDolGlobalString('LOGINPLUS_SHOW_FORMLABELS'),0);
-                                                ?>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr valign="top">
-                                        <td class="bold">Couleurs Label + Icone -ok</td>
-                                        <td class="right">
-                                            <div class="doladmin-flex-wrapper wrap end">
-                                                <div><span class="color-label"><?php echo img_info($langs->trans('Icon')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-iconcolor" name="LOGINPLUS_BOX_ICONCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_ICONCOLOR'); ?>" data-coloris></div>
-                                                <div><span class="color-label"><?php echo img_info($langs->trans('Text')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-labelcolor" name="LOGINPLUS_BOX_LABELCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_LABELCOLOR'); ?>" data-coloris></div>
+                                                <input type="radio" id="showlabel" name="LOGINPLUS_SHOW_FORMLABELS" value="0" <?php if(!getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')): echo 'checked="checked"'; endif; ?>>
+                                                <label for="showlabel"><?php echo $langs->trans('loginplus_AdminLoginBoxFormShowLabelIcon'); ?></label>
+                                                <span class="paddingright"></span>
+                                                <input type="radio" id="hidelabel" name="LOGINPLUS_SHOW_FORMLABELS" value="1" <?php if(getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')): echo 'checked="checked"'; endif; ?>>
+                                                <label for="hidelabel"><?php echo $langs->trans('loginplus_AdminLoginBoxFormShowLabelFull'); ?></label>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="bold">Couleurs texte input - ok</td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxFormLabelColor'); ?></td>
                                         <td class="right">
                                             <div class="doladmin-flex-wrapper wrap end">
-                                                <div><span class="color-label"><?php echo img_info($langs->trans('TextOut')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-inputcolor" name="LOGINPLUS_BOX_INPUTCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_INPUTCOLOR'); ?>" data-coloris></div>
-                                                <div><span class="color-label"><?php echo img_info($langs->trans('TextFocus')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-inputcolorfocus" name="LOGINPLUS_BOX_INPUTCOLORFOCUS" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_INPUTCOLORFOCUS'); ?>" data-coloris></div>
+                                                <div><span class="color-label"><?php echo img_info($langs->trans('loginplus_AdminLoginBoxFormLabelColorIcon')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-iconcolor" name="LOGINPLUS_BOX_ICONCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_ICONCOLOR'); ?>" data-coloris></div>
+                                                <div><span class="color-label"><?php echo img_info($langs->trans('loginplus_AdminLoginBoxFormLabelColorText')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-labelcolor" name="LOGINPLUS_BOX_LABELCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_LABELCOLOR'); ?>" data-coloris></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxFormInputColor'); ?></td>
+                                        <td class="right">
+                                            <div class="doladmin-flex-wrapper wrap end">
+                                                <div><span class="color-label"><?php echo img_info($langs->trans('loginplus_AdminLoginBoxFormInputColorOut')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-inputcolor" name="LOGINPLUS_BOX_INPUTCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_INPUTCOLOR'); ?>" data-coloris></div>
+                                                <div><span class="color-label"><?php echo img_info($langs->trans('loginplus_AdminLoginBoxFormInputColorFocus')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-inputcolorfocus" name="LOGINPLUS_BOX_INPUTCOLORFOCUS" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_INPUTCOLORFOCUS'); ?>" data-coloris></div>
                                             </div>
                                         </td>
                                     </tr>
@@ -528,11 +530,11 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                                         </td>
                                     </tr> -->
                                     <tr>
-                                        <td class="bold">Input border</td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxFormInputBorderColor'); ?></td>
                                         <td class="right">
                                             <div class="doladmin-flex-wrapper wrap end">
-                                                <div><span class="color-label"><?php echo img_info($langs->trans('BorderOut')); ?></span><input type="text" class="preview-input coloris color-alpha" data-property="--loginplus-box-inputbordercolor" name="LOGINPLUS_BOX_INPUTBORDERCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_INPUTBORDERCOLOR'); ?>" data-coloris></div>
-                                                <div><span class="color-label"><?php echo img_info($langs->trans('BorderFocus')); ?></span><input type="text" class="preview-input coloris color-alpha" data-property="--loginplus-box-inputbordercolorfocus" name="LOGINPLUS_BOX_INPUTBORDERCOLORFOCUS" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_INPUTBORDERCOLORFOCUS'); ?>" data-coloris></div>
+                                                <div><span class="color-label"><?php echo img_info($langs->trans('loginplus_AdminLoginBoxFormInputBorderColorOut')); ?></span><input type="text" class="preview-input coloris color-alpha" data-property="--loginplus-box-inputbordercolor" name="LOGINPLUS_BOX_INPUTBORDERCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_INPUTBORDERCOLOR'); ?>" data-coloris></div>
+                                                <div><span class="color-label"><?php echo img_info($langs->trans('loginplus_AdminLoginBoxFormInputBorderColorFocus')); ?></span><input type="text" class="preview-input coloris color-alpha" data-property="--loginplus-box-inputbordercolorfocus" name="LOGINPLUS_BOX_INPUTBORDERCOLORFOCUS" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_INPUTBORDERCOLORFOCUS'); ?>" data-coloris></div>
                                             </div>
                                         </td>
                                     </tr>
@@ -545,36 +547,35 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                                     </tr> -->
                                     
                                     <tr>
-                                        <td class="bold">Couleurs bouton</td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxFormSubmitColor'); ?></td>
                                         <td class="right">
                                             <div class="doladmin-flex-wrapper wrap end">
-                                                <div><span class="color-label"><?php echo img_info($langs->trans('Background')); ?></span><input type="text" class="preview-input coloris color-alpha" data-property="--loginplus-box-submitbackground" name="LOGINPLUS_BOX_SUBMITBACKGROUND" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_SUBMITBACKGROUND'); ?>" data-coloris></div>
-                                                <div><span class="color-label"><?php echo img_info($langs->trans('Text')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-submitcolor" name="LOGINPLUS_BOX_SUBMITCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_SUBMITCOLOR'); ?>" data-coloris></div>
-                                                <div><span class="color-label"><?php echo img_info($langs->trans('Hover')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-submitbackgroundhover" name="LOGINPLUS_BOX_SUBMITBACKGROUNDHOVER" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_SUBMITBACKGROUNDHOVER'); ?>" data-coloris></div>
+                                                <div><span class="color-label"><?php echo img_info($langs->trans('loginplus_AdminLoginBoxFormSubmitColorBackground')); ?></span><input type="text" class="preview-input coloris color-alpha" data-property="--loginplus-box-submitbackground" name="LOGINPLUS_BOX_SUBMITBACKGROUND" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_SUBMITBACKGROUND'); ?>" data-coloris></div>
+                                                <div><span class="color-label"><?php echo img_info($langs->trans('loginplus_AdminLoginBoxFormSubmitColorText')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-submitcolor" name="LOGINPLUS_BOX_SUBMITCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_SUBMITCOLOR'); ?>" data-coloris></div>
+                                                <div><span class="color-label"><?php echo img_info($langs->trans('loginplus_AdminLoginBoxFormSubmitColorHover')); ?></span><input type="text" class="preview-input coloris" data-property="--loginplus-box-submitbackgroundhover" name="LOGINPLUS_BOX_SUBMITBACKGROUNDHOVER" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_SUBMITBACKGROUNDHOVER'); ?>" data-coloris></div>
                                             </div>
                                         </td>
-                                    </tr>
-                                    
+                                    </tr>                                    
                                     <tr>
-                                        <td class="bold">Couleurs des liens</td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxLinksColor'); ?></td>
                                         <td class="right">
                                             <input type="text" class="preview-input coloris" data-property="--loginplus-box-linkscolor" name="LOGINPLUS_BOX_LINKSCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_BOX_LINKSCOLOR'); ?>" data-coloris>
                                         </td>
                                     </tr>
                                     <?php if(getDolGlobalString('LOGINPLUS_TEMPLATE') != 'template_one'): ?>
                                     <tr>
-                                        <td class="doladmin-table-subtitle" colspan="2" style="padding-top: 48px;"><i class="fas fa-cog paddingright"></i> Paramètres template</td>
+                                        <td class="doladmin-table-subtitle" colspan="2" style="padding-top: 48px;"><i class="fas fa-cog paddingright"></i> <?php echo $langs->trans('loginplus_AdminLoginBoxTemplateParams'); ?></td>
                                     </tr>
 
                                     <?php if(getDolGlobalString('LOGINPLUS_TEMPLATE') == 'template_two'): ?>
                                     <tr>
-                                        <td class="bold">Background(TPL2) </td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxTemplateTwoBackgroundSide'); ?></td>
                                         <td class="right">
                                             <input type="text" class="preview-input coloris color-alpha" data-property="--loginplus-image-color" name="LOGINPLUS_IMAGE_COLOR" value="<?php echo getDolGlobalString('LOGINPLUS_IMAGE_COLOR'); ?>" data-coloris>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="bold">Image (TPL2) </td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxTemplateTwoImageSide'); ?></td>
                                         <td class="right">
                                             <?php if(!empty(getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY'))): ?>
                                                 <span class="doladmin-selectedfile paddingright" >
@@ -586,21 +587,21 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                                         </td>
                                     </tr>
                                      <tr>
-                                        <td class="bold"><?php echo $langs->trans('loginplus_option_background_image_opacity').' '.img_info($langs->trans('loginplus_option_background_image_opacity_desc')); ?></td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxTemplateTwoImageSideOpacity'); ?></td>
                                         <td class="right">
                                             <input type="range" class="loginplus-rangeslider preview-input" name="LOGINPLUS_IMAGE_OPACITY" min="0" max="100" step="1" value="<?php echo getDolGlobalInt('LOGINPLUS_IMAGE_OPACITY'); ?>" data-slidervalue="#ldo-bg-sideimageopacity" data-unit="%" data-slideroption="divide|100" data-property="--loginplus-image-opacity">
                                             <span class="loginplus-rangevalue" id="ldo-bg-sideimageopacity"><?php echo getDolGlobalInt('LOGINPLUS_IMAGE_OPACITY'); ?>%</span>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="bold">Title (TPL2) </td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxTemplateTwoTitle'); ?></td>
                                         <td class="right">
                                             <input type="text" name="LOGINPLUS_TXT_TITLE" value="<?php echo getDolGlobalString('LOGINPLUS_TXT_TITLE'); ?>">
                                             <input type="text" class="preview-input coloris" data-property="--loginplus-txt-titlecolor" name="LOGINPLUS_TXT_TITLECOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_TXT_TITLECOLOR'); ?>" data-coloris>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="bold">Content (TPL2) </td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxTemplateTwoContent'); ?></td>
                                         <td class="right">
                                             <input type="text" name="LOGINPLUS_TXT_CONTENT" value="<?php echo getDolGlobalString('LOGINPLUS_TXT_CONTENT'); ?>">
                                             <input type="text" class="preview-input coloris" data-property="--loginplus-txt-contentcolor" name="LOGINPLUS_TXT_CONTENTCOLOR" value="<?php echo getDolGlobalString('LOGINPLUS_TXT_CONTENTCOLOR'); ?>" data-coloris>
@@ -608,14 +609,14 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                                     </tr>
                                     <?php elseif(getDolGlobalString('LOGINPLUS_TEMPLATE') == 'template_three'): ?>
                                     <tr>
-                                        <td class="bold">marge du bord (TPL3)</td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxTemplateThreeMargin'); ?></td>
                                         <td class="right">
                                             <input type="range" class="loginplus-rangeslider preview-input" name="LOGINPLUS_BOX_MARGIN" min="0" max="42" step="1" value="<?php echo getDolGlobalInt('LOGINPLUS_BOX_MARGIN'); ?>" data-slidervalue="#ldo-box-margin" data-unit="px" data-suffix="px" data-property="--loginplus-box-margin">
                                             <span class="loginplus-rangevalue" id="ldo-box-margin"><?php echo getDolGlobalInt('LOGINPLUS_BOX_MARGIN'); ?>px</span>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="bold">Coté</td>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxTemplateThreeSide'); ?></td>
                                         <td class="right">
                                             <input type="radio" id="sideleft" name="LOGINPLUS_BOX_ALIGN" value="left" <?php if(getDolGlobalString('LOGINPLUS_BOX_ALIGN') == 'left'): echo 'checked="checked"'; endif; ?>>
                                             <label for="sideleft"><?php echo $langs->trans('Left'); ?></label>
@@ -926,19 +927,43 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
     Coloris.setInstance('.color-alpha', { alpha: true });
 
     //
+    let previewglobalwrapper = document.querySelector('.preview-global-wrapper');
     let previewwrapper = document.querySelector('.preview-wrapper');
-    let inputradiolist = document.querySelectorAll('input[name="LOGINPLUS_BOX_ALIGN"]');
-    if(inputradiolist.length > 0){
-        inputradiolist.forEach(function (inputradio){
+    
+    //
+    let inputradio_alignlist = document.querySelectorAll('input[name="LOGINPLUS_BOX_ALIGN"]');
+    if(inputradio_alignlist.length > 0){
+        inputradio_alignlist.forEach(function (inputradio){
+            inputradio.addEventListener('change', function (a){
+                if(previewglobalwrapper.classList.contains('box-left')){
+                    previewglobalwrapper.classList.remove('box-left');
+                }
+                if(previewglobalwrapper.classList.contains('box-center')){
+                    previewglobalwrapper.classList.remove('box-center');
+                }
+                if(previewglobalwrapper.classList.contains('box-right')){
+                    previewglobalwrapper.classList.remove('box-right');
+                }
+                previewglobalwrapper.classList.add('box-'+inputradio.value);
+            });
+        });
+    }
+
+    //
+    let inputradio_labellist = document.querySelectorAll('input[name="LOGINPLUS_SHOW_FORMLABELS"]');
+    if(inputradio_labellist.length > 0){
+        inputradio_labellist.forEach(function (inputradio){
             inputradio.addEventListener('change', function (a){
                 if(parseInt(inputradio.value) == 0){
-                    previewwrapper.classList.remove('sideright');
+                    previewwrapper.querySelector('.preview-fields').classList.remove('loginplus-viewlabel');
                 } else if(parseInt(inputradio.value) == 1){
-                    previewwrapper.classList.add('sideright');
+                    previewwrapper.querySelector('.preview-fields').classList.add('loginplus-viewlabel');
                 }
             });
         });
     }
+
+
 
 </script>
 

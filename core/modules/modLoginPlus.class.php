@@ -70,7 +70,7 @@ class modLoginPlus extends DolibarrModules
         
         // Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
         $this->version = '2.0.0';
-        $this->url_last_version = "https://progiseize.fr/modules_info/lastversion.php?module=".$this->numero;
+        //$this->url_last_version = "https://progiseize.fr/modules_info/lastversion.php?module=".$this->numero;
 
         // Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
         $this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
@@ -138,11 +138,11 @@ class modLoginPlus extends DolibarrModules
         // Example: 
         $this->const = array(
             0 => array('LOGINPLUS_ACTIVELOGINTPL','chaine','0','',1),
-            1 => array('LOGINPLUS_TEMPLATE','chaine','template_','',1),
+            1 => array('LOGINPLUS_TEMPLATE','chaine','template_one','',1),
             2 => array('LOGINPLUS_BG_COLOR','chaine','#ececec','',1),
             3 => array('LOGINPLUS_BG_IMAGEKEY','chaine','','',1),
             4 => array('LOGINPLUS_BG_IMAGEOPACITY','chaine','100','',1),
-            5 => array('LOGINPLUS_SHAPE_PATH','chaine','Wave-1','',1),
+            5 => array('LOGINPLUS_SHAPE_PATH','chaine','wave-1','',1),
             6 => array('LOGINPLUS_SHAPE_COLOR','chaine','#3c4664','',1),
             7 => array('LOGINPLUS_BOX_BACKGROUND','chaine','#ffffff','',1),
             8 => array('LOGINPLUS_BOX_RADIUS','chaine','16','',1),
