@@ -146,6 +146,28 @@ switch($action):
     //
     case 'set_loginbox':
 
+        $logo_alt = $_FILES['ldo-logo-alt'];
+        if($logo_alt['size'] > 0):
+            if ($logo_alt['name'] && !preg_match('/(\.jpeg|\.jpg|\.png)$/i', $logo_alt['name'])):
+                $error++;
+                setEventMessages($langs->trans("ErrorBadFormat"), null, 'errors');
+                break;
+            endif;
+            if (preg_match('/([^\\/:]+)$/i', $logo_alt['name'], $reg)):
+                $dirforimage = $conf->medias->multidir_output[$conf->entity].'/loginplus';
+                $nfilename = 'logo_'.str_replace(' ', '_', $reg[1]);
+                if (!is_dir($dirforimage)): dol_mkdir($dirforimage); endif;
+                $result = dol_move_uploaded_file($logo_alt['tmp_name'], $dirforimage.'/'.$nfilename, 1, 0, $logo_alt['error']);
+                if($result):
+                    if(!dolibarr_set_const($db, "LOGINPLUS_LOGOALT",$nfilename,'chaine',0,'',$conf->entity)): $error++; endif;
+                else:
+                    $error++;
+                    setEventMessages($langs->trans("Error"), null, 'errors');
+                    break;
+                endif;
+            endif;
+        endif;
+
         if(!dolibarr_set_const($db, 'LOGINPLUS_BOX_BACKGROUND',GETPOST('LOGINPLUS_BOX_BACKGROUND')?:'#ffffff','chaine',0,'',$conf->entity)): $error++; endif;
         if(!dolibarr_set_const($db, 'LOGINPLUS_BOX_RADIUS',GETPOST('LOGINPLUS_BOX_RADIUS')?:'0','chaine',0,'',$conf->entity)): $error++; endif;
         if(!dolibarr_set_const($db, 'LOGINPLUS_BOX_ICONCOLOR',GETPOST('LOGINPLUS_BOX_ICONCOLOR')?:'#ffffff','chaine',0,'',$conf->entity)): $error++; endif;
@@ -186,7 +208,7 @@ switch($action):
                             break;
                         endif;
                     endif;
-                endif;                
+                endif;
                 if(!dolibarr_set_const($db, "LOGINPLUS_IMAGE_OPACITY",GETPOST('LOGINPLUS_IMAGE_OPACITY')?:0,'chaine',0,'',$conf->entity)): $error++; endif;
                 if(!dolibarr_set_const($db, "LOGINPLUS_TXT_TITLE",trim(GETPOST('LOGINPLUS_TXT_TITLE')),'chaine',0,'',$conf->entity)): $error++; endif;
                 if(!dolibarr_set_const($db, "LOGINPLUS_TXT_TITLECOLOR",GETPOST('LOGINPLUS_TXT_TITLECOLOR')?:'#000000','chaine',0,'',$conf->entity)): $error++; endif;
@@ -472,6 +494,18 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
                                 <tbody>
                                     <tr>
                                         <td class="doladmin-table-subtitle" colspan="2"><i class="fas fa-cog paddingright"></i> <?php echo $langs->trans('loginplus_AdminLoginBoxStepTitle'); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxLogoAlt'); ?></td>
+                                        <td class="right">
+                                            <?php if(!empty(getDolGlobalString('LOGINPLUS_LOGOALT'))): ?>
+                                                <span class="doladmin-selectedfile paddingright" >
+                                                    <span class="sf-label paddingright"><?php echo getDolGlobalString('LOGINPLUS_LOGOALT'); ?></span>
+                                                    <a class="sf-action" href="<?php echo $_SERVER["PHP_SELF"].'?action=removeimage&key=LOGINPLUS_LOGOALT&optiontype='.$optiontype.'&token='.newToken(); ?>"><i class="fas fa-trash"></i></a>
+                                                </span>
+                                            <?php endif; ?>
+                                            <input type="file" name="ldo-logo-alt" accept="image/*">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="bold"><?php echo $langs->trans('loginplus_AdminLoginBoxBackground'); ?></td>

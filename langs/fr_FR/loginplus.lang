@@ -172,3 +172,4 @@ loginplus_AdminLoginBoxTemplateTwoContent=Afficher un texte
 loginplus_OptionModeAlt=Mode alternatif / miroir
 loginplus_AdminBackgroundStepLongDesc=Créer l'arrière-plan de votre page de connexion en combinant un arrière-plan, une image et une forme additionnelle. La forme en transparence est l'emplacement de la boite de connexion.
 loginplus_AdminLoginBoxStepLongDesc=Configurer la boite de connexion avec de nombreux paramètres. Notez que l'aperçu peut différer légèrement de la page de connexion finale.
+loginplus_AdminLoginBoxLogoAlt=Logo Alternatif

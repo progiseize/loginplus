@@ -9,6 +9,9 @@
 * REMOVE - Suppression des templates avec Copyright
 * MAJ - Upload plus simple des images (dossier medias)
 * MAJ - Nouvelles options de personnalisation
+* NEW - Logo Alternatif
+* TODO - Passwordforgotten tpl
+
 
 
 ### 1.5.4

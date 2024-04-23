@@ -161,13 +161,17 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 					<?php 
 					// LOGO
 					$urllogo = '';
-					if (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo)):
-						$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/'.$mysoc->logo);
-					elseif (!empty($mysoc->logo_squarred_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_squarred_small)):
-			       		$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/thumbs/'.$mysoc->logo_squarred_small);
-			     	elseif (is_readable(DOL_DOCUMENT_ROOT.'/theme/dolibarr_logo.svg')):
-			     		$urllogo = DOL_URL_ROOT.'/theme/dolibarr_logo.svg';
-			     	endif; 
+					if(!empty(getDolGlobalString('LOGINPLUS_LOGOALT'))):
+						$urllogo = DOL_URL_ROOT.'/viewimage.php?modulepart=medias&file='.urlencode('loginplus/'.getDolGlobalString('LOGINPLUS_LOGOALT'));
+					else:
+						if (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo)):
+							$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/'.$mysoc->logo);
+						elseif (!empty($mysoc->logo_squarred_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_squarred_small)):
+				       		$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/thumbs/'.$mysoc->logo_squarred_small);
+				     	elseif (is_readable(DOL_DOCUMENT_ROOT.'/theme/dolibarr_logo.svg')):
+				     		$urllogo = DOL_URL_ROOT.'/theme/dolibarr_logo.svg';
+				     	endif; 
+				    endif;
 			     	if(!empty($urllogo)): 
 			     		echo '<div class="loginplus-boxlogin-logo"><img src="'.$urllogo.'"></div>';
 			     	endif; ?>
