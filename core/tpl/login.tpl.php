@@ -116,7 +116,6 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 	    --loginplus-txt-contentcolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_TXT_CONTENTCOLOR')); ?>;
 	    --loginplus-image-opacity: <?php echo getDolGlobalInt('LOGINPLUS_IMAGE_OPACITY') / 100; ?>;
 	}
-
 	</style>
 
 	<!-- BEGIN PHP CUSTOM TEMPLATE loginplus! LOGIN.TPL.PHP -->
@@ -318,7 +317,7 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 		endif; ?>
 
 		<?php // Google Analytics
-		if (!empty($conf->google->enabled) && !empty(getDolGlobalString('MAIN_GOOGLE_AN_ID'))):
+		if (isModEnabled('google') && !empty(getDolGlobalString('MAIN_GOOGLE_AN_ID'))):
 
 			$tmptagarray = explode(',', getDolGlobalString('MAIN_GOOGLE_AN_ID'));
 			foreach ($tmptagarray as $tmptag):
@@ -336,6 +335,22 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 					</script>";
 				print "\n";
 			endforeach;
+		endif; ?>
+
+		<?php // Google Adsense (need Google module)
+		if (isModEnabled('google') && !empty($conf->global->MAIN_GOOGLE_AD_CLIENT) && !empty($conf->global->MAIN_GOOGLE_AD_SLOT)):
+			if (empty($conf->dol_use_jmobile)): ?>
+			<div class="center"><br>
+				<script><!--
+					google_ad_client = "<?php echo $conf->global->MAIN_GOOGLE_AD_CLIENT ?>";
+					google_ad_slot = "<?php echo $conf->global->MAIN_GOOGLE_AD_SLOT ?>";
+					google_ad_width = <?php echo $conf->global->MAIN_GOOGLE_AD_WIDTH ?>;
+					google_ad_height = <?php echo $conf->global->MAIN_GOOGLE_AD_HEIGHT ?>;
+					//-->
+				</script>
+				<script src="//pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+			</div> <?php
+			endif;
 		endif; ?>
 
 		<script type="text/javascript">

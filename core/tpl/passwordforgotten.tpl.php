@@ -26,12 +26,13 @@ if (empty($conf) || !is_object($conf))
 	print "Error, template page can't be called as URL";
 	exit;
 }
-
-
 require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 
 header('Cache-Control: Public, must-revalidate');
 header("Content-type: text/html; charset=".$conf->file->character_set_client);
+
+dol_include_once('./loginplus/class/loginplus.class.php');
+$loginplus_static = new Loginplus($db);
 
 if (GETPOST('dol_hide_topmenu')) $conf->dol_hide_topmenu = 1;
 if (GETPOST('dol_hide_leftmenu')) $conf->dol_hide_leftmenu = 1;
@@ -48,83 +49,167 @@ $php_self = str_replace('action=validatenewpassword', '', $php_self);
 
 $titleofpage = $langs->trans('SendNewPassword');
 
-print top_htmlhead('', $titleofpage);
+// CSS
+if(!isset($arrayofcss) || empty($arrayofcss)): $arrayofjs = array(); endif;
+if(!isset($arrayofcss) || empty($arrayofcss)): $arrayofcss = array('/loginplus/css/newloginplus.css');
+else: $arrayofcss[] = '/loginplus/css/newloginplus.css';
+endif;
+
+$disablenofollow = 1;
+if (!preg_match('/'.constant('DOL_APPLICATION_TITLE').'/', $title)):
+	$disablenofollow = 0;
+endif;
+if (!empty($conf->global->MAIN_OPTIMIZEFORTEXTBROWSER)):
+	$disablenofollow = 0;
+endif;
+top_htmlhead('', $titleofpage, 0, 0, $arrayofjs, $arrayofcss, 1, $disablenofollow);
 
 
 /***********************************************************************************************************************************/
 ?>
 <style type="text/css">
-:root {
-
-  --shape-color: <?php echo $conf->global->LOGINPLUS_SHAPE_COLOR; ?>;
-  --shape-opacity: <?php echo $conf->global->LOGINPLUS_SHAPE_OPACITY / 100; ?>;
-  --bg-color: <?php echo $conf->global->LOGINPLUS_BG_COLOR; ?>;
-  --bg-imageopacity: <?php echo $conf->global->LOGINPLUS_BG_IMAGEOPACITY / 100; ?>;
-  --main-color: <?php echo $conf->global->LOGINPLUS_MAIN_COLOR; ?>;
-  --second-color: <?php echo $conf->global->LOGINPLUS_SECOND_COLOR; ?>;
-  --image-opacity: <?php echo $conf->global->LOGINPLUS_IMAGE_OPACITY / 100; ?>;
-  --image-color: <?php echo $conf->global->LOGINPLUS_IMAGE_COLOR; ?>;
-  --txt-titlecolor: <?php echo $conf->global->LOGINPLUS_TXT_TITLECOLOR; ?>;
-  --txt-contentcolor: <?php echo $conf->global->LOGINPLUS_TXT_CONTENTCOLOR; ?>;
-  --copyright-color: <?php echo $conf->global->LOGINPLUS_COPYRIGHT_COLOR; ?>;
-}
-
-</style>
+	:root {
+		--loginplus-bg-color: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BG_COLOR')); ?>;
+	    --loginplus-bg-imageopacity: <?php echo getDolGlobalInt('LOGINPLUS_BG_IMAGEOPACITY') / 100; ?>;
+	    --loginplus-shape-color: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_SHAPE_COLOR')); ?>;
+	    --loginplus-box-background: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_BACKGROUND')); ?>;
+	    --loginplus-box-radius: <?php echo getDolGlobalString('LOGINPLUS_BOX_RADIUS').'px'; ?>;
+	    --loginplus-box-iconcolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_ICONCOLOR')); ?>;
+	    --loginplus-box-labelcolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_LABELCOLOR')); ?>;
+	    --loginplus-box-inputcolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_INPUTCOLOR')); ?>;
+	    --loginplus-box-inputcolorfocus: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_INPUTCOLORFOCUS')); ?>;
+	    --loginplus-box-submitbackground: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_SUBMITBACKGROUND')); ?>;
+	    --loginplus-box-submitcolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_SUBMITCOLOR')); ?>;   
+	    --loginplus-box-submitbackgroundhover: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_SUBMITBACKGROUNDHOVER')); ?>;   
+	    --loginplus-box-inputbackground: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_INPUTBACKGROUND')); ?>; 
+	    --loginplus-box-inputborder: <?php echo getDolGlobalInt('LOGINPLUS_BOX_INPUTBORDER').'px'; ?>;
+	    --loginplus-box-inputbordercolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_INPUTBORDERCOLOR')); ?>; 
+	    --loginplus-box-inputbordercolorfocus: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_INPUTBORDERCOLORFOCUS')); ?>; 
+	    --loginplus-box-linkscolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_LINKSCOLOR')); ?>;
+	    --loginplus-box-margin: <?php echo getDolGlobalInt('LOGINPLUS_BOX_MARGIN').'px'; ?>;
+	    --loginplus-image-color: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_IMAGE_COLOR')); ?>;
+	    --loginplus-txt-titlecolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_TXT_TITLECOLOR')); ?>;
+	    --loginplus-txt-contentcolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_TXT_CONTENTCOLOR')); ?>;
+	    --loginplus-image-opacity: <?php echo getDolGlobalInt('LOGINPLUS_IMAGE_OPACITY') / 100; ?>;
+	}
+	</style>
 
 <!-- BEGIN PHP CUSTOM TEMPLATE LOGINplus! LOGIN.TPL.PHP -->
-<body id="loginplus" class="tpl-1">aaaaaaaaaaaaaaaa
+<body id="loginplus" class="<?php echo getDolGlobalString('LOGINPLUS_TEMPLATE').' loginbox-align-'.getDolGlobalString('LOGINPLUS_BOX_ALIGN'); ?>">
 
-	<?php if(!empty($conf->global->LOGINPLUS_BG_IMAGEKEY)): ?>
-		<div class="loginplus-bgimage" style="background-image: url('<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo $conf->global->LOGINPLUS_BG_IMAGEKEY; ?>');background-position: center;"></div>
+	<?php if(getDolGlobalInt('LOGINPLUS_SHOW_DOLILINK')): ?>
+		<div class="loginplus-doliversion"><?php echo dol_escape_htmltag($title); ?></div>
 	<?php endif; ?>
 
-	<div class="loginplus-wrapper <?php if(!empty($conf->global->LOGINPLUS_SHAPE_PATH)): echo $conf->global->LOGINPLUS_SHAPE_PATH; endif; ?>">
-		<div class="loginplus-wrapperbox <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-one-side';endif;?>">
-			<div class="loginplus-wrapperbox-side image-side <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-hide'; endif;?>">
-				<?php if(!empty($conf->global->LOGINPLUS_IMAGE_KEY)): ?>
-					<div class="loginplus-img" style="background-image: url('<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo $conf->global->LOGINPLUS_IMAGE_KEY; ?>');"></div>
-				<?php endif; ?>
-					<div class="loginplus-txt">
-						<?php if(!empty($conf->global->LOGINPLUS_TXT_TITLE)): echo '<h2>'.$conf->global->LOGINPLUS_TXT_TITLE.'</h2>'; endif; ?>
-						<?php if(!empty($conf->global->LOGINPLUS_TXT_CONTENT)): echo '<p>'.$conf->global->LOGINPLUS_TXT_CONTENT.'</p>'; endif; ?>
+	<?php
+	// BACKGROUND IMAGE
+	if(!empty(getDolGlobalString('LOGINPLUS_BG_IMAGEKEY'))):
+		echo '<div class="loginplus-background" style="background-image: url(\''.DOL_URL_ROOT.'/viewimage.php?modulepart=medias&file='.urlencode('loginplus/'.getDolGlobalString('LOGINPLUS_BG_IMAGEKEY')).'\');" ></div>';
+	endif; 
+
+	// BACKGROUND SHAPE
+	$path_name = getDolGlobalString('LOGINPLUS_SHAPE_PATH');
+	$path_shape = $loginplus_static->getShapes($path_name);
+	if(!empty($path_shape)):
+		echo '<div class="loginplus-shape shape-'.$path_shape['type'].' '.$path_name.' '.(getDolGlobalInt('LOGINPLUS_SHAPE_ALT')?'alternate':'').'">';
+			if($path_shape['type'] == 'svg'):
+				$shape_folder = dol_buildpath('loginplus/svg');
+				if(file_exists($shape_folder.'/'.$path_name.'.svg')):
+                	echo file_get_contents($shape_folder.'/'.$path_name.'.svg');
+                endif;
+            endif;
+		echo '</div>';
+	endif; ?>
+
+	<div class="loginplus-global-wrapper <?php echo 'box-'.getDolGlobalString('LOGINPLUS_BOX_ALIGN'); ?>">
+		<div class="loginplus-wrapper">
+
+			<?php if(getDolGlobalString('LOGINPLUS_TEMPLATE') == 'template_two'): ?>
+				<div class="loginplus-box loginplus-boxside">
+					<?php 
+					// SIDE IMAGE
+					if(!empty(getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY'))):
+						echo '<div class="loginplus-boximage" style="background-image: url(\''.DOL_URL_ROOT.'/viewimage.php?modulepart=medias&file='.urlencode('loginplus/'.getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY')).'\');" ></div>';
+					endif; ?>
+
+					<div class="loginplus-boxtxt">
+						<div class="loginplus-title"><?php echo getDolGlobalString('LOGINPLUS_TXT_TITLE'); ?></div>
+						<div class="loginplus-content"><?php echo getDolGlobalString('LOGINPLUS_TXT_CONTENT'); ?></div>
 					</div>
-			</div>
+				</div>
+			<?php endif; ?>
 
-			<div class="loginplus-wrapperbox-side content-side <?php if(!$conf->global->LOGINPLUS_TWOSIDES): echo 'ld-extend';endif;?>">
-				<img alt="" src="<?php echo $urllogo; ?>" id="loginplus-imglogo" />
+			<div class="loginplus-box loginplus-boxlogin">
 
-				<form id="login" name="login" method="POST" action="<?php echo $php_self; ?>">
-					<input type="hidden" name="token" value="<?php echo $_SESSION['newtoken']; ?>">
+				<?php 
+				// LOGO
+				$urllogo = '';
+				if(!empty(getDolGlobalString('LOGINPLUS_LOGOALT'))):
+					$urllogo = DOL_URL_ROOT.'/viewimage.php?modulepart=medias&file='.urlencode('loginplus/'.getDolGlobalString('LOGINPLUS_LOGOALT'));
+				else:
+					if (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo)):
+						$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/'.$mysoc->logo);
+					elseif (!empty($mysoc->logo_squarred_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_squarred_small)):
+			       		$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/thumbs/'.$mysoc->logo_squarred_small);
+			     	elseif (is_readable(DOL_DOCUMENT_ROOT.'/theme/dolibarr_logo.svg')):
+			     		$urllogo = DOL_URL_ROOT.'/theme/dolibarr_logo.svg';
+			     	endif; 
+			    endif;
+		     	if(!empty($urllogo)): 
+		     		echo '<div class="loginplus-boxlogin-logo"><img src="'.$urllogo.'"></div>';
+		     	endif; ?>
+
+		     	<form id="login" name="login" method="post" action="<?php echo $php_self; ?>">
+					<input type="hidden" name="token" value="<?php echo newToken(); ?>">
 					<input type="hidden" name="action" value="buildnewpassword">
-					
-					<div class="fields-group" id="login_line1">
-						<div class="field-row">
-							<?php if($conf->global->LOGINPLUS_SHOW_FORMLABELS): ?><label for="username" class="hidden"><i class="fa fa-user"></i> <?php echo $langs->trans("Login"); ?></label><?php endif; ?>
-							<input type="text" id="username" name="username" class="" value="<?php echo dol_escape_htmltag($login); ?>" tabindex="1" autofocus="autofocus" />
+
+					<div id="login_line1" class="loginplus-fields <?php echo (getDolGlobalInt('LOGINPLUS_TWOFACTOR_DARKTHEME')?'dark-theme ':''); echo (getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?'loginplus-viewlabel':''); ?>">
+						
+						<div id="login_right">
+							<div class="loginplus-fieldrow tagtable">
+								<label for="username" class="paddingright">
+									<i class="fa fa-user"></i>
+									<?php echo (getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?' '.$langs->trans("Login"):''); ?>
+								</label>
+								<input type="text" id="username" name="username" placeholder="<?php echo $langs->trans("Login"); ?>" class="" value="<?php echo dol_escape_htmltag($login); ?>" tabindex="1" autofocus="autofocus" />
+							</div>
+							<div class="loginplus-fieldrow row-captcha tagtable">
+								<label for="securitycode">
+									<i class="fa fa-unlock"></i>
+									<?php echo (getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?' '.$langs->trans("Password"):''); ?>
+								</label>
+								<div class="loginplus-captcha">
+									<input id="securitycode" placeholder="<?php echo $langs->trans("SecurityCode"); ?>" class="" type="text" maxlength="5" name="code" tabindex="2" />
+									<img class="inline-block valignmiddle" src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
+									<a class="inline-block valignmiddle captcha-link" href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a>
+								</div>
+							</div>
+
+							<?php // MORELOGINCONTENT ?>
+							<?php if (!empty($morelogincontent)): 
+								if (is_array($morelogincontent)):
+									foreach ($morelogincontent as $format => $option):
+										if ($format == 'table'):
+											echo '<!-- Option by hook -->';
+											echo $option;
+										endif;
+									endforeach;
+								else:
+									echo '<!-- Option by hook -->';
+									echo $morelogincontent;
+								endif;
+							endif; ?>
 						</div>
 
-						<?php if($captcha): 
-
-							$php_self = preg_replace('/[&\?]time=(\d+)/', '', $php_self); // Remove param time
-							if (preg_match('/\?/', $php_self)) $php_self .= '&time='.dol_print_date(dol_now(), 'dayhourlog');
-							else $php_self .= '?time='.dol_print_date(dol_now(), 'dayhourlog'); ?>
-							
-							<div class="field-row">
-								<?php if($conf->global->LOGINPLUS_SHOW_FORMLABELS): ?><label for="securitycode" class="hidden"><i class="fa fa-unlock"></i> <?php echo $langs->trans("SecurityCode"); ?></label><?php endif; ?>
-								<input type="text" id="securitycode" name="code" class=""  maxlength="5" tabindex="1" autofocus="autofocus" autocomplete="off" />
-							</div>
-
-							<div class="loginplus-captcha">
-									<img class="" src="<?php echo DOL_URL_ROOT; ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
-									<a href="<?php echo $php_self; ?>" ><?php echo $captcha_refresh; ?></a>
-							</div>
-
-						<?php endif; ?>
-						
-						<div class="field-row align-center">
-							<input type="submit" class="button" <?php echo $disabled; ?> name="button_password" value="<?php echo $langs->trans('SendNewPassword'); ?>" tabindex="4" />
-						</div>					
 					</div>
+
+					<div id="login_line2" class="loginplus-submit">
+						<div class="field-row align-center">
+							<input type="submit" <?php echo $disabled; ?> name="button_password" value="<?php echo $langs->trans('SendNewPassword'); ?>" tabindex="4" />
+						</div>
+						<div class="field-row align-center center"></div>
+					</div>
+
 				</form>
 
 				<?php // AFFICHAGE DES MESSAGES D'ERREURS
@@ -134,81 +219,60 @@ print top_htmlhead('', $titleofpage);
 					</div>
 				<?php endif; ?>
 
-				<div class="loginplus-helplinks align-center">	
+				<div class="loginplus-helplinks">
 					<?php echo '<a class="alogin" href="'.$dol_url_root.'/index.php'.$moreparam.'">'.$langs->trans('BackToLoginPage').'</a>'; ?>
 				</div>
+
+				<?php //if (!empty(getDolGlobalString('MAIN_HTML_FOOTER'))): print getDolGlobalString('MAIN_HTML_FOOTER'); endif; ?>
+
 			</div>
-		</div>
-	
-	<?php if($conf->global->LOGINPLUS_COPYRIGHT): 
-
-			$copyright_text = $conf->global->LOGINPLUS_COPYRIGHT;
-			if($conf->global->LOGINPLUS_COPYRIGHT_LINK):
-				$copyright_link = '<a href="'.$conf->global->LOGINPLUS_COPYRIGHT_LINK.'" target="_blank">';
-				$copyright_text = str_replace('[', $copyright_link, $copyright_text);
-				$copyright_text = str_replace(']', '</a>', $copyright_text);
-			endif; ?>
-
-			<div id="loginplus-copyright"><?php echo $copyright_text; ?></div>
-		<?php endif; ?>
+		</div>			
 	</div>
 
+	<?php // MORELOGINCONTENT JS
+	if (!empty($morelogincontent) && is_array($morelogincontent)):
+		foreach ($morelogincontent as $format => $option):
+			if ($format == 'js'): echo "\n".'<!-- Javascript by hook -->'; echo $option."\n"; endif;
+		endforeach;
+	elseif (!empty($moreloginextracontent)):
+		echo '<!-- Javascript by hook -->'; echo $moreloginextracontent;
+	endif; ?>
 
-<?php
-if (!empty($conf->global->MAIN_HTML_FOOTER)) {
-	print $conf->global->MAIN_HTML_FOOTER;
-}
+	<?php // Google Analytics
+	if (isModEnabled('google') && !empty(getDolGlobalString('MAIN_GOOGLE_AN_ID'))):
 
-if (!empty($morelogincontent) && is_array($morelogincontent)) {
-	foreach ($morelogincontent as $format => $option) {
-		if ($format == 'js') {
-			echo "\n".'<!-- Javascript by hook -->';
-			echo $option."\n";
-		}
-	}
-} elseif (!empty($moreloginextracontent)) {
-	echo '<!-- Javascript by hook -->';
-	echo $moreloginextracontent;
-}
+		$tmptagarray = explode(',', getDolGlobalString('MAIN_GOOGLE_AN_ID'));
+		foreach ($tmptagarray as $tmptag):
+			print "\n";
+			print "<!-- JS CODE TO ENABLE for google analtics tag -->\n";
+			print "
+				<!-- Global site tag (gtag.js) - Google Analytics -->
+				<script async src=\"https://www.googletagmanager.com/gtag/js?id=".trim($tmptag)."\"></script>
+				<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
 
-// Google Analytics
-// TODO Add a hook here
-if (!empty($conf->google->enabled) && !empty($conf->global->MAIN_GOOGLE_AN_ID)) {
-	$tmptagarray = explode(',', $conf->global->MAIN_GOOGLE_AN_ID);
-	foreach ($tmptagarray as $tmptag) {
-		print "\n";
-		print "<!-- JS CODE TO ENABLE for google analtics tag -->\n";
-		print "
-					<!-- Global site tag (gtag.js) - Google Analytics -->
-					<script async src=\"https://www.googletagmanager.com/gtag/js?id=".trim($tmptag)."\"></script>
-					<script>
-					window.dataLayer = window.dataLayer || [];
-					function gtag(){dataLayer.push(arguments);}
-					gtag('js', new Date());
+				gtag('config', '".trim($tmptag)."');
+				</script>";
+			print "\n";
+		endforeach;
+	endif; ?>
 
-					gtag('config', '".trim($tmptag)."');
-					</script>";
-		print "\n";
-	}
-}
-
-// TODO Replace this with a hook
-// Google Adsense (need Google module)
-if (!empty($conf->google->enabled) && !empty($conf->global->MAIN_GOOGLE_AD_CLIENT) && !empty($conf->global->MAIN_GOOGLE_AD_SLOT)) {
-	if (empty($conf->dol_use_jmobile)) {
-		?>
-	<div class="center"><br>
-		<script><!--
-			google_ad_client = "<?php echo $conf->global->MAIN_GOOGLE_AD_CLIENT; ?>";
-			google_ad_slot = "<?php echo $conf->global->MAIN_GOOGLE_AD_SLOT; ?>";
-			google_ad_width = <?php echo $conf->global->MAIN_GOOGLE_AD_WIDTH; ?>;
-			google_ad_height = <?php echo $conf->global->MAIN_GOOGLE_AD_HEIGHT; ?>;
-			//-->
-		</script>
-		<script	src="//pagead2.googlesyndication.com/pagead/show_ads.js"></script>
-	</div>
-		<?php
-	}
-}
-?>
+	<?php // Google Adsense (need Google module)
+	if (isModEnabled('google') && !empty($conf->global->MAIN_GOOGLE_AD_CLIENT) && !empty($conf->global->MAIN_GOOGLE_AD_SLOT)):
+		if (empty($conf->dol_use_jmobile)): ?>
+		<div class="center"><br>
+			<script><!--
+				google_ad_client = "<?php echo $conf->global->MAIN_GOOGLE_AD_CLIENT ?>";
+				google_ad_slot = "<?php echo $conf->global->MAIN_GOOGLE_AD_SLOT ?>";
+				google_ad_width = <?php echo $conf->global->MAIN_GOOGLE_AD_WIDTH ?>;
+				google_ad_height = <?php echo $conf->global->MAIN_GOOGLE_AD_HEIGHT ?>;
+				//-->
+			</script>
+			<script src="//pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+		</div> <?php
+		endif;
+	endif; ?>
 </body>
+</html>

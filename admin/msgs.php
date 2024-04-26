@@ -59,8 +59,6 @@ $array_typeto = array(
     'users' => 'Utilisateurs spécifiques'
 );
 
-
-
 /*******************************************************************
 * ACTIONS
 ********************************************************************/
@@ -445,7 +443,7 @@ endif;
                                             <td class="bold "><?php echo $langs->trans('loginplus_msgDateExpiration'); ?> <span class="required">*</span></td>
                                             <td class="right">
                                                 <?php 
-                                                    if(GETPOSTISSET('lpmsg_datexp')): $slctd = dol_stringtotime(GETPOST('lpmsg_datexp'));
+                                                    if(GETPOSTISSET('lpmsg_datexp')): $slctd = dol_stringtotime(GETPOST('lpmsg_datexp').' 00:00:00');
                                                     else:
                                                         if(!empty($msg_edit->date_expiration)): $slctd = dol_stringtotime($msg_edit->date_expiration);
                                                         else: $slctd = strtotime("+1 month", dol_now());
@@ -549,7 +547,7 @@ endif;
                                         <tr style="<?php if(!GETPOSTISSET('lpmsg_forceview')): echo 'display:none'; endif; ?>" id="loginplus-addmsg-datexp">
                                             <td class="bold "><?php echo $langs->trans('loginplus_msgDateExpiration'); ?> <span class="required">*</span></td>
                                             <td class="right">
-                                                <?php $slctd = (GETPOSTISSET('lpmsg_datexp'))?dol_stringtotime(GETPOST('lpmsg_datexp')):strtotime("+1 month", dol_now());
+                                                <?php $slctd = (GETPOSTISSET('lpmsg_datexp'))?dol_stringtotime(GETPOST('lpmsg_datexp').' 00:00:00'):strtotime("+1 month", dol_now());
                                                 echo $form->selectDate($slctd,'lpmsg_datexp'); ?>
                                             </td>
                                         </tr>
