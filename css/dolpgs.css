@@ -280,6 +280,11 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
 
 .doladmin {font-family:'Roboto',sans-serif !important;background: #fbfbfb;margin: -14px -36px -20px -40px;min-height: calc(100vh - 53px);}
 
+.doladmin .doladmin-top-message {background: var(--colorgraylight3);color: #fff;margin-bottom: 32px;padding: 16px;border-radius:8px;}
+.doladmin .doladmin-top-message span {font-weight: 500;}
+.doladmin .doladmin-top-message.msg-error {background: var(--colordanger);color: #fff;}
+.doladmin .doladmin-top-message.msg-warning {background: var(--colorwarning);color: #fff;}
+
 #doladmin-content {padding: 24px 40px;}
 #doladmin-content .doladmin-flex-wrapper {display: flex;gap: 24px;}
 #doladmin-content .doladmin-flex-wrapper.wrap {flex-wrap: wrap;gap: 12px;}
@@ -293,7 +298,14 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
   border-radius: 50%;
 }*/
 
+#doladmin-content .doladmin-flex-wrapper .doladmin-flextitle-withbutton {justify-content: space-between;align-items: flex-start;}
+#doladmin-content .doladmin-flex-wrapper .doladmin-flextitle-withbutton .doladmin-flextitle {flex: 1;}
+#doladmin-content .doladmin-flex-wrapper .doladmin-flextitle-withbutton .doladmin-flexbutton {padding-left: 24px;padding-top: 4px;}
+#doladmin-content .doladmin-flex-wrapper .doladmin-flextitle-withbutton .doladmin-flexbutton i {color: var(--colorgraylight3);font-size: 1.5em;cursor: pointer;}
+#doladmin-content .doladmin-flex-wrapper .doladmin-flextitle-withbutton .doladmin-flexbutton i:hover {color: var(--colorsecondary);}
+
 #doladmin-content .doladmin-form input {font-family:'Roboto',sans-serif !important;}
+#doladmin-content .doladmin-form textarea {font-family:'Roboto',sans-serif !important;}
 #doladmin-content .doladmin-form input.coloris {width: 64px;}
 #doladmin-content .doladmin-form .clr-field button {width: 100%;height: 100%;border-radius: 5px;}
 #doladmin-content .doladmin-form .doladmin-form-buttons {text-align: right;margin-top: 24px;}
@@ -303,41 +315,84 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
 /***************************/
 /***************************/
 
+#doladmin-content .doladmin-flex-wrapper .doladmin-col-menu {flex: 1;}
+#doladmin-content .doladmin-flex-wrapper .doladmin-col-menu .doladmin-card {margin-bottom: 24px;}
+#doladmin-content .doladmin-flex-wrapper .doladmin-col-params {flex: 3;}
 
 
-
-#doladmin-content .doladmin-flex-wrapper .doladmin-col-menu {flex: 0.5;}
-#doladmin-content .doladmin-flex-wrapper .doladmin-col-params {flex: 1;}
-
-
-#doladmin-content .doladmin-card {background: #fff;border-radius:8px;padding: 24px;box-shadow: rgba(17, 12, 46, 0.05) 0px 0px 16px 0px;margin: 24px 0;}
+#doladmin-content .doladmin-card {background: #fff;border-radius:8px;padding: 24px;box-shadow: rgba(17, 12, 46, 0.05) 0px 0px 16px 0px;margin: 0;}
 #doladmin-content .doladmin-card.card-active {}
 #doladmin-content .card-flex {display: flex;flex-wrap:wrap;justify-content: space-between;align-items: center;}
 
+#doladmin-content .doladmin-card.with-topmenu {}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu {margin: 0 -24px 24px -24px;border-bottom: 1px solid var(--colorgraylight);box-sizing: border-box;}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul {margin: 0;padding: 0 24px;list-style: none;display: flex;gap: 12px;}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li {padding: 0 8px 16px 8px;font-weight: 500;color: var(--colorgraylight3);box-sizing: border-box;position: relative;}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li a {color: var(--colorgraylight3);text-decoration: none;}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li a:hover {color: #000;text-decoration: none;}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li a i {color: var(--colorgraylight2);padding-right: 6px;}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li a:hover i {color: var(--colorsecondary);}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li.active a {color: #000;}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li.active a:hover {color: #000;}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li.active a i {color: var(--colorsecondary);}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li.active:after {content: "";display: block;width: 100%;height: 1px;background: var(--colorsecondary);position: absolute;top: 100%;left: 0}
+
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li.active {color: #000;}
+#doladmin-content .doladmin-card.with-topmenu .doladmin-card-topmenu ul li.active i {color: var(--colorsecondary);}
+
+/**/
+
+/**/
+
+#doladmin-content .doladmin-card .doladmin-card-icon.icolor-danger {color: var(--colordanger) !important;}
+
+#doladmin-content .doladmin-card .doladmin-card-title {font-weight: 700;font-size: 1.15em;}
+#doladmin-content .doladmin-card .doladmin-card-title a {color: var(--colorgraylight4);}
+#doladmin-content .doladmin-card .doladmin-card-title a:hover {color: var(--colorsecondary);text-decoration: none;}
+
 #doladmin-content .doladmin-card .doladmin-card-icon {padding-right: 24px;color: var(--colorgraylight2);font-size: 1.6em;}
-#doladmin-content .doladmin-card .doladmin-card-icon.icolor-danger {color: var(--colordanger);}
-#doladmin-content .doladmin-card .doladmin-card-icon.icolor-doli {color: var(--colorsecondary);}
+
 #doladmin-content .doladmin-card .doladmin-card-content {flex: 1;}
-#doladmin-content .doladmin-card .doladmin-card-content .doladmin-card-desc {color: var(--colorgraylight4);}
+#doladmin-content .doladmin-card .doladmin-card-content .doladmin-card-desc {color: var(--colorgraylight3);}
 #doladmin-content .doladmin-card .doladmin-card-right {padding-left: 24px;}
 
-#doladmin-content .doladmin-card.card-params {margin-bottom: 96px;}
-#doladmin-content .doladmin-card .doladmin-card-title {font-weight: 700;font-size: 1.15em;}
-#doladmin-content .doladmin-card .doladmin-card-title a {color: var(--colorprimary);}
-#doladmin-content .doladmin-card .doladmin-card-title a:hover {color: var(--colorsecondary);}
+#doladmin-content .doladmin-card.card-active .doladmin-card-icon i {color: var(--colorsecondary);}
+#doladmin-content .doladmin-card.card-active .doladmin-card-icon.icolor-danger i {color: var(--colordanger);}
+#doladmin-content .doladmin-card.card-active .doladmin-card-title a {color: #000;}
+#doladmin-content .doladmin-card.card-active .doladmin-card-title a:hover {color: #000;}
+
 #doladmin-content .doladmin-card .doladmin-params-title {font-weight: 700;font-size: 1.3em;}
 #doladmin-content .doladmin-card .doladmin-params-title i {color: var(--colorsecondary);}
-
-#doladmin-content .doladmin-card.card-active .doladmin-card-icon i {color: var(--colorsecondary);}
-#doladmin-content .doladmin-card.card-active .doladmin-card-title a {color: var(--colorprimary);}
-#doladmin-content .doladmin-card.card-active .doladmin-card-title a:hover {color: var(--colorprimary);}
+#doladmin-content .doladmin-card .doladmin-params-desc {margin-top: 3px;}
 
 #doladmin-content .doladmin-card .doladmin-table-simple {width: 100%;border-collapse: collapse;}
 #doladmin-content .doladmin-card .doladmin-table-simple tr {}
-#doladmin-content .doladmin-card .doladmin-table-simple td {border-bottom: 1px solid #eee;padding: 12px 0;}
+#doladmin-content .doladmin-card .doladmin-table-simple td {border-bottom: 1px dashed #eee;padding: 12px 0;}
 #doladmin-content .doladmin-card .doladmin-table-simple td.doladmin-table-subtitle {color:var(--colorgraylight3);font-weight: 500;border-bottom: none;}
 #doladmin-content .doladmin-card .doladmin-table-simple td.doladmin-table-subtitle i {color:var(--colorsecondary);}
 #doladmin-content .doladmin-card .doladmin-table-simple td .color-label {padding-right:5px;}
+
+#doladmin-content .doladmin-card .doladmin-table-simple tbody.params-for-template {display: none;}
+
+/**/
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table {margin-top: 8px;}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table tr th {color: var(--colorgraylight2);padding: 16px 20px;background: var(--colorfillgray2);text-align: left;}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table tr th:first-child {padding-left: 0;padding-right: 4px;}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table tr th:last-child {padding-right: 8px;}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table tr td {padding: 16px 20px;}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table tr td:first-child {padding-left: 0;padding-right: 4px;}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table tr .loginmsg-table-message {padding-right: 36px;padding-left: 4px;}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table tr td:last-child {padding-right: 8px;}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table tr td .loginmsg-gray {color: var(--colorgraylight4);}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table .loginmsg-table-infos i {color: var(--colorsecondary);}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table .loginmsg-table-infos i:hover {color: var(--colorsecondary);}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table .loginmsg-table-infos-icon i {color: var(--colorgraylight2);}
+#doladmin-content .doladmin-card .doladmin-table-simple.loginmsg-table .loginmsg-table-infos-icon i:hover {color: var(--colorsecondary);}
+
+/**/
+#doladmin-content .doladmin-form .lpmsg-typeto {display: none;}
+#doladmin-content .doladmin-form #lpmsg_message {min-height: 160px;margin-top: 8px;width: 100%;resize: vertical;}
+
 
 
 #doladmin-sidebar {background: #fff;width: 600px;padding: 32px;box-sizing:border-box;position: fixed;right: 0;top: 53px;bottom: 0;z-index: 9999;box-shadow: rgba(17, 12, 46, 0.2) 0px 0px 100px 0px;overflow-y: scroll;transform: translateX(0);transition: transform 0.4s ease-in;}
@@ -355,8 +410,8 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
 /**********************/
 .doladmin-slider {}
 .doladmin-slider .doladmin-slides-container {overflow: hidden;position:relative;aspect-ratio: 21/9;}
-.doladmin-slider .doladmin-slides {display: flex;flex-wrap: nowrap; overflow-x: scroll;scroll-behavior: smooth;scroll-snap-type: x mandatory;}
-.doladmin-slider .doladmin-slides .doladmin-slide {flex: 0 0 auto;width: 100%;aspect-ratio: 21/9; position: relative;}
+.doladmin-slider .doladmin-slides {display: flex;flex-wrap: nowrap; overflow-x: scroll;scroll-behavior: smooth;scroll-snap-type: x mandatory;gap: 30px}
+.doladmin-slider .doladmin-slides .doladmin-slide {flex: 0 0 auto;width: 33.33%;aspect-ratio: 21/9; position: relative;}
 .doladmin-slider .doladmin-slides .doladmin-slide img {max-width: 100%;height: auto;display: block;box-sizing: border-box;}
 .doladmin-slider .doladmin-slides .doladmin-slide .doladmin-selected {position:absolute;top: 16px;right:0;padding:8px 16px 8px 8px; background: #fff;font-weight: 500; color: var(--colorgraylight3); font-size: 0.85em; text-transform: uppercase;}
 .doladmin-slider .doladmin-slides .doladmin-slide .doladmin-selected i {font-size: 1.2em;color: var(--colorsuccess);}
@@ -472,6 +527,9 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
 .doladmin-preview .preview-global-wrapper.template_one .preview-wrapper .mask,
 .doladmin-preview .preview-global-wrapper.template_two .preview-wrapper .mask {aspect-ratio: 10/9}
 
+.doladmin-preview .preview-global-wrapper.template_one .preview-wrapper .preview-boxside,
+.doladmin-preview .preview-global-wrapper.template_three .preview-wrapper .preview-boxside {display: none;}
+
 .doladmin-preview .preview-global-wrapper.template_two .preview-wrapper .preview-boxside {border-top-right-radius:0 !important;border-bottom-right-radius:0 !important;}
 .doladmin-preview .preview-global-wrapper.template_two .preview-wrapper .preview-boxlogin {border-top-left-radius:0 !important;border-bottom-left-radius:0 !important;}
 
@@ -481,6 +539,7 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
 .doladmin-preview .preview-global-wrapper.template_three .preview-wrapper {width: 25%;margin: var(--loginplus-box-margin);}
 
 
+.doladmin .doladmin-danger {color: var(--colordanger) !important;}
 
 /**/
 #doladmin-content .doladmin-selectedfile {margin-top: 8px;font-weight: 500;color: var(--colorgraylight4);}
@@ -488,5 +547,5 @@ h3.dolpgs-table-title:before {display: inline-block;content: "";height: 14px;wid
 @media only screen and (max-width: 1620px) {
   #doladmin-content #loginplusadmin-content {flex-direction: column;}
   #doladmin-content #loginplusadmin-content .doladmin-col-menu {display:flex;flex-direction: row;flex-wrap: wrap;gap: 24px;}
-  #doladmin-content #loginplusadmin-content .doladmin-col-menu .doladmin-card {min-width: 320px;}
+  #doladmin-content #loginplusadmin-content .doladmin-col-menu .doladmin-card {min-width: 320px;margin-bottom: 0}
 }

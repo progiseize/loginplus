@@ -72,7 +72,7 @@ print top_htmlhead('', $titleofpage);
 </style>
 
 <!-- BEGIN PHP CUSTOM TEMPLATE LOGINplus! LOGIN.TPL.PHP -->
-<body id="loginplus" class="tpl-1">
+<body id="loginplus" class="tpl-1">aaaaaaaaaaaaaaaa
 
 	<?php if(!empty($conf->global->LOGINPLUS_BG_IMAGEKEY)): ?>
 		<div class="loginplus-bgimage" style="background-image: url('<?php echo $conf->file->dol_url_root['main']; ?>/document.php?hashp=<?php echo $conf->global->LOGINPLUS_BG_IMAGEKEY; ?>');background-position: center;"></div>

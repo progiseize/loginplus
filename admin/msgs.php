@@ -38,11 +38,28 @@ if (!$user->rights->loginplus->gerer_messages): accessforbidden(); endif;
 ********************************************************************/
 
 $action = GETPOST('action');
+$optiontype = GETPOST('optiontype','aZ09')?:'list';
+
+if($optiontype == 'editmsg' && $action != 'editmsg'):
+    $optiontype = 'list';
+endif;
+
 $loginmsg = new loginMsg($db);
 $msg_user = new User($db);
-
 $form = new Form($db);
 $error = 0;
+
+$groups = $loginmsg->get_usersGroups(); 
+$tags = $form->select_all_categories('user', '', 'parent', 64, 0, 1); 
+$listusers = $form->select_dolusers(0,'',0,'',0,'',1,$conf->entity,0,0,'',0,'','',1,1); 
+$array_typeto = array(
+    'all' => 'Tout le monde',
+    'groups' => 'Groupe d\'utilisateurs',
+    'tags' => 'Tags utilisateurs',
+    'users' => 'Utilisateurs spécifiques'
+);
+
+
 
 /*******************************************************************
 * ACTIONS
@@ -50,76 +67,52 @@ $error = 0;
 
 switch ($action):
 
-    // PREPARER MSG
-    case 'prepare_newmsg':
-        
-        // VERIFS
-        if(GETPOST('token') == $_SESSION['token']):        
-            $type_destinataire = GETPOST('newmsg_typeto','alpha');
-            if(empty($type_destinataire)): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyType'), null, 'errors'); 
-            else:
-                switch ($type_destinataire):
-                    case 'all': $destlist = $type_destinataire; break;
-                    case 'groups': $destlist = $loginmsg->get_usersGroups();break;
-                    case 'tags': $destlist = $form->select_all_categories('user', '', 'parent', 64, 0, 1); break;
-                    case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,$conf->entity,0,0,'',0,'','',1,1);break;
-                endswitch;
-            endif;       
-
-        else: $error++;setEventMessages("SecurityTokenHasExpiredSoActionHasBeenCanceledPleaseRetry", null, 'warnings');
-        endif;
-    break;
-
     // AJOUTER MSG
     case 'add_newmsg':
 
-        if(GETPOST('token') == $_SESSION['token']):
-        
-            $type_destinataire = GETPOST('newmsg_typeto','alpha');
-            if(empty(GETPOST('newmsg_label','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyTitle'), null, 'errors'); endif;
-            if(empty(GETPOST('newmsg_message','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyMsg'), null, 'errors'); endif;
-            if(GETPOSTISSET('newmsg_forceview') && empty(GETPOST('newmsg_datexp','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyDate'), null, 'errors'); endif;
-            if(in_array($type_destinataire, array('groups','users','tags'))):
-                if(!GETPOSTISSET('newmsg_destinataire')): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyDest'), null, 'errors'); endif;
-            endif;
-            
+        $type_destinataire = GETPOST('lpmsg_typeto','alpha');
+
+        switch ($type_destinataire):
+            case 'groups': if(empty(GETPOST('destlist_groups','array'))): $error++; setEventMessages($langs->trans('ErrorFieldRequired',$langs->trans('loginplus_msgTo_groups')), null, 'errors'); endif; break;
+            case 'tags': if(empty(GETPOST('destlist_tags','array'))): $error++; setEventMessages($langs->trans('ErrorFieldRequired',$langs->trans('loginplus_msgTo_tags')), null, 'errors'); endif; break;
+            case 'users': if(empty(GETPOST('destlist_listusers','array'))): $error++; setEventMessages($langs->trans('ErrorFieldRequired',$langs->trans('loginplus_msgTo_users')), null, 'errors'); endif; break;
+        endswitch;
+        if(empty(GETPOST('lpmsg_label','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyTitle'), null, 'errors'); endif;
+        if(empty(GETPOST('lpmsg_message','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyMsg'), null, 'errors'); endif;
+        if(GETPOSTISSET('lpmsg_forceview') && empty(GETPOST('lpmsg_datexp','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyDate'), null, 'errors'); endif;
+
+        if(!$error):
+
+            $loginmsg->label = GETPOST('lpmsg_label','alpha');
+            $loginmsg->message = GETPOST('lpmsg_message','alpha');
+
+            $dest['mode'] = $type_destinataire;
             switch ($type_destinataire):
-                case 'all': $destlist = $type_destinataire; break;
-                case 'groups': $destlist = $loginmsg->get_usersGroups();break;
-                case 'tags': $destlist = $form->select_all_categories('user', '', 'parent', 64, 0, 1); break;
-                case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,$conf->entity,0,0,'',0,'','',1,1);break;
+                case 'groups': $dest['params'] = GETPOST('destlist_groups','array'); break;
+                case 'tags': $dest['params'] = GETPOST('destlist_tags','array');break;
+                case 'users': $dest['params'] = GETPOST('destlist_listusers','array'); break;
             endswitch;
+            $loginmsg->destinataire = json_encode($dest);
 
-            if(!$error):
+            $loginmsg->force_view = 0;
+            $loginmsg->date_expiration = '';
 
-                $loginmsg->label = GETPOST('newmsg_label','alpha');
-                $loginmsg->message = GETPOST('newmsg_message','alpha');
-
-                $dest['mode'] = $type_destinataire;
-                if(in_array($type_destinataire, array('groups','users','tags'))): $dest['params'] = GETPOST('newmsg_destinataire'); endif;
-                $loginmsg->destinataire = json_encode($dest);
-
-                $loginmsg->force_view = 0;
-                $loginmsg->date_expiration = '';
-
-                if(GETPOSTISSET('newmsg_forceview')):
-                    $loginmsg->force_view = 1;
-                    $loginmsg->date_expiration = GETPOST('newmsg_datexpyear').'-'.GETPOST('newmsg_datexpmonth').'-'.GETPOST('newmsg_datexpday');
-                    $loginmsg->date_expiration .= ' 00:00:00';
-                endif;
-
-                if($loginmsg->addNewMsg($user)): setEventMessages($langs->trans('loginplus_msg_isAdded'), null, 'mesgs');
-                else: setEventMessages($langs->trans('loginplus_msgerror_add'), null, 'errors'); $error++;
-                endif;
-
+            if(GETPOSTISSET('lpmsg_forceview')):
+                $postdate = GETPOSTDATE('lpmsg_datexp','00:00:00');
+                $loginmsg->force_view = 1;
+                $loginmsg->date_expiration = dol_print_date($postdate,'standard');
             endif;
-        else:
-            setEventMessages("SecurityTokenHasExpiredSoActionHasBeenCanceledPleaseRetry", null, 'warnings');
+
+            if($loginmsg->addNewMsg($user)): 
+                setEventMessages($langs->trans('loginplus_msg_isAdded'), null, 'mesgs');
+                $optiontype = 'list';
+            else: setEventMessages($langs->trans('loginplus_msgerror_add'), null, 'errors'); $error++;
+            endif;
+
         endif;
     break;
 
     case 'confirm_delete_msg':
-
         if(GETPOST('token') == $_SESSION['token']):
 
             // IDENTIFIANT DU MSG
@@ -136,83 +129,64 @@ switch ($action):
                     case -2: echo setEventMessages($langs->trans('loginplus_optionp_error'), null, 'errors'); $error++; break;
                     case -3: echo setEventMessages($langs->trans('loginplus_optionp_nodeladmin'), null, 'errors'); $error++; break;
                 endswitch;
-
             endif;
-
         else:
             setEventMessages("SecurityTokenHasExpiredSoActionHasBeenCanceledPleaseRetry", null, 'warnings');
         endif;
     break;
 
-    case 'edit':
+    case 'editmsg':
+        $msg_edit = new loginMsg($db);
+        $msg_edit->fetch(GETPOST('msgid','int'));
+    break;
+
+    case 'editmsgconfirm':
         
-        if(GETPOST('token') == $_SESSION['token']):
+        $msg_edit = new loginMsg($db);
+        $msg_edit->fetch(GETPOST('msgid','int'));
 
-            $msg_id = GETPOST('msgid','int');
-            $loginmsg->fetch($msg_id);
+        $type_destinataire = GETPOST('lpmsg_typeto','alpha');
+        switch ($type_destinataire):
+            case 'groups': if(empty(GETPOST('destlist_groups','array'))): $error++; setEventMessages($langs->trans('ErrorFieldRequired',$langs->trans('loginplus_msgTo_groups')), null, 'errors'); endif; break;
+            case 'tags': if(empty(GETPOST('destlist_tags','array'))): $error++; setEventMessages($langs->trans('ErrorFieldRequired',$langs->trans('loginplus_msgTo_tags')), null, 'errors'); endif; break;
+            case 'users': if(empty(GETPOST('destlist_listusers','array'))): $error++; setEventMessages($langs->trans('ErrorFieldRequired',$langs->trans('loginplus_msgTo_users')), null, 'errors'); endif; break;
+        endswitch;
+        if(empty(GETPOST('lpmsg_label','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyTitle'), null, 'errors'); endif;
+        if(empty(GETPOST('lpmsg_message','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyMsg'), null, 'errors'); endif;
+        if(GETPOSTISSET('lpmsg_forceview') && empty(GETPOST('lpmsg_datexp','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyDate'), null, 'errors'); endif;
 
-            $type_destinataire = json_decode($loginmsg->destinataire);
+        if(!$error):
 
-            switch ($type_destinataire->mode):
-                case 'all': $destlist = $type_destinataire->mode; break;
-                case 'groups': $destlist = $loginmsg->get_usersGroups();break;
-                case 'tags': $destlist = $form->select_all_categories('user', '', 'parent', 64, 0, 1); break;
-                case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,$conf->entity,0,0,'',0,'','',1,1);break;
+            $msg_edit->label = GETPOST('lpmsg_label','alpha');
+            $msg_edit->message = GETPOST('lpmsg_message','alpha');
+
+            $dest['mode'] = $type_destinataire;
+            switch ($type_destinataire):
+                case 'groups': $dest['params'] = GETPOST('destlist_groups','array'); break;
+                case 'tags': $dest['params'] = GETPOST('destlist_tags','array');break;
+                case 'users': $dest['params'] = GETPOST('destlist_listusers','array'); break;
             endswitch;
-        else:
-            setEventMessages("SecurityTokenHasExpiredSoActionHasBeenCanceledPleaseRetry", null, 'warnings');
-            $error++;
-        endif;
+            $msg_edit->destinataire = json_encode($dest);
 
-    break;
+            $msg_edit->force_view = 0;
+            $msg_edit->date_expiration = '';
 
-    case 'edit_msg':        
-        
-        if(GETPOST('token') == $_SESSION['token']):
-
-            $msg_id = GETPOST('msgid','int');
-            $loginmsg->fetch($msg_id);
-            //var_dump($loginmsg);
-
-            $type_destinataire = json_decode($loginmsg->destinataire);
-
-            if(empty(GETPOST('editmsg_label','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyTitle'), null, 'errors'); endif;
-            if(empty(GETPOST('editmsg_message','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyMsg'), null, 'errors'); endif;
-            if(GETPOSTISSET('editmsg_forceview') && empty(GETPOST('editmsg_datexp','alpha'))): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyDate'), null, 'errors'); endif;
-            if(in_array($type_destinataire->mode, array('groups','users','tags'))):
-                if(!GETPOSTISSET('editmsg_destinataire')): $error++; setEventMessages($langs->trans('loginplus_msgerror_emptyDest'), null, 'errors'); endif;
+            if(GETPOSTISSET('lpmsg_forceview')):
+                $postdate = GETPOSTDATE('lpmsg_datexp','00:00:00');
+                $msg_edit->force_view = 1;
+                $msg_edit->date_expiration = dol_print_date($postdate,'standard');
             endif;
 
-            if(!$error):
-                $loginmsg->label = GETPOST('editmsg_label','alpha');
-                $loginmsg->message = GETPOST('editmsg_message','alpha');
-                if(in_array($type_destinataire->mode, array('groups','users','tags'))): $type_destinataire->params = GETPOST('editmsg_destinataire'); endif;
-                $loginmsg->destinataire = json_encode($type_destinataire);
-
-                if(GETPOSTISSET('editmsg_forceview')):
-                    $loginmsg->force_view = 1;
-                    $loginmsg->date_expiration = GETPOST('editmsg_datexpyear').'-'.GETPOST('editmsg_datexpmonth').'-'.GETPOST('editmsg_datexpday');
-                    $loginmsg->date_expiration .= ' 00:00:00';
-                else:
-                    $loginmsg->force_view = 0; $loginmsg->date_expiration = '';
-                endif;
-
-                if($loginmsg->updateMsg($user)): setEventMessages($langs->trans('loginplus_msg_isUpdated'), null, 'mesgs');
-                else: setEventMessages($langs->trans('loginplus_msgerror_update'), null, 'errors'); $error++;
-                endif;
-            else:
-                switch ($type_destinataire->mode):
-                    case 'all': $destlist = $type_destinataire->mode; break;
-                    case 'groups': $destlist = $loginmsg->get_usersGroups();break;
-                    case 'tags': $destlist = $form->select_all_categories('user', '', 'parent', 64, 0, 1); break;
-                    case 'users': $destlist = $form->select_dolusers(0,'',0,'',0,'',1,$conf->entity,0,0,'',0,'','',1,1); break;
-                endswitch;
+            if($msg_edit->updateMsg($user)): setEventMessages($langs->trans('loginplus_msg_isUpdated'), null, 'mesgs');
+            else: 
+                setEventMessages($langs->trans('loginplus_msgerror_update'), null, 'errors'); $error++;
+                $action = 'editmsg';
+                $optiontype = 'editmsg';
             endif;
-
         else:
-            setEventMessages("SecurityTokenHasExpiredSoActionHasBeenCanceledPleaseRetry", null, 'warnings');
+            $action = 'editmsg';
+            $optiontype = 'editmsg';
         endif;
-
     break;
 
 endswitch;
@@ -224,13 +198,8 @@ $list_loginmessages = $loginmsg->list_messages();
 /***************************************************
 * VIEW
 ****************************************************/
-$array_js = array(
-    '/loginplus/js/remodal.js',
-    '/loginplus/js/loginplus_config.js'
-);
-$array_css = array(
-    '/loginplus/css/dolpgs.css',
-);
+$array_js = array();
+$array_css = array('/loginplus/css/dolpgs.css');
 
 llxHeader('',$langs->transnoentities('loginplus_head_loginmsg').' :: '.$langs->transnoentities('Module300316Name'),'','','','',$array_js,$array_css,'','loginplus setup');
 // ACTIONS NECESSITANT LE HEADER
@@ -239,261 +208,419 @@ if ($action == 'delete_msg'):
 endif;
 ?>
 
-<div class="dolpgs-main-wrapper">
+<div class="doladmin">
 
-    <?php if(in_array('progiseize', $conf->modules)): ?>
-        <h1 class="has-before"><?php echo $langs->transnoentities('loginplus_head_loginmsg'); ?></h1>
-    <?php else : ?>
-        <table class="centpercent notopnoleftnoright table-fiche-title"><tbody><tr class="titre"><td class="nobordernopadding widthpictotitle valignmiddle col-picto"><span class="fas fa-tools valignmiddle widthpictotitle pictotitle" style=""></span></td><td class="nobordernopadding valignmiddle col-title"><div class="titre inline-block"><?php echo $langs->transnoentities('loginplus_head_loginmsg'); ?></div></td></tr></tbody></table>
-    <?php endif; ?>
-    
-    <?php $head = loginplusAdminPrepareHead(); dol_fiche_head($head, 'msg','loginplus', 0,'fa-user-lock_fas_#fb2a52'); ?>
+    <!--  -->
+    <div id="doladmin-content">
+        <?php 
+        $linkback = '<a href="'.DOL_URL_ROOT.'/admin/modules.php?restore_lastsearch_values=1">'.$langs->trans("BackToModuleList").'</a>';
+        print load_fiche_titre($langs->trans("loginplus_head_loginmsg"), $linkback, 'title_setup'); ?>
 
-    <?php if ($user->rights->loginplus->gerer_messages): ?>
+        <?php //$head = loginplusAdminPrepareHead(); dol_fiche_head($head, 'setup','loginplus', 1); ?>
 
-        <table class="dolpgs-table" style="border-top:none;">
-            <tbody>
-                <tr class="">
-                    <td class="nobordernopadding valignmiddle col-title" style="" colspan="4">
-                        <div class="titre inline-block" style="">                            
-                            <h3 class="dolpgs-table-title"><?php echo $langs->trans("Messages d'accueil"); ?></h3>
-                        </div>
-                    </td>
-                    <td colspan="4" class="right">
-                        <form enctype="multipart/form-data" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="POST" id="loginplus_msg">
-                            <input type="hidden" name="action" value="prepare_newmsg">
-                            <input type="hidden" name="token" value="<?php echo newToken(); ?>">
+        <div class="doladmin-flex-wrapper" id="loginplusadmin-content">
 
-                            <?php 
-                                $array_typeto = array(
-                                    'all' => 'Tout le monde',
-                                    'groups' => 'Groupe d\'utilisateurs',
-                                    'tags' => 'Tags utilisateurs',
-                                    'users' => 'Utilisateurs spécifiques',
-                                );
-                                echo $form->selectarray('newmsg_typeto',$array_typeto,'',0);
-                            ?>                            
-                            <button type="submit" class="dolpgs-btn btn-primary" style=""><i class="fas fa-plus"></i> </button>
-                        </form>
-                    </td>
-                </tr>
-                <tr class="dolpgs-thead noborderside">
-                    <th><?php echo $langs->trans('loginplus_msgTitle'); ?></th>
-                    <th><?php echo $langs->trans('loginplus_msgContent'); ?></th>
-                    <th><?php echo $langs->trans('loginplus_msgTo'); ?></th>
-                    <th><?php echo $langs->trans('loginplus_msgDate'); ?></th>
-                    <th><?php echo $langs->trans('loginplus_msgDateExpiration'); ?></th>
-                    <th><?php echo $langs->trans('loginplus_msgAuthor'); ?></th>
-                    <th class="center"><?php echo $langs->trans('loginplus_msgNbView'); ?></th>
-                    <th></th>
-                </tr>
+            <!-- COL FOR MENU -->
+            <div class="doladmin-col-menu">
+                <?php echo lp_showAdminMenu('messages'); ?>
+            </div>
 
-                <?php foreach($list_loginmessages as $msg_id => $msg): 
+            <!-- COL FOR PARAMS -->
+            <div class="doladmin-col-params">
 
-                    $msg_user->fetch($msg->author); $author_label = $msg_user->getFullName($langs, 0, -1); ?>
-
-                    <tr class="dolpgs-tbody">
-                        <td class="bold pgsz-optiontable-fieldname"><?php echo $msg->label; ?></td>               
-                        <td class="pgsz-optiontable-fielddesc"><?php echo $msg->message; ?></td>
-                        <?php // 
-
-                            $infos_destinataire = json_decode($msg->destinataire);
-
-                            $label_destinataire =  '<span style="font-weight:500;">'.$langs->trans('loginplus_msgTo_'.$infos_destinataire->mode).'</span>';
-                            $tabdest = array();
-
-                            switch ($infos_destinataire->mode):
-                                
-                                // GROUPES UTILISATEURS
-                                case 'groups': 
-                                    $label_destinataire .= "<br>";
-                                    $userg = new UserGroup($db);
-                                    foreach ($infos_destinataire->params as $group_id): $userg->fetch($group_id);                               
-                                        array_push($tabdest, $userg->name);
-                                    endforeach;
-                                    $label_destinataire .= implode(', ', $tabdest);
-                                break;                        
-                                
-                                // TAGS
-                                case 'tags': 
-                                    $label_destinataire .= "<br>";
-                                    $cat = new Categorie($db);
-                                    foreach ($infos_destinataire->params as $tag_id): $cat->fetch($tag_id);                               
-                                        array_push($tabdest, $cat->label);
-                                    endforeach;
-                                    $label_destinataire .= implode(', ', $tabdest);
-                                break;     
-
-                                // UTILISATEURS            
-                                case 'users': 
-                                    $label_destinataire .= "<br>";                            
-                                    foreach ($infos_destinataire->params as $user_id): $destinataire = new User($db); $destinataire->fetch($user_id);                                
-                                        array_push($tabdest, $destinataire->lastname.' '.$destinataire->firstname);
-                                    endforeach;
-                                    $label_destinataire .= implode(', ', $tabdest);
-                                break;
-
-                                default: break;
-                            endswitch;
-
-                        ?>               
-                        <td class="pgsz-optiontable-fielddesc"><?php echo $label_destinataire; ?></td>
-                        <td class="pgsz-optiontable-fielddesc"><?php echo date('d/m/Y H:i',strtotime($msg->date_creation)); ?></td>
-                        <td class="pgsz-optiontable-fielddesc"><?php if($msg->force_view): echo date('d/m/Y',strtotime($msg->date_expiration)); else : echo '--'; endif; ?></td>
-                        <td class="pgsz-optiontable-fielddesc"><?php echo $author_label; ?></td>
-                        <td class="center pgsz-optiontable-field "><?php echo $msg->nb_view; ?></td>
-                        <td width="120" class="center">
-                            <?php if($user->admin || $msg->author == $user->id && $user->rights->loginplus->gerer_messages): ?>
-                                <?php echo '<a class="reposition editfielda paddingrightonly" href="'.$_SERVER['PHP_SELF'].'?msgid='.$msg->rowid.'&action=edit&token='.newToken().'">'.img_edit().'</a> &nbsp; '; ?>
-                                <?php echo '<a class="reposition" href="'.$_SERVER['PHP_SELF'].'?msgid='.$msg->rowid.'&action=delete_msg&token='.newToken().'">'.img_delete().'</a>'; ?>
+                <div class="doladmin-card with-topmenu">
+                    <?php $loginmenu = array(
+                        array('optiontype' => 'list', 'icon' => 'fas fa-list','title' => $langs->trans('loginplus_AdminMsgList')),
+                        array('optiontype' => 'addmsg', 'icon' => 'fas fa-plus-circle','title' => $langs->trans('loginplus_AdminMsgAdd')),
+                    ); ?>
+                    <nav class="doladmin-card-topmenu">
+                        <ul>
+                            <?php foreach ($loginmenu as $menukey => $menudet): ?>
+                                <li class="<?php echo ($optiontype == $menudet['optiontype'])?'active':''; ?>">
+                                    <a href="<?php echo dol_buildpath('loginplus/admin/msgs.php?optiontype='.$menudet['optiontype'],1); ?>">
+                                        <i class="<?php echo $menudet['icon']; ?>"></i> <?php echo $menudet['title']; ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                            <?php if($action == 'editmsg'): ?>
+                                <li class="active">
+                                    <i class="fas fa-pencil-alt paddingright"></i> <?php echo $langs->trans('loginplus_msg_update'); ?>
+                                </li>
                             <?php endif; ?>
-                        </td>
-                    </tr>
+                        </ul>
+                    </nav>
 
-                <?php endforeach; ?>
-                
+                    <?php if($optiontype == 'list'): ?>
+                        <div class="doladmin-params-title"><?php echo $langs->trans('loginplus_head_loginmsg'); ?></div>
+                        <p class="doladmin-params-desc opacitymedium"><?php echo $langs->trans('loginplus_option_message_desc'); ?></p>
+                        <table class="doladmin-table-simple loginmsg-table">
+                            <tbody>
+                                <tr class="trlight">
+                                    <th class="nowrap"></th>
+                                    <th class="loginmsg-table-message nowrap"><?php echo $langs->trans('loginplus_msgContent'); ?></th>
+                                    <th class="nowrap"><?php echo $langs->trans('loginplus_msgTo'); ?></th>
+                                    <th class="nowrap"><?php echo $langs->trans('loginplus_msgDateExpiration'); ?></th>
+                                    <th class="nowrap"><?php echo $langs->trans('loginplus_msgNbView2'); ?></th>
+                                    <th class="nowrap"></th>
+                                </tr>
+                                <?php foreach($list_loginmessages as $msg_id => $msg): 
 
-            </tbody>
-        </table>
+                                    $msg_user->fetch($msg->author);
+                                    $infos_destinataire = json_decode($msg->destinataire);
+                                    ?>
 
-        <?php if($action == 'prepare_newmsg' && !$error || $action == 'add_newmsg' && $error): ?>
+                                    <tr valign="top">
 
-            <form enctype="multipart/form-data" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="POST" style="margin-top: 42px;">
-                <input type="hidden" name="action" value="add_newmsg">
-                <input type="hidden" name="token" value="<?php echo newToken(); ?>">
-                <input type="hidden" name="newmsg_typeto" value="<?php echo GETPOST('newmsg_typeto'); ?>">
+                                        <td class="loginmsg-table-infos nowrap">
+                                            <i class="fas fa-info-circle paddingright" title="<?php echo $langs->trans('loginplus_msgCreatedDateAndAuthor',dol_print_date($msg->date_creation),$msg_user->login); ?>"></i>
+                                        </td>
+                                        <td class="loginmsg-table-message">
+                                            <b><?php echo $msg->label; ?></b>
+                                            <div class="loginmsg-gray">
+                                                <?php if(strlen($msg->message) > 200): echo nl2br(substr($msg->message, 0, 200)).'...';
+                                                else: echo nl2br($msg->message); endif; ?>
+                                            </div>
+                                        </td>
+                                        
+                                        <td class="loginmsg-table-infos nowrap">
+                                            <?php // 
+                                            $label_destinataire =  '<b>'.$langs->trans('loginplus_msgToSelect_'.$infos_destinataire->mode).'</b>';
+                                            $more_destinataire =  '';
+                                            $tabdest = array();
+                                            switch ($infos_destinataire->mode):
+                                                //
+                                                case 'all':
+                                                    $more_destinataire =  $langs->trans('loginplus_msgTo_all2');
+                                                break;                                            
+                                                // GROUPES UTILISATEURS
+                                                case 'groups': 
+                                                    $userg = new UserGroup($db);
+                                                    foreach ($infos_destinataire->params as $group_id): $userg->fetch($group_id);                               
+                                                        array_push($tabdest, $userg->name);
+                                                    endforeach;
+                                                    $more_destinataire .= implode(', ', $tabdest);
+                                                break;                        
+                                                
+                                                // TAGS
+                                                case 'tags': 
+                                                    $cat = new Categorie($db);
+                                                    foreach ($infos_destinataire->params as $tag_id): $cat->fetch($tag_id);                               
+                                                        array_push($tabdest, $cat->label);
+                                                    endforeach;
+                                                    $more_destinataire .= implode(', ', $tabdest);
+                                                break;     
 
-                <h3 class="dolpgs-table-title"><?php echo $langs->trans('loginplus_msgAdd_'.GETPOST('newmsg_typeto')); ?></h3>
-                <table class="dolpgs-table">
-                    <tbody>
-                        
-                        <tr class="dolpgs-thead noborderside">
-                            <th><?php echo $langs->trans('Parameter'); ?></th>
-                            <th><?php echo $langs->trans('Description'); ?></th>
-                            <th class="soixantepercent right"><?php echo $langs->trans('Value'); ?></th>
-                        </tr>
-                        <tr class="dolpgs-tbody">
-                            <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_msgTitle'); ?> <span class="required">*</span></td>
-                            <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_msgTitle_desc'); ?></td>
-                            <td class="right pgsz-optiontable-field"><input class="quatrevingtpercent" type="text" name="newmsg_label" placeholder="<?php echo $langs->trans('Label'); ?>" value="<?php echo GETPOST('newmsg_label'); ?>"></td>
-                        </tr>
-                        <tr class="dolpgs-tbody">
-                            <td class="bold pgsz-optiontable-fieldname" valign="top"><?php echo $langs->trans('loginplus_msgContent'); ?> <span class="required">*</span></td>
-                            <td class="pgsz-optiontable-fielddesc" valign="top"><?php echo $langs->trans('loginplus_msgContent_desc'); ?></td>
-                            <td class="right pgsz-optiontable-field"><textarea class="quatrevingtpercent" style="resize: none;min-height: 64px" name="newmsg_message"><?php echo GETPOST('newmsg_message'); ?></textarea></td>
-                        </tr>
-                        <?php if(in_array(GETPOST('newmsg_typeto'), array('groups','users','tags'))): ?>
-                            <tr class="dolpgs-tbody">
-                                <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_msgTo'); ?> <span class="required">*</span></td>
-                                <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_msg_dest'.GETPOST('newmsg_typeto')); ?></td>
-                                <td class="right pgsz-optiontable-field">
-                                    <?php if(!empty($destlist)): ?>
-                                        <select name="newmsg_destinataire[]" class="pgsz-slct2-simple quatrevingtpercent" multiple>
-                                        <?php foreach ($destlist as $param_id => $param): ?>
-                                            <option value="<?php echo $param_id; ?>" <?php if(GETPOSTISSET('newmsg_destinataire') && in_array($param_id, GETPOST('newmsg_destinataire')) ): echo 'selected'; endif; ?>><?php echo $param; ?></option>
-                                        <?php endforeach; ?>
-                                        </select>
-                                    <?php else: ?>
-                                        <?php echo 'Aucune donnée trouvée'; ?>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endif; ?>
-                        <tr class="dolpgs-tbody">
-                            <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_msgForceView'); ?></td>
-                            <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_msgForceView_desc'); ?></td>
-                            <td class="right pgsz-optiontable-field">
-                                <?php $isChecked = (GETPOSTISSET('newmsg_forceview'))?'checked="checked"':''; ; ?>
-                                <input type="checkbox" name="newmsg_forceview" <?php echo $isChecked; ?>>
-                            </td>
-                        </tr>
-                        <tr class="dolpgs-tbody" style="<?php if(!GETPOSTISSET('newmsg_forceview')): echo 'display:none'; endif; ?>" id="loginplus-addmsg-datexp">
-                            <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_msgDateExpiration'); ?> <span class="required">*</span></td>
-                            <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_msgDateExpiration_desc'); ?></td>
-                            <td class="right pgsz-optiontable-field">
-                                <?php $slctd = (GETPOSTISSET('newmsg_datexp'))?strtotime(str_replace('/', '-', GETPOST('newmsg_datexp'))):strtotime("+1 month", strtotime(date('Y-m-d'))); ?>
-                                <?php echo $form->selectDate($slctd,'newmsg_datexp'); ?>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="right">
-                    <input type="submit" name="" class="dolpgs-btn btn-sm btn-primary" value="Ajouter">
+                                                // UTILISATEURS            
+                                                case 'users': 
+                                                    foreach ($infos_destinataire->params as $user_id): $destinataire = new User($db); $destinataire->fetch($user_id);                                
+                                                        array_push($tabdest, $destinataire->lastname.' '.$destinataire->firstname);
+                                                    endforeach;
+                                                    $more_destinataire .= implode(', ', $tabdest);
+                                                break;
+
+                                                default: break;
+                                            endswitch; ?>  
+                                            <i class="fas fa-user paddingright"></i> <?php echo $label_destinataire; ?>
+                                            <?php if(!empty($more_destinataire)): echo '<div class="loginmsg-gray">'.$more_destinataire.'</div>'; endif; ?>
+                                        </td>
+                                        <td class="loginmsg-table-infos nowrap">
+                                            <?php if($msg->date_expiration): 
+                                                $icon_date = 'far fa-calendar';
+                                                if(dol_stringtotime($msg->date_expiration) < dol_now()):
+                                                    $icon_date = 'fas fa-exclamation-triangle doladmin-danger';
+                                                endif; ?>
+                                                <i class="<?php echo $icon_date; ?> paddingright" title="<?php echo $langs->trans('loginplus_msgDateExpirationD',dol_print_date($msg->date_expiration)); ?>"></i>
+                                                <b><?php echo $langs->trans('DateEnd').' :'; ?></b>
+                                                <div class="loginmsg-gray"><?php echo dol_print_date($msg->date_expiration,'%d/%m/%Y'); ?></div>
+                                            <?php else: ?>
+                                                <i class="fas fa-infinity paddingright" title="<?php echo $langs->trans('loginplus_msgNoExpiration'); ?>"></i>
+                                                <b><?php echo $langs->trans('DateEnd').':'; ?></b>
+                                                <div class="loginmsg-gray"><?php echo $langs->trans('loginplus_msgUnlimited'); ?></div>
+                                            <?php endif; ?>
+                                        </td>
+                                        
+                                        <td class="loginmsg-table-infos nowrap">
+                                            <i class="fas fa-eye paddingright" title="Nombre de vues"></i> <b><?php echo $msg->nb_view; ?></b>
+                                        </td>
+                                        <td class="loginmsg-table-actions right nowrap">
+                                            <?php if($user->admin || $msg->author == $user->id && $user->rights->loginplus->gerer_messages): ?>
+                                                <?php echo '<a class="reposition editfielda paddingright" href="'.$_SERVER['PHP_SELF'].'?msgid='.$msg->rowid.'&action=editmsg&optiontype=editmsg&token='.newToken().'">'.img_edit().'</a> &nbsp; '; ?>
+                                                <?php echo '<a class="reposition" href="'.$_SERVER['PHP_SELF'].'?msgid='.$msg->rowid.'&action=delete_msg&token='.newToken().'">'.img_delete().'</a>'; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php elseif($optiontype == 'editmsg'): //$msg_edit 
+
+                        $destinfos = json_decode($msg_edit->destinataire); ?>
+
+                        <div class="doladmin-params-title"><?php echo $langs->trans('loginplus_msg_update'); ?></div>
+                        <div class="doladmin-card-content paddingtop" style="margin-top: 16px;">
+                            <form enctype="multipart/form-data" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="POST" class="doladmin-form">
+                                
+                                <input type="hidden" name="action" value="editmsgconfirm">
+                                <input type="hidden" name="token" value="<?php echo newToken(); ?>">
+                                <input type="hidden" name="optiontype" value="editmsg">
+                                <input type="hidden" name="msgid" value="<?php echo GETPOST('msgid'); ?>">
+
+                                <table class="doladmin-table-simple">                                
+                                    <tbody>
+                                        <tr>
+                                            <td class="doladmin-table-subtitle" colspan="2"><i class="fas fa-paper-plane paddingright"></i> <?php echo $langs->trans('loginplus_msgTo'); ?></td>
+                                        </tr>
+
+                                        <tr class="dest-groups">
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgTo'); ?></td>
+                                            <td class="right">
+                                                <?php echo $form->selectarray('lpmsg_typeto',$array_typeto,GETPOSTISSET('lpmsg_typeto')?GETPOST('lpmsg_typeto','alphanohtml'):$destinfos->mode,0,0,0,'',0,0,0,'','minwidth300'); ?>
+                                            </td>
+                                        </tr>
+
+                                        <!-- GROUPS -->
+                                        <tr class="lpmsg-typeto" id="lpmsg-typeto-groups">
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgTo_groups'); ?></td>
+                                            <td class="right">
+                                                <?php
+
+                                                $default_groups = array();
+                                                if($destinfos->mode == 'groups'): $default_groups = $destinfos->params; endif;
+
+                                                if(!empty($groups)): 
+                                                    echo $form->selectarray('destlist_groups[]',$groups,GETPOSTISSET('destlist_groups')?GETPOST('destlist_groups','array'):$default_groups,0,0,0,'multiple',0,0,0,'','minwidth300'); 
+                                                else: echo $langs->trans('NoData');
+                                                endif; ?>
+                                            </td>
+                                        </tr>
+
+                                        <!-- TAGS -->
+                                        <tr class="lpmsg-typeto" id="lpmsg-typeto-tags">
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgTo_tags'); ?></td>
+                                            <td class="right">
+                                                <?php
+
+                                                $default_tags = array();
+                                                if($destinfos->mode == 'tags'): $default_tags = $destinfos->params; endif;
+
+                                                if(!empty($tags)): echo $form->selectarray('destlist_tags[]',$tags,GETPOSTISSET('destlist_tags')?GETPOST('destlist_tags','array'):$default_tags,0,0,0,'multiple',0,0,0,'','minwidth300'); 
+                                                else: echo $langs->trans('NoData');
+                                                endif; ?>
+                                            </td>
+                                        </tr>
+
+                                        <!-- USERS -->
+                                        <tr class="lpmsg-typeto" id="lpmsg-typeto-users">
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgTo_users'); ?></td>
+                                            <td class="right">
+                                                <?php     
+
+                                                $default_users = array();
+                                                if($destinfos->mode == 'users'): $default_users = $destinfos->params; endif;
+
+                                                if(!empty($listusers)):
+                                                    echo $form->selectarray('destlist_listusers[]',$listusers,GETPOSTISSET('destlist_listusers')?GETPOST('destlist_listusers','array'):$default_users,0,0,0,'multiple',0,0,0,'','minwidth300'); 
+                                                else: echo $langs->trans('NoData');
+                                                endif; ?>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="doladmin-table-subtitle" colspan="2" style="padding-top: 36px;padding-bottom: 4px;"><i class="fas fa-cog paddingright"></i> <?php echo $langs->trans('loginplus_msgParams'); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgForceView').' '.img_info($langs->trans('loginplus_msgForceView_desc')); ?></td>
+                                            <td class="right">
+                                                <?php 
+                                                    // First view, post after
+                                                    if(!empty($_GET)): $isChecked = $msg_edit->force_view?'checked="checked"':'';
+                                                    else: $isChecked = (GETPOSTISSET('lpmsg_forceview'))?'checked="checked"':'';
+                                                    endif;                                                    
+                                                ?>
+                                                <input type="checkbox" value="a" name="lpmsg_forceview" <?php echo $isChecked; ?>>
+                                            </td>
+                                        </tr>
+                                        <tr style="<?php if(!GETPOSTISSET('lpmsg_forceview')): echo 'display:none'; endif; ?>" id="loginplus-addmsg-datexp">
+                                            <td class="bold "><?php echo $langs->trans('loginplus_msgDateExpiration'); ?> <span class="required">*</span></td>
+                                            <td class="right">
+                                                <?php 
+                                                    if(GETPOSTISSET('lpmsg_datexp')): $slctd = dol_stringtotime(GETPOST('lpmsg_datexp'));
+                                                    else:
+                                                        if(!empty($msg_edit->date_expiration)): $slctd = dol_stringtotime($msg_edit->date_expiration);
+                                                        else: $slctd = strtotime("+1 month", dol_now());
+                                                        endif;
+                                                    endif;
+                                                    echo $form->selectDate($slctd,'lpmsg_datexp');
+                                                ?>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="doladmin-table-subtitle" colspan="2" style="padding-top: 36px;padding-bottom: 4px;"><i class="fas fa-comment-alt paddingright"></i> <?php echo $langs->trans('loginplus_msgContentTitle'); ?></td>
+                                        </tr>
+                                        <tr class="dolpgs-tbody">
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgTitle'); ?> <span class="required">*</span></td>
+                                            <td class="right"><input type="text" class="minwidth400" name="lpmsg_label" placeholder="<?php echo $langs->trans('Label'); ?>" value="<?php echo GETPOSTISSET('lpmsg_label')?GETPOST('lpmsg_label','alphanohtml'):$msg_edit->label; ?>"></td>
+                                        </tr>
+                                        <tr class="dolpgs-tbody">
+                                            <td class="bold" valign="top" colspan="2">
+                                                <?php echo $langs->trans('loginplus_msgContent'); ?> <span class="required">*</span><br>
+                                                <textarea class="" style="" id="lpmsg_message" name="lpmsg_message"><?php echo GETPOSTISSET('lpmsg_message')?GETPOST('lpmsg_message','alphanohtml'):$msg_edit->message; ?></textarea>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="doladmin-form-buttons right">
+                                    <input type="submit" name="" >
+                                </div>
+
+                            </form>
+                        </div>
+
+                    <?php elseif($optiontype == 'addmsg'): ?>
+
+                        <div class="doladmin-params-title"><?php echo $langs->trans('loginplus_AdminMsgAdd'); ?></div>
+                        <p class="doladmin-params-desc opacitymedium"><?php echo $langs->trans('loginplus_AdminMsgAddDesc'); ?></p>
+                        <div class="doladmin-card-content paddingtop" style="margin-top: 16px;">
+                            <form enctype="multipart/form-data" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="POST" class="doladmin-form">
+                                
+                                <input type="hidden" name="action" value="add_newmsg">
+                                <input type="hidden" name="token" value="<?php echo newToken(); ?>">
+                                <input type="hidden" name="optiontype" value="addmsg">
+
+                                <table class="doladmin-table-simple">                                
+                                    <tbody>
+                                        <tr>
+                                            <td class="doladmin-table-subtitle" colspan="2"><i class="fas fa-paper-plane paddingright"></i> <?php echo $langs->trans('loginplus_msgTo'); ?></td>
+                                        </tr>
+
+                                        <tr class="dest-groups">
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgTo'); ?></td>
+                                            <td class="right">
+                                                <?php echo $form->selectarray('lpmsg_typeto',$array_typeto,GETPOST('lpmsg_typeto','alphanohtml'),0,0,0,'',0,0,0,'','minwidth300'); ?>
+                                            </td>
+                                        </tr>
+
+                                        <!-- GROUPS -->
+                                        <tr class="lpmsg-typeto" id="lpmsg-typeto-groups">
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgTo_groups'); ?></td>
+                                            <td class="right">
+                                                <?php 
+                                                if(!empty($groups)): echo $form->selectarray('destlist_groups[]',$groups,GETPOST('destlist_groups','array'),0,0,0,'multiple',0,0,0,'','minwidth300'); 
+                                                else:  echo $langs->trans('NoData');
+                                                endif; ?>
+                                            </td>
+                                        </tr>
+
+                                        <!-- TAGS -->
+                                        <tr class="lpmsg-typeto" id="lpmsg-typeto-tags">
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgTo_tags'); ?></td>
+                                            <td class="right">
+                                                <?php                                                 
+                                                if(!empty($tags)): echo $form->selectarray('destlist_tags[]',$tags,GETPOST('destlist_tags','array'),0,0,0,'multiple',0,0,0,'','minwidth300'); 
+                                                else: echo $langs->trans('NoData');
+                                                endif; ?>
+                                            </td>
+                                        </tr>
+
+                                        <!-- USERS -->
+                                        <tr class="lpmsg-typeto" id="lpmsg-typeto-users">
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgTo_users'); ?></td>
+                                            <td class="right">
+                                                <?php                                                 
+                                                if(!empty($listusers)): echo $form->selectarray('destlist_listusers[]',$listusers,GETPOST('destlist_listusers','array'),0,0,0,'multiple',0,0,0,'','minwidth300'); 
+                                                else: echo $langs->trans('NoData');
+                                                endif; ?>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="doladmin-table-subtitle" colspan="2" style="padding-top: 36px;padding-bottom: 4px;"><i class="fas fa-cog paddingright"></i> <?php echo $langs->trans('loginplus_msgParams'); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgForceView').' '.img_info($langs->trans('loginplus_msgForceView_desc')); ?></td>
+                                            <td class="right">
+                                                <?php $isChecked = (GETPOSTISSET('lpmsg_forceview'))?'checked="checked"':''; ; ?>
+                                                <input type="checkbox" name="lpmsg_forceview" <?php echo $isChecked; ?>>
+                                            </td>
+                                        </tr>
+                                        <tr style="<?php if(!GETPOSTISSET('lpmsg_forceview')): echo 'display:none'; endif; ?>" id="loginplus-addmsg-datexp">
+                                            <td class="bold "><?php echo $langs->trans('loginplus_msgDateExpiration'); ?> <span class="required">*</span></td>
+                                            <td class="right">
+                                                <?php $slctd = (GETPOSTISSET('lpmsg_datexp'))?dol_stringtotime(GETPOST('lpmsg_datexp')):strtotime("+1 month", dol_now());
+                                                echo $form->selectDate($slctd,'lpmsg_datexp'); ?>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="doladmin-table-subtitle" colspan="2" style="padding-top: 36px;padding-bottom: 4px;"><i class="fas fa-comment-alt paddingright"></i> <?php echo $langs->trans('loginplus_msgContentTitle'); ?></td>
+                                        </tr>
+                                        <tr class="dolpgs-tbody">
+                                            <td class="bold"><?php echo $langs->trans('loginplus_msgTitle'); ?> <span class="required">*</span></td>
+                                            <td class="right"><input type="text" class="minwidth400" name="lpmsg_label" placeholder="<?php echo $langs->trans('Label'); ?>" value="<?php echo GETPOST('lpmsg_label'); ?>"></td>
+                                        </tr>
+                                        <tr class="dolpgs-tbody">
+                                            <td class="bold" valign="top" colspan="2">
+                                                <?php echo $langs->trans('loginplus_msgContent'); ?> <span class="required">*</span><br>
+                                                <textarea class="" style="" id="lpmsg_message" name="lpmsg_message"><?php echo GETPOST('lpmsg_message'); ?></textarea>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="doladmin-form-buttons right">
+                                    <input type="submit" name="" >
+                                </div>
+
+                            </form>
+                        </div>
+                    <?php endif; ?>
+                    
                 </div>
-                
-
-            </form>
-
-        <?php elseif($action == 'edit' && !$error || $action == 'edit_msg' && $error): ?>
-
-            <form enctype="multipart/form-data" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="POST"  style="margin-top: 42px;">
-                <input type="hidden" name="action" value="edit_msg">
-                <input type="hidden" name="token" value="<?php echo newToken(); ?>">
-                <input type="hidden" name="msgid" value="<?php echo $loginmsg->rowid; ?>">
-
-                <h3 class="dolpgs-table-title"><?php echo $langs->trans('loginplus_msg_update'); ?></h3>
-                <table class="dolpgs-table" style="border-top:none;">
-                    <tbody>
-                        <tr class="dolpgs-thead noborderside">
-                            <th><?php echo $langs->trans('Parameter'); ?></th>
-                            <th><?php echo $langs->trans('Description'); ?></th>
-                            <th class="soixantepercent right"><?php echo $langs->trans('Value'); ?></th>
-                        </tr>
-                        <tr class="dolpgs-tbody">
-                            <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_msgTitle'); ?> <span class="required">*</span></td>
-                            <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_msgTitle_desc'); ?></td>
-                            <td class="right pgsz-optiontable-field"><input class="quatrevingtpercent" type="text" name="editmsg_label" placeholder="<?php echo $langs->trans('Label'); ?>" value="<?php echo (GETPOSTISSET('editmsg_label'))?GETPOST('editmsg_label'):$loginmsg->label; ?>"></td>
-                        </tr>
-                        <tr class="dolpgs-tbody">
-                            <td class="bold pgsz-optiontable-fieldname" valign="top"><?php echo $langs->trans('loginplus_msgContent'); ?> <span class="required">*</span></td>
-                            <td class="pgsz-optiontable-fielddesc" valign="top"><?php echo $langs->trans('loginplus_msgContent_desc'); ?></td>
-                            <td class="right pgsz-optiontable-field"><textarea class="quatrevingtpercent" style="resize: none;min-height: 64px" name="editmsg_message"><?php echo (GETPOSTISSET('editmsg_message'))?GETPOST('editmsg_message'):$loginmsg->message; ?></textarea></td>
-                        </tr>                        
-                        <?php if(in_array($type_destinataire->mode, array('groups','users','tags'))): ?>
-                            <tr class="dolpgs-tbody">
-                                <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_msgTo'); ?> <span class="required">*</span></td>
-                                <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_msg_dest'.$type_destinataire->mode); ?></td>
-                                <td class="right pgsz-optiontable-field">
-                                    <select name="editmsg_destinataire[]" class="pgsz-slct2-simple quatrevingtpercent" multiple>
-                                    <?php foreach ($destlist as $param_id => $param): $selected = false; ?>
-                                        <?php if($action == 'edit_msg' && GETPOSTISSET('editmsg_destinataire') && in_array($param_id, GETPOST('editmsg_destinataire'))): $selected = true; ?>
-                                        <?php elseif(in_array($param_id, $type_destinataire->params)): $selected = true; endif; ?>
-                                        <option value="<?php echo $param_id; ?>" <?php if($selected): echo 'selected'; endif; ?>><?php echo $param; ?></option>
-                                    <?php endforeach; ?>
-                                    </select>
-                                </td>
-                            </tr>
-                        <?php endif; ?>
-
-                        <tr class="dolpgs-tbody">
-                            <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_msgForceView'); ?></td>
-                            <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_msgForceView_desc'); ?></td>
-                            <td class="right pgsz-optiontable-field">
-                                <?php $isChecked = (GETPOSTISSET('editmsg_forceview'))?GETPOST('editmsg_forceview'):$loginmsg->force_view; ?>
-                                <input type="checkbox" name="editmsg_forceview" <?php if($isChecked): echo 'checked="checked"'; endif; ?>>
-                            </td>
-                        </tr>
-                        <tr class="dolpgs-tbody" style="<?php if(!$isChecked): echo 'display:none'; endif; ?>" id="loginplus-editmsg-datexp">
-                            <td class="bold pgsz-optiontable-fieldname"><?php echo $langs->trans('loginplus_msgDateExpiration'); ?> <span class="required">*</span></td>
-                            <td class="pgsz-optiontable-fielddesc"><?php echo $langs->trans('loginplus_msgDateExpiration_desc'); ?></td>
-                            <td class="right pgsz-optiontable-field">
-                                <?php if(empty($loginmsg->date_expiration)): $default_date = strtotime("+1 month", strtotime(date('Y-m-d'))); else: $default_date = strtotime(str_replace('/', '-', $loginmsg->date_expiration)); endif; ?>
-                                <?php $slctd = (GETPOSTISSET('editmsg_datexp'))?strtotime(str_replace('/', '-', GETPOST('editmsg_datexp'))):$default_date; ?>
-                                <?php echo $form->selectDate($slctd,'editmsg_datexp'); ?>
-                            </td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
-                <div class="right">
-                    <input type="submit" name="" class="dolpgs-btn btn-sm btn-danger" value="Modifier">
-                </div>
-
-            </form>
-        <?php endif; ?>
-
-    <?php endif; ?>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    
+    // SELECT2 NEEDS JQUERY
+    $(function() {
+
+        //
+        var s_typeto = $('select[name="lpmsg_typeto"]').val();
+        if(s_typeto != 'all'){$('#lpmsg-typeto-' + s_typeto).show();}
+        $('select[name="lpmsg_typeto"]').on('change', function (e) {
+            var typeto = $(this).val();
+            $('.lpmsg-typeto').hide();            
+            if(typeto != 'all'){$('#lpmsg-typeto-' + typeto).show();}            
+        });
+    });
+
+    // FORCEVIEW
+    let forceview_checkbox = document.querySelector('input[name="lpmsg_forceview"]');
+    let forceview_date = document.querySelector('#loginplus-addmsg-datexp');
+
+    if(forceview_checkbox){
+
+        if(forceview_checkbox.checked == true){
+            forceview_date.style.setProperty('display','table-row');
+        } else {
+            forceview_date.style.setProperty('display','none');
+        }
+
+        forceview_checkbox.addEventListener('change', function (a){
+            if(forceview_checkbox.checked == true){
+                forceview_date.style.setProperty('display','table-row');
+            } else {
+                forceview_date.style.setProperty('display','none');
+            }
+        });
+    }
+
+</script>
 
 <?php llxFooter(); $db->close(); ?>
 

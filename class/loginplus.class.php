@@ -43,8 +43,8 @@ class LoginPlus {
         'semicorner_bl' => array('type' => 'clip','category' => 'corners'),
 
         // ASC - DESC
-        'diagonal_desc' => array('type' => 'clip','category' => 'diagside'),
         'diagonal_asc' => array('type' => 'clip','category' => 'diagside'),
+        'diagonal_desc' => array('type' => 'clip','category' => 'diagside'),
 
         // WAVES - NEW
         'wave-1' => array('type' => 'svg','category' => 'waves'),
@@ -158,16 +158,18 @@ class LoginPlus {
 			$boxlogin .= '<div class="preview-links"><a href="#">Mot de passe oublié</a></div>';
 		endif;
 
+		$boxside = '';
 		$previewdivclass = '';
 		if($mask): $previewdivclass = 'mask'; endif;
 		switch ($templatekey):
 			case 'template_one':
+				$preview .= '<div class="prevdiv preview-boxside"></div>';
 				$preview .= '<div class="prevdiv preview-boxlogin '.($mask?'mask':'').'">'.$boxlogin.'</div>';
 			break;
 			case 'template_two':
 
 				//BOXSIDE
-				$boxside = '';
+				
 				if(!$mask):
 
 					// BACKGROUND IMAGE
@@ -186,6 +188,7 @@ class LoginPlus {
 				$preview .= '<div class="prevdiv preview-boxlogin '.($mask?'mask':'').'">'.$boxlogin.'</div>';
 			break;
 			case 'template_three':
+				$preview .= '<div class="prevdiv preview-boxside"></div>';
 				$preview .= '<div class="prevdiv preview-boxlogin '.($mask?'mask':'').'">'.$boxlogin.'</div>';
 			break;
 		endswitch;

@@ -7,12 +7,11 @@
 ### 2.0.0
 * NEW - Nouvelle page de personnalisation
 * REMOVE - Suppression des templates avec Copyright
+* REMOVE - Onglet Documentation - obsolète
 * MAJ - Upload plus simple des images (dossier medias)
 * MAJ - Nouvelles options de personnalisation
 * NEW - Logo Alternatif
-* TODO - Passwordforgotten tpl
-
-
+* MAJ - Pages admins améliorées
 
 ### 1.5.4
 * FIX - Correction erreur log trigger 

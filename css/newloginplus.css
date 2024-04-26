@@ -76,10 +76,10 @@ body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin 
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-boxlogin-logo {}
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-boxlogin-logo img {display: block;margin: 8px auto 16px auto;max-width: 240px;height: auto;}
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin form#login {padding-bottom: 0;}
-body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields {margin: 36px 0;flex: 1;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields {margin: 18px 0 36px 0;flex: 1;}
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow {margin: 24px 0;}
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow label {}
-body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields.loginplus-viewlabel .loginplus-fieldrow label {display:block;margin-bottom: 3px;color: var(--loginplus-box-labelcolor);font-weight: 500;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields.loginplus-viewlabel .loginplus-fieldrow label {display:block;margin-bottom: 3px;color: var(--loginplus-box-labelcolor);font-weight: 500;text-align: left;}
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow label i {color: var(--loginplus-box-iconcolor);margin-right: 5px;}
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow input {width: 320px;font-family: 'Roboto', sans-serif;box-sizing: border-box;background: transparent !important;border: none;outline: none;padding: 8px 0;color: var(--loginplus-box-inputcolor);border-bottom: 1px solid var(--loginplus-box-inputbordercolor);transition: 0.15s ease-in;border-radius: 0;font-weight: 500}
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow input:focus, 
@@ -87,10 +87,21 @@ body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin 
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow input::placeholder {color: rgba(200, 200, 200, 0.4);}
 body#loginplus input:focus:not(.button):not(.buttonwebsite):not(.buttonreset):not(.select2-search__field):not(#top-bookmark-search-input):not(.search_component_input):not(.input-search-takepos){border-bottom-width: 1px !important; border-bottom-color: var(--loginplus-box-inputbordercolorfocus) !important; border-bottom-style: solid !important; }
 
+/* CAPTCHA  */
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow.row-captcha {}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow.row-captcha .loginplus-captcha {display: inline-flex;width: 320px;align-items: center;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow.row-captcha input {width: auto;flex: 1;margin-right: 24px;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow.row-captcha a {color: var(--loginplus-box-submitbackground);margin-left: 6px;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-fields .loginplus-fieldrow.row-captcha a:hover {color: var(--loginplus-box-submitbackgroundhover);margin-left: 6px;}
+
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit {text-align: center;padding-top: 8px;}
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit input[type=submit] {font-family: 'Roboto', sans-serif;padding: 10px 16px;font-size: 1em;border-radius:4px;background: var(--loginplus-box-submitbackground);color: var(--loginplus-box-submitcolor);cursor: pointer;font-weight: 500;transition: 0.05s ease-in;}
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit input[type=submit]:hover, 
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit input[type=submit]:active {background: var(--loginplus-box-submitbackgroundhover);}
+
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit #login-submit-button {font-family: 'Roboto', sans-serif;padding: 10px 16px;font-size: 1em;border-radius:4px;background: var(--loginplus-box-submitbackground);color: var(--loginplus-box-submitcolor);cursor: pointer;font-weight: 500;transition: 0.05s ease-in;}
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit #login-submit-button:hover, 
+body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-submit #login-submit-button:active {background: var(--loginplus-box-submitbackgroundhover);}
 
 body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxlogin .loginplus-error-msg {color: #ff000e;margin: 24px 0;font-size: 0.9em;font-weight: 500;border: 1px solid #ff000e;padding: 6px 12px;background: rgba(0, 0, 0, .1);border-radius: 6px;}
 
@@ -130,3 +141,22 @@ body#loginplus.template_three .loginplus-global-wrapper .loginplus-wrapper {widt
   body#loginplus .loginplus-global-wrapper .loginplus-wrapper .loginplus-boxside {display: none;}
   body#loginplus.template_two .loginplus-global-wrapper .loginplus-wrapper {width: auto;}
 }
+
+/* TWOFACTOR */
+body#loginplus .loginplus-fields .twofactorauth-choice-wrapper, .twofactorauth-u2f-wrapper, .twofactorauth-totp-wrapper {background: transparent;height: auto;text-align: center;}
+body#loginplus .loginplus-fields .twofactorauth-wrapper-border {border: none;}
+body#loginplus .loginplus-fields #u2f-submit-wrapper p, 
+body#loginplus .loginplus-fields #totp-submit-wrapper p {display: block;margin: 16px 0;padding: 0;width: auto;max-width: 320px;font-family: 'Roboto', sans-serif; font-weight: 500;}
+
+body#loginplus .loginplus-fields #totp-submit-wrapper input {width: 180px;font-family: 'Roboto', sans-serif;box-sizing: border-box;background: transparent !important;border: none;outline: none;padding: 8px 0;color: var(--loginplus-box-inputcolor);border-bottom: 1px solid var(--loginplus-box-inputbordercolor);transition: 0.15s ease-in;border-radius: 0;font-weight: 500}
+body#loginplus .loginplus-fields #totp-submit-wrapper input:focus, 
+body#loginplus .loginplus-fields #totp-submit-wrapper input:active {border-bottom: 1px solid var(--loginplus-box-inputbordercolorfocus);color: var(--loginplus-box-inputcolorfocus);}
+
+body#loginplus #login_line2 input#totp-submit-button {border:none;outline:none;font-family: 'Roboto', sans-serif;padding: 10px 16px;font-size: 1em;border-radius:4px;background: var(--loginplus-box-submitbackground);color: var(--loginplus-box-submitcolor);cursor: pointer;font-weight: 500;transition: 0.05s ease-in;}
+body#loginplus #login_line2 input#totp-submit-button:hover,
+body#loginplus #login_line2 input#totp-submit-button:active {background: var(--loginplus-box-submitbackgroundhover);}
+
+body#loginplus .twofactorauth-cancel-button {color: var(--loginplus-box-linkscolor);} 
+
+body#loginplus .loginplus-fields.dark-theme #u2f-submit-wrapper p, 
+body#loginplus .loginplus-fields.dark-theme #totp-submit-wrapper p {color: #ccc;}
