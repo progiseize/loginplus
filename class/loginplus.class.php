@@ -21,11 +21,17 @@ class LoginPlus {
 
 	public $templates =  array(
         'template_one' => array(
-        	'position' => 1, 'imgurl' => '../img/template/tpl_colsimple.png','previewclass' => 'template_one'),
+        	'position' => 1,
+        	'imgurl' => '../img/template/tpl_colsimple.png',
+        	'previewclass' => 'template_one',
+        	'langkey' => 'loginplus_AdminStructureModel1'
+        ),
         'template_two' => array(
-        	'position' => 2, 'imgurl' => '../img/template/tpl_coldouble.png','previewclass' => 'template_two'),
-        'template_three' => array(
-        	'position' => 3, 'imgurl' => '../img/template/tpl_sidebar.png','previewclass' => 'template_three'),
+        	'position' => 3,
+        	'imgurl' => '../img/template/tpl_sidebar.png',
+        	'previewclass' => 'template_two',
+        	'langkey' => 'loginplus_AdminStructureModel3'
+        ),
     );
 
 	public $shapes = array(
@@ -105,11 +111,12 @@ class LoginPlus {
 		/*******************************************/
 		// BOXES
 		$preview_wrapperclass = 'preview-global-wrapper '.$templatekey;
-		if($templatekey == 'template_three'):
-			$preview_wrapperclass .= ' box-'.getDolGlobalString('LOGINPLUS_BOX_ALIGN');
+		$preview_wrapperclass .= ' box-'.getDolGlobalString('LOGINPLUS_BOX_ALIGN');
+		if(getDolGlobalInt('LOGINPLUS_SHOW_SECONDARYBOX')):
+			$preview_wrapperclass .= ' show-secondary';
 		endif;
 		$preview .= '<div class="'.$preview_wrapperclass.'">';
-		$preview .= '<div class="preview-wrapper">';
+		$preview .= '<div class="preview-wrapper '.(getDolGlobalInt('LOGINPLUS_BOX_WIDTH')?'w2':'').'">';
 
 		// LOGO
 		$urllogo = '';
@@ -159,39 +166,22 @@ class LoginPlus {
 		endif;
 
 		$boxside = '';
+		if(!$mask):
+			// BACKGROUND IMAGE
+			if(!empty(getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY'))):
+				$boxside .=  '<div class="preview-boximage" style="background-image: url(\''.DOL_URL_ROOT.'/viewimage.php?modulepart=medias&file='.urlencode('loginplus/'.getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY')).'\');" ></div>';
+			endif;
+			$boxside .= '<div class="preview-boxtxt">';
+			$boxside .= '<div class="preview-title">'.getDolGlobalString('LOGINPLUS_TXT_TITLE').'</div class="preview-title">';
+			$boxside .= '<div class="preview-content">'.getDolGlobalString('LOGINPLUS_TXT_CONTENT').'</div>';
+			$boxside .= '</div>';
+		endif;
+
 		$previewdivclass = '';
 		if($mask): $previewdivclass = 'mask'; endif;
-		switch ($templatekey):
-			case 'template_one':
-				$preview .= '<div class="prevdiv preview-boxside"></div>';
-				$preview .= '<div class="prevdiv preview-boxlogin '.($mask?'mask':'').'">'.$boxlogin.'</div>';
-			break;
-			case 'template_two':
 
-				//BOXSIDE
-				
-				if(!$mask):
-
-					// BACKGROUND IMAGE
-					if(!empty(getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY'))):
-						$boxside .=  '<div class="preview-boximage" style="background-image: url(\''.DOL_URL_ROOT.'/viewimage.php?modulepart=medias&file='.urlencode('loginplus/'.getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY')).'\');" ></div>';
-					endif;
-
-					$boxside .= '<div class="preview-boxtxt">';
-					$boxside .= '<div class="preview-title">'.getDolGlobalString('LOGINPLUS_TXT_TITLE').'</div class="preview-title">';
-					$boxside .= '<div class="preview-content">'.getDolGlobalString('LOGINPLUS_TXT_CONTENT').'</div>';
-					$boxside .= '</div>';
-
-				endif;
-				
-				$preview .= '<div class="prevdiv preview-boxside '.($mask?'mask':'').'">'.$boxside.'</div>';
-				$preview .= '<div class="prevdiv preview-boxlogin '.($mask?'mask':'').'">'.$boxlogin.'</div>';
-			break;
-			case 'template_three':
-				$preview .= '<div class="prevdiv preview-boxside"></div>';
-				$preview .= '<div class="prevdiv preview-boxlogin '.($mask?'mask':'').'">'.$boxlogin.'</div>';
-			break;
-		endswitch;
+			$preview .= '<div class="prevdiv preview-boxside '.($mask?'mask':'').'">'.$boxside.'</div>';
+			$preview .= '<div class="prevdiv preview-boxlogin '.(getDolGlobalInt('LOGINPLUS_SECONDARYBOX_SHADOW')?'with-shadow':'').' '.($mask?'mask':'').'">'.$boxlogin.'</div>';
 
 		$preview .= '</div>';
 		$preview .= '</div>';

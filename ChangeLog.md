@@ -1,9 +1,13 @@
 # LoginPlus
 
 [comment]: <> (TODO)
-[comment]: <> (Upload des fichiers + simple)
+[comment]: <> (Meilleure saisie texte + taille & alignement + substitutions)
+[comment]: <> (Masquer formulaire preview si LOGINPLUS_HIDE_ALLFORM = 1)
+[comment]: <> (Afficher bouton externe preview)
+[comment]: <> (Améliorer preview petits écran - smartphone)
 
 ***
+
 ### 2.0.0
 * NEW - Nouvelle page de personnalisation
 * REMOVE - Suppression des templates avec Copyright
@@ -12,6 +16,10 @@
 * MAJ - Nouvelles options de personnalisation
 * NEW - Logo Alternatif
 * MAJ - Pages admins améliorées
+* MAJ - Paramètres supplémentaires pour copier et supprimer le tpl passwordforgotten
+* NEW - Compatible OpenID Connect && Google OAuth
+* NEW - Personnalisation des boutons externes 
+* NEW - LOGINPLUS_HIDE_ALLFORM = 1 pour masquer complètement les champs du formulaires
 
 ### 1.5.4
 * FIX - Correction erreur log trigger 

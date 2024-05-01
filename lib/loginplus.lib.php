@@ -22,58 +22,8 @@
 /**
  * SETUP ADMIN MENU
  */
-function lp_prepareAdminMenu($db){
 
-    global $langs;
-    dol_include_once('./loginplus/class/loginmsg.class.php');
-
-    $adminmenu = array();
-    $loginmsgstatic = new loginMsg($db);
-
-    // SETUP
-    $adminmenu['setup'] = array(
-        'icon' => 'fas fa-palette',
-        'title' => $langs->trans('loginplus_CustomLoginPage'),
-        'description' => $langs->trans('loginplus_CustomLoginPageDesc'),
-        'toggleconst' => 'LOGINPLUS_ACTIVELOGINTPL',
-        'link' => dol_buildpath('loginplus/admin/setup.php',1),
-        'more_right' => false,
-    );
-
-    // MAINTENANCE
-    $adminmenu['maintenance'] = array(
-        'icon' => 'fas fa-exclamation-triangle',
-        'title' => $langs->trans('loginplus_option_maintenance'),
-        'description' => $langs->trans('loginplus_option_maintenance_desc'),
-        'toggleconst' => 'LOGINPLUS_ISMAINTENANCE',
-        'link' => dol_buildpath('loginplus/admin/maintenance.php',1),
-        'more_right' => false,
-    );
-
-    // MESSAGES
-    $adminmenu['messages'] = array(
-        'icon' => 'fas fa-comment-alt',
-        'title' => $langs->trans('loginplus_head_loginmsg'),
-        'description' => $langs->trans('loginplus_option_message_desc'),
-        'toggleconst' => '',
-        'link' => dol_buildpath('loginplus/admin/msgs.php',1),
-        'more_right' => $loginmsgstatic->count_all(),
-    );
-
-    // DOCUMENTATION
-    $adminmenu['doc'] = array(
-        'icon' => 'fas fa-book',
-        'title' => $langs->trans('loginplus_head_doc'),
-        'description' => $langs->trans('loginplus_head_doc_desc'),
-        'toggleconst' => '',
-        'link' => dol_buildpath('loginplus/admin/doc.php',1),
-        'more_right' => false,
-    );
-
-    return $adminmenu;
-}
-
-function lp_showAdminMenu($adminmenukey){
+function lp_showAdminMenu($adminmenukey, $user){
 
     global $db, $langs;
     dol_include_once('./loginplus/class/loginmsg.class.php');
@@ -88,7 +38,8 @@ function lp_showAdminMenu($adminmenukey){
         'description' => $langs->trans('loginplus_CustomLoginPageDesc'),
         'toggleconst' => 'LOGINPLUS_ACTIVELOGINTPL',
         'link' => dol_buildpath('loginplus/admin/setup.php',1),
-        'more_right' => false,
+        'more_content' => false,
+        'user_right' => $user->hasRight('loginplus','configurer'),
     );
 
     // MAINTENANCE
@@ -98,7 +49,8 @@ function lp_showAdminMenu($adminmenukey){
         'description' => $langs->trans('loginplus_option_maintenance_desc'),
         'toggleconst' => 'LOGINPLUS_ISMAINTENANCE',
         'link' => dol_buildpath('loginplus/admin/maintenance.php',1),
-        'more_right' => false,
+        'more_content' => false,
+        'user_right' => $user->hasRight('loginplus','maintenancemode'),
     );
 
     // MESSAGES
@@ -108,35 +60,34 @@ function lp_showAdminMenu($adminmenukey){
         'description' => $langs->trans('loginplus_AdminMsgAddDesc'),
         'toggleconst' => '',
         'link' => dol_buildpath('loginplus/admin/msgs.php',1),
-        'more_right' => $loginmsgstatic->count_all(),
+        'more_content' => $loginmsgstatic->count_all(),
+        'user_right' => $user->hasRight('loginplus','gerer_messages'),
     );
-
-    // DOCUMENTATION
-    /*$adminmenu['doc'] = array(
-        'icon' => 'fas fa-book',
-        'title' => $langs->trans('loginplus_head_doc'),
-        'description' => $langs->trans('loginplus_head_doc_desc'),
-        'toggleconst' => '',
-        'link' => dol_buildpath('loginplus/admin/doc.php',1),
-        'more_right' => false,
-    );*/
 
     $html = '';
     foreach ($adminmenu as $menukey => $menudet):
-        $html .= '<div class="doladmin-card '.(($adminmenukey == $menukey)?'card-active':'').'">';
-            $html .= '<div class="card-flex">';
-                $html .= '<div class="doladmin-card-icon '.(($menukey == 'maintenance' && getDolGlobalInt('LOGINPLUS_ISMAINTENANCE'))?'icolor-danger':'').'"><i class="'.$menudet['icon'].'"></i></div>';
-                $html .= '<div class="doladmin-card-content">';
-                    $html .= '<div class="doladmin-card-title"><a href="'.$menudet['link'].'">'.$menudet['title'].'</a></div>';
-                    $html .= '<div class="doladmin-card-desc">'.$menudet['description'].'</div>';
+        if($menudet['user_right']):
+            $html .= '<div class="doladmin-card '.(($adminmenukey == $menukey)?'card-active':'').'">';
+                $html .= '<div class="card-flex">';
+                    $html .= '<div class="doladmin-card-icon '.(($menukey == 'maintenance' && getDolGlobalInt('LOGINPLUS_ISMAINTENANCE'))?'icolor-danger':'').'"><i class="'.$menudet['icon'].'"></i></div>';
+                    $html .= '<div class="doladmin-card-content">';
+                        $html .= '<div class="doladmin-card-title">';
+                        if($menudet['user_right']):
+                            $html .= '<a href="'.$menudet['link'].'">'.$menudet['title'].'</a>';
+                        else:
+                            $html .= $menudet['title'];
+                        endif;
+                        $html .= '</div>';
+                        $html .= '<div class="doladmin-card-desc">'.$menudet['description'].'</div>';
+                    $html .= '</div>';
+                    if(!empty($menudet['toggleconst']) && $menudet['user_right']):
+                        $html .= '<div class="doladmin-card-right">'.ajax_constantonoff($menudet['toggleconst'],array(),null,0,0,1).'</div>';
+                    elseif(!empty($menudet['more_content']) && $menudet['user_right']):
+                        $html .= '<div class="doladmin-card-right"><span style="font-size: 1.15em;font-weight: 700;min-width:34px;letter-spacing: -1px;color: #ccc;text-align: center;display: inline-block;">'.$menudet['more_content'].'</span></div>';
+                    endif;
                 $html .= '</div>';
-                if(!empty($menudet['toggleconst'])):
-                    $html .= '<div class="doladmin-card-right">'.ajax_constantonoff($menudet['toggleconst'],array(),null,0,0,1).'</div>';
-                elseif(!empty($menudet['more_right'])):
-                    $html .= '<div class="doladmin-card-right"><span style="font-size: 1.15em;font-weight: 700;min-width:34px;letter-spacing: -1px;color: #ccc;text-align: center;display: inline-block;">'.$menudet['more_right'].'</span></div>';
-                endif;
             $html .= '</div>';
-        $html .= '</div>';
+        endif;
     endforeach;
 
     return $html;

@@ -35,8 +35,10 @@ dol_include_once('./loginplus/lib/loginplus.lib.php');
 
 // Protection if external user
 if ($user->socid > 0): accessforbidden(); endif;
-if (!$user->rights->loginplus->configurer): accessforbidden(); endif;
+if (!$user->hasRight('loginplus','maintenancemode')): accessforbidden(); endif;
 
+$langs->load('admin');
+$langs->load('loginplus@loginplus');
 
 /*******************************************************************
 * VARIABLES
@@ -93,7 +95,7 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
 
             <!-- COL FOR MENU -->
             <div class="doladmin-col-menu">
-                <?php echo lp_showAdminMenu('maintenance'); ?>
+                <?php echo lp_showAdminMenu('maintenance', $user); ?>
             </div>
 
             <!-- COL FOR PARAMS -->

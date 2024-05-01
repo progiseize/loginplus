@@ -63,8 +63,8 @@ class modLoginPlus extends DolibarrModules
         $this->name = preg_replace('/^mod/i','',get_class($this));
         //$this->name = 'Saisie Rapide Factures Fournisseurs';
         // Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
-        $this->description = "Personnalisation de la page d'authentification et ajout de messages d'accueil";
-        $this->descriptionlong = "Modification de l'apparence de la page d'authentification de Dolibarr. Nombreux paramètres et thèmes prédéfinis disponibles. Compatible TwoFactor & Captcha. Messages d'accueil.";
+        $this->description = "Personnalisation de la page d'authentification, mode maintenance et messages d'accueil.";
+        $this->descriptionlong = "Modifiez l'apparence de la page d'authentification de Dolibarr et ajoutez des messages aux utilisateurs lors de leur connexion. Mode maintenance: N'autorisez que les connexions administrateurs. De nombreux paramètres sont disponibles. Compatible TwoFactor / Captcha.";
         $this->editor_name = 'Progiseize';
         $this->editor_url = 'https://progiseize.fr';
         
@@ -112,21 +112,21 @@ class modLoginPlus extends DolibarrModules
             'models' => 0,
             'css' => array(),
             'js' => array(),
-            'hooks' => array('login'),
+            'hooks' => array('login','index'),
             'dir' => array(),
             'workflow' => array(),
         );
 
         // Data directories to create when module is enabled.
         // Example: this->dirs = array("/mymodule/temp");
-        $this->dirs = array('/ecm/loginplus');
+        $this->dirs = array();
 
         // Config pages. Put here list of php page, stored into mymodule/admin directory, to use to setup module.
         $this->config_page_url = "setup.php@loginplus";
 
         // Dependencies
         $this->hidden = false;          // A condition to hide module
-        $this->depends = array('modECM');       // List of module class names as string that must be enabled if this module is enabled
+        $this->depends = array();       // List of module class names as string that must be enabled if this module is enabled
         $this->requiredby = array();    // List of module ids to disable if this one is disabled
         $this->conflictwith = array();  // List of module class names as string this module is in conflict with
         $this->phpmin = array(5,0);                 // Minimum version of PHP required by module
@@ -166,6 +166,10 @@ class modLoginPlus extends DolibarrModules
             26 => array('LOGINPLUS_TXT_TITLECOLOR','chaine','#ffffff','',1),
             27 => array('LOGINPLUS_TXT_CONTENT','chaine','','',1),
             28 => array('LOGINPLUS_TXT_CONTENTCOLOR','chaine','#bababa','',1),
+            29 => array('LOGINPLUS_BOX_EXTERNALBACKGROUND','chaine','#3c4664','',1),
+            30 => array('LOGINPLUS_BOX_EXTERNALBACKGROUNDHOVER','chaine','#007b8c','',1),
+            31 => array('LOGINPLUS_BOX_EXTERNALCOLOR','chaine','#ffffff','',1),
+            32 => array('LOGINPLUS_SHOW_SECONDARYBOX','chaine','0','',1),
         );
 
         // Array to add new pages in new tabs
@@ -271,35 +275,101 @@ class modLoginPlus extends DolibarrModules
 
         /*--------------- */
         
-        $this->menu[$r]=array(
+        /*$this->menu[$r]=array(
             'fk_menu'=>'fk_mainmenu=tools',
             'type'=>'left',
             'titre'=>'LoginPlus',
-            'mainmenu'=>'',
-            'leftmenu'=>'',
+            'mainmenu'=>'tools',
+            'leftmenu'=>'loginplus',
             'url'=>'/loginplus/admin/setup.php',
             'langs'=>'loginplus@loginplus',
             'position'=> 999,
             'enabled'=> '$conf->loginplus->enabled',
             'perms'=> '$user->rights->loginplus->configurer',
             'target'=>'',
-            'user'=> 2,
+            'user'=> 0,
             'prefix' => '<span class="fas fa-user-lock" style="color: #6c6aa8;margin-right:3px;"></span> '
         );
         $r++;
 
         $this->menu[$r]=array( 
-            'fk_menu'=>'fk_mainmenu=progiseize',
+            'fk_menu'=>'fk_mainmenu=tools,fk_leftmenu=loginplus',
             'type'=>'left',
             'titre'=> $this->name,
-            'mainmenu'=>'progiseize',
-            'leftmenu'=> $this->rights_class,
-            'url'=>'', 'langs'=>'loginplus@loginplus', 'position'=> $this->module_position, 'enabled'=>'1', 'perms'=>'1','target'=>'', 'user'=>2,
+            'mainmenu'=>'',
+            'leftmenu'=> '',
+            'url'=>'', 'langs'=>'loginplus@loginplus',
+            'position'=> $this->module_position,
+            'enabled'=>'1',
+            'perms'=>'1',
+            'target'=>'',
+            'user'=>0,
+            'prefix' => ''
+        );
+        $r++;*/
+
+
+        $this->menu[$r++]=array(
+            'fk_menu'=>'fk_mainmenu=tools',
+            'type'=>'left',
+            'titre'=>'LoginPlus',
+            'mainmenu'=>'tools',
+            'leftmenu'=>'loginplus',
+            'url'=>'',
+            'langs'=>'loginplus@loginplus',
+            'position'=> 100 + intval($this->module_position) + $r,
+            'enabled'=> '($user->rights->loginplus->configurer OR $user->rights->loginplus->maintenancemode OR $user->rights->loginplus->gerer_messages)',
+            'perms'=> '($user->rights->loginplus->configurer OR $user->rights->loginplus->maintenancemode OR $user->rights->loginplus->gerer_messages)',
+            'target'=>'',
+            'user'=>0,
             'prefix' => '<span class="fas fa-user-lock" style="color: #6c6aa8;margin-right:3px;"></span> '
         );
-        $r++;
+        $this->menu[$r++]=array(
+            'fk_menu'=>'fk_mainmenu=tools,fk_leftmenu=loginplus',
+            'type'=>'left',
+            'titre'=>'loginplus_head_customlogin',
+            'mainmenu'=>'',
+            'leftmenu'=>'',
+            'url'=>'loginplus/admin/setup.php',
+            'langs'=>'loginplus@loginplus',
+            'position'=> 100 + intval($this->module_position) + $r,
+            'enabled'=> '$user->rights->loginplus->configurer',
+            'perms'=> '$user->rights->loginplus->configurer',
+            'target'=>'',
+            'user'=>0,
+        );
+        $this->menu[$r++]=array(
+            'fk_menu'=>'fk_mainmenu=tools,fk_leftmenu=loginplus',
+            'type'=>'left',
+            'titre'=>'loginplus_option_maintenance',
+            'mainmenu'=>'',
+            'leftmenu'=>'',
+            'url'=>'loginplus/admin/maintenance.php',
+            'langs'=>'loginplus@loginplus',
+            'position'=> 100 + intval($this->module_position) + $r,
+            'enabled'=> '$user->rights->loginplus->maintenancemode',
+            'perms'=> '$user->rights->loginplus->maintenancemode',
+            'target'=>'',
+            'user'=>0,
+        );
+        $this->menu[$r++]=array(
+            'fk_menu'=>'fk_mainmenu=tools,fk_leftmenu=loginplus',
+            'type'=>'left',
+            'titre'=>'loginplus_head_loginmsg',
+            'mainmenu'=>'',
+            'leftmenu'=>'',
+            'url'=>'loginplus/admin/msgs.php',
+            'langs'=>'loginplus@loginplus',
+            'position'=> 100 + intval($this->module_position) + $r,
+            'enabled'=> '$user->rights->loginplus->gerer_messages',
+            'perms'=> '$user->rights->loginplus->gerer_messages',
+            'target'=>'',
+            'user'=>0,
+        );
 
-        $this->menu[$r]=array(
+
+
+        /*$this->menu[$r]=array(
             'fk_menu'=>'fk_mainmenu=progiseize,fk_leftmenu='.$this->rights_class,
             'type'=>'left',
             'titre'=>'Modifier page Login',
@@ -329,7 +399,7 @@ class modLoginPlus extends DolibarrModules
             'target'=>'',
             'user'=>2
         );
-        $r++;
+        $r++;*/
         
         // Example to declare a Left Menu entry into an existing Top menu entry:
         /*--------------- */

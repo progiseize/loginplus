@@ -31,7 +31,10 @@ dol_include_once('./loginplus/lib/loginplus.lib.php');
 
 // Protection if external user
 if ($user->socid > 0): accessforbidden(); endif;
-if (!$user->rights->loginplus->gerer_messages): accessforbidden(); endif;
+if (!$user->hasRight('loginplus','gerer_messages')): accessforbidden(); endif;
+
+$langs->load('admin');
+$langs->load('loginplus@loginplus');
 
 /*******************************************************************
 * VARIABLES
@@ -220,7 +223,7 @@ endif;
 
             <!-- COL FOR MENU -->
             <div class="doladmin-col-menu">
-                <?php echo lp_showAdminMenu('messages'); ?>
+                <?php echo lp_showAdminMenu('messages', $user); ?>
             </div>
 
             <!-- COL FOR PARAMS -->
