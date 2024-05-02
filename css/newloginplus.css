@@ -20,8 +20,7 @@
 
 body#loginplus {font-family: 'Roboto', sans-serif; background: var(--loginplus-bg-color);}
 
-body#loginplus .loginplus-maintenance-msg {position: fixed;top: 0;left: 0;padding: 8px;font-weight: 500;background: #ffa328;width: 100%;z-index: 4;color: rgba(0, 0, 0, 0.6);text-align: center;box-sizing: border-box;}
-body#loginplus.template_two .loginplus-maintenance-msg {width: 75%;}
+body#loginplus .loginplus-maintenance-msg {position: fixed;top: 12px;left:50%;padding: 12px;font-weight: 500;background: #ffa328;width: auto;z-index: 4;color: rgba(0, 0, 0, 0.6);text-align: center;box-sizing: border-box;border-radius: 4px;transform: translateX(-50%);}
 
 /**/
 body#loginplus .loginplus-background {background-position: center;background-size:cover;position: absolute;top: 0;left: 0;right: 0;bottom: 0;opacity: var(--loginplus-bg-imageopacity);z-index: 1;}

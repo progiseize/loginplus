@@ -64,7 +64,7 @@ class modLoginPlus extends DolibarrModules
         //$this->name = 'Saisie Rapide Factures Fournisseurs';
         // Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
         $this->description = "Personnalisation de la page d'authentification, mode maintenance et messages d'accueil.";
-        $this->descriptionlong = "Modifiez l'apparence de la page d'authentification de Dolibarr et ajoutez des messages aux utilisateurs lors de leur connexion. Mode maintenance: N'autorisez que les connexions administrateurs. De nombreux paramètres sont disponibles. Compatible TwoFactor / Captcha.";
+        $this->descriptionlong = "LoginPlus pour Dolibarr vous permet de personnaliser la page de connexion et d'afficher des messages personnalisés lors de la connexion des utilisateurs. Il offre également un mode maintenance afin de restreindre l'accès aux non administrateurs pendant vos mises à jour.<br><b>Compatible Captcha, Two-Factor, OpenID Connect & Google OAuth.</b>";
         $this->editor_name = 'Progiseize';
         $this->editor_url = 'https://progiseize.fr';
         

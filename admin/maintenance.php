@@ -61,14 +61,12 @@ $loginplus_static = new LoginPlus($db);
 //
 $error = 0;
 switch($action):
-
     case 'set_maintenanceoptions':
         if(!dolibarr_set_const($db, 'LOGINPLUS_MAINTENANCETEXT',GETPOST('LOGINPLUS_MAINTENANCETEXT')?:'','chaine',0,'',$conf->entity)): $error++; endif;
         if(!$error):$db->commit(); setEventMessages($langs->trans('loginplus_optionp_success'), null, 'mesgs');
         else: $db->rollback(); setEventMessages($langs->trans('loginplus_optionp_error'), null, 'errors');
         endif;
     break;
-
 endswitch;
 
 // $form=new Form($db);
@@ -87,7 +85,7 @@ llxHeader('',$langs->transnoentities('loginplus_optionp_title').' :: '.$langs->t
     <div id="doladmin-content">
         <?php 
         $linkback = '<a href="'.DOL_URL_ROOT.'/admin/modules.php?restore_lastsearch_values=1">'.$langs->trans("BackToModuleList").'</a>';
-        print load_fiche_titre($langs->trans("msgs"), $linkback, 'title_setup'); ?>
+        print load_fiche_titre($langs->trans("loginplus_option_maintenance"), $linkback, 'title_setup'); ?>
 
         <?php //$head = loginplusAdminPrepareHead(); dol_fiche_head($head, 'setup','loginplus', 1); ?>
 
