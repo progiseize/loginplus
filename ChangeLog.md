@@ -6,6 +6,10 @@
 [comment]: <> (Afficher bouton externe preview)
 [comment]: <> (Améliorer preview petits écran - smartphone)
 
+### 2.0.1
+* NEW - Soumission automatique TwoFactor à la saisie
+* REMOVE - Fichiers js obsolètes
+
 ### 2.0.0
 * MAJ - Upload plus simple des images (dossier medias)
 * MAJ - Nouvelles options de personnalisation

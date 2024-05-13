@@ -402,6 +402,17 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 					if (element) {element.focus();}
 				},300);	
 			});
+
+			$(document).ready(function(){
+				$(document).on('input','#totp',function(e){
+					var lptotpcode = $(this).val();
+					if(lptotpcode.length == 6){
+						setTimeout(function(e){
+							$('#totp-submit-button').click();
+						},300);
+					}
+				});
+			});
 		</script>
 	</body>	
 	</html>
