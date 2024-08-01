@@ -21,11 +21,17 @@ class LoginPlus {
 
 	public $templates =  array(
         'template_one' => array(
-        	'position' => 1, 'imgurl' => '../img/template/tpl_colsimple.png','previewclass' => 'template_one'),
+        	'position' => 1,
+        	'imgurl' => '../img/template/tpl_colsimple.png',
+        	'previewclass' => 'template_one',
+        	'langkey' => 'loginplus_AdminStructureModel1'
+        ),
         'template_two' => array(
-        	'position' => 2, 'imgurl' => '../img/template/tpl_coldouble.png','previewclass' => 'template_two'),
-        'template_three' => array(
-        	'position' => 3, 'imgurl' => '../img/template/tpl_sidebar.png','previewclass' => 'template_three'),
+        	'position' => 3,
+        	'imgurl' => '../img/template/tpl_sidebar.png',
+        	'previewclass' => 'template_two',
+        	'langkey' => 'loginplus_AdminStructureModel3'
+        ),
     );
 
 	public $shapes = array(
@@ -43,8 +49,8 @@ class LoginPlus {
         'semicorner_bl' => array('type' => 'clip','category' => 'corners'),
 
         // ASC - DESC
-        'diagonal_desc' => array('type' => 'clip','category' => 'diagside'),
         'diagonal_asc' => array('type' => 'clip','category' => 'diagside'),
+        'diagonal_desc' => array('type' => 'clip','category' => 'diagside'),
 
         // WAVES - NEW
         'wave-1' => array('type' => 'svg','category' => 'waves'),
@@ -105,21 +111,26 @@ class LoginPlus {
 		/*******************************************/
 		// BOXES
 		$preview_wrapperclass = 'preview-global-wrapper '.$templatekey;
-		if($templatekey == 'template_three'):
-			$preview_wrapperclass .= ' box-'.getDolGlobalString('LOGINPLUS_BOX_ALIGN');
+		$preview_wrapperclass .= ' box-'.getDolGlobalString('LOGINPLUS_BOX_ALIGN');
+		if(getDolGlobalInt('LOGINPLUS_SHOW_SECONDARYBOX')):
+			$preview_wrapperclass .= ' show-secondary';
 		endif;
 		$preview .= '<div class="'.$preview_wrapperclass.'">';
-		$preview .= '<div class="preview-wrapper">';
+		$preview .= '<div class="preview-wrapper '.(getDolGlobalInt('LOGINPLUS_BOX_WIDTH')?'w2':'').'">';
 
 		// LOGO
 		$urllogo = '';
-		if (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo)):
-			$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/'.$mysoc->logo);
-		elseif (!empty($mysoc->logo_squarred_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_squarred_small)):
-       		$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/thumbs/'.$mysoc->logo_squarred_small);
-     	elseif (is_readable(DOL_DOCUMENT_ROOT.'/theme/dolibarr_logo.svg')):
-     		$urllogo = DOL_URL_ROOT.'/theme/dolibarr_logo.svg';
-     	endif;
+		if(!empty(getDolGlobalString('LOGINPLUS_LOGOALT'))):
+			$urllogo = DOL_URL_ROOT.'/viewimage.php?modulepart=medias&file='.urlencode('loginplus/'.getDolGlobalString('LOGINPLUS_LOGOALT'));
+		else:
+			if (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo)):
+				$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/'.$mysoc->logo);
+			elseif (!empty($mysoc->logo_squarred_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_squarred_small)):
+	       		$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/thumbs/'.$mysoc->logo_squarred_small);
+	     	elseif (is_readable(DOL_DOCUMENT_ROOT.'/theme/dolibarr_logo.svg')):
+	     		$urllogo = DOL_URL_ROOT.'/theme/dolibarr_logo.svg';
+	     	endif;
+	    endif;
 
 		//BOXLOGIN
 		$boxlogin = '';
@@ -132,11 +143,17 @@ class LoginPlus {
 			$boxlogin .= '<form class="preview-fields '.(getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?'loginplus-viewlabel':'').'" method="post" action="" autocomplete="off">';
 				$boxlogin .= '<input autocomplete="false" name="hidden" type="text" style="display:none;">';
 				$boxlogin .= '<div class="preview-fieldrow">';
-					$boxlogin .= '<label for="previewfield-a"><i class="fa fa-user"></i>'.(getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?' Login':'').'</label>';
+					$boxlogin .= '<label for="previewfield-a">';
+						$boxlogin .= '<i class="fa fa-user"></i> ';
+						$boxlogin .= '<span class="label-txt">Login</span>';
+					$boxlogin .= '</label>';
 					$boxlogin .= '<input id="previewfield-a" type="text" name="previewlogin" value="Userlogin" autocomplete="off">';
 				$boxlogin .= '</div>';
 				$boxlogin .= '<div class="preview-fieldrow">';
-					$boxlogin .= '<label for="previewfield-b"><i class="fa fa-key"></i>'.(getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?' Password':'').'</label>';
+					$boxlogin .= '<label for="previewfield-b">';
+						$boxlogin .= '<i class="fa fa-key"></i> ';
+						$boxlogin .= '<span class="label-txt">Password</span>';
+					$boxlogin .= '</label>';
 					$boxlogin .= '<input id="previewfield-b" type="password" name="previewpassword" value="userpass" autocomplete="new-password">';
 				$boxlogin .= '</div>';
 			$boxlogin .= '</form>';
@@ -148,37 +165,23 @@ class LoginPlus {
 			$boxlogin .= '<div class="preview-links"><a href="#">Mot de passe oublié</a></div>';
 		endif;
 
+		$boxside = '';
+		if(!$mask):
+			// BACKGROUND IMAGE
+			if(!empty(getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY'))):
+				$boxside .=  '<div class="preview-boximage" style="background-image: url(\''.DOL_URL_ROOT.'/viewimage.php?modulepart=medias&file='.urlencode('loginplus/'.getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY')).'\');" ></div>';
+			endif;
+			$boxside .= '<div class="preview-boxtxt">';
+			$boxside .= '<div class="preview-title">'.getDolGlobalString('LOGINPLUS_TXT_TITLE').'</div class="preview-title">';
+			$boxside .= '<div class="preview-content">'.getDolGlobalString('LOGINPLUS_TXT_CONTENT').'</div>';
+			$boxside .= '</div>';
+		endif;
+
 		$previewdivclass = '';
 		if($mask): $previewdivclass = 'mask'; endif;
-		switch ($templatekey):
-			case 'template_one':
-				$preview .= '<div class="prevdiv preview-boxlogin '.($mask?'mask':'').'">'.$boxlogin.'</div>';
-			break;
-			case 'template_two':
 
-				//BOXSIDE
-				$boxside = '';
-				if(!$mask):
-
-					// BACKGROUND IMAGE
-					if(!empty(getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY'))):
-						$boxside .=  '<div class="preview-boximage" style="background-image: url(\''.DOL_URL_ROOT.'/viewimage.php?modulepart=medias&file='.urlencode('loginplus/'.getDolGlobalString('LOGINPLUS_SIDEBG_IMAGEKEY')).'\');" ></div>';
-					endif;
-
-					$boxside .= '<div class="preview-boxtxt">';
-					$boxside .= '<div class="preview-title">'.getDolGlobalString('LOGINPLUS_TXT_TITLE').'</div class="preview-title">';
-					$boxside .= '<div class="preview-content">'.getDolGlobalString('LOGINPLUS_TXT_CONTENT').'</div>';
-					$boxside .= '</div>';
-
-				endif;
-				
-				$preview .= '<div class="prevdiv preview-boxside '.($mask?'mask':'').'">'.$boxside.'</div>';
-				$preview .= '<div class="prevdiv preview-boxlogin '.($mask?'mask':'').'">'.$boxlogin.'</div>';
-			break;
-			case 'template_three':
-				$preview .= '<div class="prevdiv preview-boxlogin '.($mask?'mask':'').'">'.$boxlogin.'</div>';
-			break;
-		endswitch;
+			$preview .= '<div class="prevdiv preview-boxside '.($mask?'mask':'').'">'.$boxside.'</div>';
+			$preview .= '<div class="prevdiv preview-boxlogin '.(getDolGlobalInt('LOGINPLUS_SECONDARYBOX_SHADOW')?'with-shadow':'').' '.($mask?'mask':'').'">'.$boxlogin.'</div>';
 
 		$preview .= '</div>';
 		$preview .= '</div>';

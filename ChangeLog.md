@@ -1,15 +1,27 @@
-# LoginPlus
+## LoginPlus
 
 [comment]: <> (TODO)
-[comment]: <> (Upload des fichiers + simple)
+[comment]: <> (Meilleure saisie texte + taille & alignement + substitutions)
+[comment]: <> (Masquer formulaire preview si LOGINPLUS_HIDE_ALLFORM = 1)
+[comment]: <> (Afficher bouton externe preview)
+[comment]: <> (Améliorer preview petits écran - smartphone)
 
-***
+### 2.0.1
+* NEW - Soumission automatique TwoFactor à la saisie
+* REMOVE - Fichiers js obsolètes
+
 ### 2.0.0
-* NEW - Nouvelle page de personnalisation
-* REMOVE - Suppression des templates avec Copyright
 * MAJ - Upload plus simple des images (dossier medias)
 * MAJ - Nouvelles options de personnalisation
-
+* MAJ - Pages admins améliorées
+* MAJ - Paramètres supplémentaires pour copier et supprimer le tpl passwordforgotten
+* NEW - Nouvelle page de personnalisation - Preview
+* NEW - Logo Alternatif
+* NEW - Compatible OpenID Connect && Google OAuth
+* NEW - Personnalisation des boutons externes 
+* NEW - LOGINPLUS_HIDE_ALLFORM = 1 pour masquer complètement les champs du formulaires
+* REMOVE - Suppression des templates avec Copyright
+* REMOVE - Onglet Documentation - obsolète
 
 ### 1.5.4
 * FIX - Correction erreur log trigger 

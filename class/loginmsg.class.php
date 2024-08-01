@@ -44,9 +44,33 @@ class LoginMsg {
 	public function __construct($db){$this->db = $db;}
 
 	/*****************************************************************/
+	// COMPTER LES MESSAGES (TOTAL)
+	/*****************************************************************/
+	public function count_all(){
+
+		global $conf;
+
+		$list_msgs = array();
+
+		$sql = "SELECT count(rowid) as nbrow FROM ".MAIN_DB_PREFIX.$this->table_element;
+		$sql .= " WHERE entity = '".$conf->entity."'";
+		$result = $this->db->query($sql);
+
+		if($result):
+			$obj = $this->db->fetch_object($result);
+			return $obj->nbrow;
+		else: return -1;
+		endif;
+
+		return $list_msgs;
+	}
+
+	/*****************************************************************/
 	// RECUPERER LA LISTE DES GROUPES USERS
 	/*****************************************************************/
 	public function get_usersGroups(){
+
+		global $conf;
 
 		$groups = array();
 
@@ -96,7 +120,6 @@ class LoginMsg {
 
 			return $this->rowid;
 		endif;
-
 	}
 
 	/*****************************************************************/
@@ -337,6 +360,5 @@ class LoginMsg {
 		else: 
 			return 0; 
 		endif;
-
 	}
 }

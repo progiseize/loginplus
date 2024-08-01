@@ -23,12 +23,11 @@ dol_include_once('./loginplus/class/loginmsg.class.php');
 
 class ActionsLoginPlus
 { 
-	
+
 	function printLeftBlock($parameters, &$object, &$action, $hookmanager){
 		global $db, $langs, $user, $conf, $_GET;
 		
 		if(isset($_GET['action']) && $_GET['action'] == 'setReadLoginMsg'):
-
 			$loginmsg = new LoginMsg($db);
 			$reads_id = explode(',', $_GET['msgsids']);
 
@@ -37,7 +36,6 @@ class ActionsLoginPlus
 					$loginmsg->setRead($readid,$user->id);
 				endforeach;
 			endif;
-
 		endif;
 
 		// PAGE APRES LOGIN
@@ -68,10 +66,10 @@ class ActionsLoginPlus
 						$author_name = $author_name.' (Modifié par: '. $msg_user->getFullName($langs, 0, -1).')';
 					endif;
 
-					$view_form.= '<div class="loginplus-msg">';
-					$view_form.= '<div class="loginplus-msglabel">'.$msg->label.'</div>';
-					$view_form.= '<div class="loginplus-msgcontent">'.$msg->message.'</div>';
-					$view_form.= '<div class="loginplus-msgauthor">'.$author_name.'</div>';
+					$view_form.= '<div style="margin:8px 0">';
+					$view_form.= '<div style="font-weight: 700;">'.$msg->label.'</div>';
+					$view_form.= '<div style="">'.$msg->message.'</div>';
+					$view_form.= '<div style="font-size: 0.8em;font-style: italic;color: #666;">'.$author_name.'</div>';
 					$view_form.= '</div>';
 				endforeach;		
 				

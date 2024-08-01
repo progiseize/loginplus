@@ -28,6 +28,15 @@ if (empty($conf) || !is_object($conf)) { print "Error, template page can't be ca
 
 if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 
+	$moreparam = "";
+
+	// DDOS protection
+	$size = (empty($_SERVER['CONTENT_LENGTH']) ? 0 : (int) $_SERVER['CONTENT_LENGTH']);
+	if ($size > 10000) {
+		$langs->loadLangs(array("errors", "install"));
+		httponly_accessforbidden('<center>'.$langs->trans("ErrorRequestTooLarge").'.<br><a href="'.DOL_URL_ROOT.'">'.$langs->trans("ClickHereToGoToApp").'</a></center>', 413, 1);
+	}
+
 	//
 	require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 	dol_include_once('./loginplus/class/loginplus.class.php');
@@ -51,9 +60,19 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 	// If we force to use jmobile, then we reenable javascript
 	if (!empty($conf->dol_use_jmobile)) $conf->use_javascript_ajax = 1;
 
-	$php_self = dol_escape_htmltag($_SERVER['PHP_SELF']);
+	$php_self = empty($php_self) ? dol_escape_htmltag($_SERVER['PHP_SELF']) : $php_self;
 	$php_self .= dol_escape_htmltag($_SERVER["QUERY_STRING"]) ? '?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]) : '';
-	if (!preg_match('/mainmenu=/', $php_self)) $php_self .= (preg_match('/\?/', $php_self) ? '&' : '?').'mainmenu=home';
+	if (!preg_match('/mainmenu=/', $php_self)) {
+		$php_self .= (preg_match('/\?/', $php_self) ? '&' : '?').'mainmenu=home';
+	}
+	if (preg_match('/'.preg_quote('core/modules/oauth', '/').'/', $php_self)) {
+		$php_self = DOL_URL_ROOT.'/index.php?mainmenu=home';
+	}
+	$php_self = preg_replace('/(\?|&amp;|&)action=[^&]+/', '\1', $php_self);
+	$php_self = preg_replace('/(\?|&amp;|&)username=[^&]*/', '\1', $php_self);
+	$php_self = preg_replace('/(\?|&amp;|&)entity=\d+/', '\1', $php_self);
+	$php_self = preg_replace('/(\?|&amp;|&)massaction=[^&]+/', '\1', $php_self);
+	$php_self = preg_replace('/(\?|&amp;|&)token=[^&]+/', '\1', $php_self);
 
 	// Javascript code on logon page only to detect user tz, dst_observed, dst_first, dst_second
 	$arrayofjs = array(
@@ -98,12 +117,18 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 	    --loginplus-txt-titlecolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_TXT_TITLECOLOR')); ?>;
 	    --loginplus-txt-contentcolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_TXT_CONTENTCOLOR')); ?>;
 	    --loginplus-image-opacity: <?php echo getDolGlobalInt('LOGINPLUS_IMAGE_OPACITY') / 100; ?>;
+		--loginplus-box-externalbackground: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_EXTERNALBACKGROUND')); ?>;
+		--loginplus-box-externalcolor: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_EXTERNALCOLOR')); ?>;   
+		--loginplus-box-externalbackgroundhover: #<?php echo str_replace('#', '', getDolGlobalString('LOGINPLUS_BOX_EXTERNALBACKGROUNDHOVER')); ?>;
 	}
-
 	</style>
 
 	<!-- BEGIN PHP CUSTOM TEMPLATE loginplus! LOGIN.TPL.PHP -->
-	<body id="loginplus" class="<?php echo getDolGlobalString('LOGINPLUS_TEMPLATE').' loginbox-align-'.getDolGlobalString('LOGINPLUS_BOX_ALIGN'); ?>">
+	<?php 
+	$bodyclass = getDolGlobalString('LOGINPLUS_TEMPLATE');
+	$bodyclass .= ' loginbox-align-'.getDolGlobalString('LOGINPLUS_BOX_ALIGN');
+	$bodyclass .= getDolGlobalInt('LOGINPLUS_SHOW_SECONDARYBOX')?' show-secondary':''; ?>
+	<body id="loginplus" class="<?php echo $bodyclass; ?>">
 
 		<?php if(getDolGlobalInt('LOGINPLUS_SHOW_DOLILINK')): ?>
 		<div class="loginplus-doliversion"><?php echo dol_escape_htmltag($title); ?></div>
@@ -139,9 +164,9 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 		<?php endif; ?>
 
 		<div class="loginplus-global-wrapper <?php echo 'box-'.getDolGlobalString('LOGINPLUS_BOX_ALIGN'); ?>">
-			<div class="loginplus-wrapper">
+			<div class="loginplus-wrapper <?php echo getDolGlobalInt('LOGINPLUS_BOX_WIDTH')?'w2':''; ?>">
 
-				<?php if(getDolGlobalString('LOGINPLUS_TEMPLATE') == 'template_two'): ?>
+				<?php if(getDolGlobalInt('LOGINPLUS_SHOW_SECONDARYBOX')): ?>
 					<div class="loginplus-box loginplus-boxside">
 						<?php 
 						// SIDE IMAGE
@@ -156,18 +181,22 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 					</div>
 				<?php endif; ?>
 
-				<div class="loginplus-box loginplus-boxlogin">
+				<div class="loginplus-box loginplus-boxlogin <?php echo (getDolGlobalInt('LOGINPLUS_SECONDARYBOX_SHADOW')?'with-shadow':''); ?>">
 
 					<?php 
 					// LOGO
 					$urllogo = '';
-					if (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo)):
-						$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/'.$mysoc->logo);
-					elseif (!empty($mysoc->logo_squarred_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_squarred_small)):
-			       		$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/thumbs/'.$mysoc->logo_squarred_small);
-			     	elseif (is_readable(DOL_DOCUMENT_ROOT.'/theme/dolibarr_logo.svg')):
-			     		$urllogo = DOL_URL_ROOT.'/theme/dolibarr_logo.svg';
-			     	endif; 
+					if(!empty(getDolGlobalString('LOGINPLUS_LOGOALT'))):
+						$urllogo = DOL_URL_ROOT.'/viewimage.php?modulepart=medias&file='.urlencode('loginplus/'.getDolGlobalString('LOGINPLUS_LOGOALT'));
+					else:
+						if (!empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo)):
+							$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/'.$mysoc->logo);
+						elseif (!empty($mysoc->logo_squarred_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_squarred_small)):
+				       		$urllogo = DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/thumbs/'.$mysoc->logo_squarred_small);
+				     	elseif (is_readable(DOL_DOCUMENT_ROOT.'/theme/dolibarr_logo.svg')):
+				     		$urllogo = DOL_URL_ROOT.'/theme/dolibarr_logo.svg';
+				     	endif; 
+				    endif;
 			     	if(!empty($urllogo)): 
 			     		echo '<div class="loginplus-boxlogin-logo"><img src="'.$urllogo.'"></div>';
 			     	endif; ?>
@@ -176,6 +205,7 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 						<input type="hidden" name="token" value="<?php echo newToken(); ?>" />
 						<input type="hidden" name="actionlogin" value="login">
 						<input type="hidden" name="loginfunction" value="loginfunction" />
+						<input type="hidden" name="backtopage" value="<?php echo GETPOST('backtopage'); ?>" />
 
 						<input type="hidden" name="tz" id="tz" value="" />
 						<input type="hidden" name="tz_string" id="tz_string" value="" />
@@ -192,62 +222,96 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 						<input type="hidden" name="dol_no_mouse_hover" id="dol_no_mouse_hover" value="<?php echo $dol_no_mouse_hover; ?>" />
 						<input type="hidden" name="dol_use_jmobile" id="dol_use_jmobile" value="<?php echo $dol_use_jmobile; ?>" />
 
-						<div class="loginplus-fields <?php echo (getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?'loginplus-viewlabel':''); ?>">
+						<?php if(!getDolGlobalInt('LOGINPLUS_HIDE_ALLFORM')): ?>
+							<div id="login_line1" class="loginplus-fields <?php echo (getDolGlobalInt('LOGINPLUS_TWOFACTOR_DARKTHEME')?'dark-theme ':''); echo (getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?'loginplus-viewlabel':''); ?>">
+								<div id="login_right">
+									<div class="loginplus-fieldrow tagtable">
+										<label for="username" class="paddingright">
+											<i class="fa fa-user"></i>
+											<?php echo (getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?' '.$langs->trans("Login"):''); ?>
+										</label>
+										<input type="text" id="username" name="username" placeholder="<?php echo $langs->trans("Login"); ?>" class="" value="<?php echo dol_escape_htmltag($login); ?>" tabindex="1" autofocus="autofocus" />
+									</div>
+									<div class="loginplus-fieldrow tagtable">
+										<label for="password">
+											<i class="fa fa-key"></i>
+											<?php echo (getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?' '.$langs->trans("Password"):''); ?>
+										</label>
+										<input id="password" placeholder="<?php echo $langs->trans("Password"); ?>" name="password" class="" type="password" value="<?php echo dol_escape_htmltag($password); ?>" tabindex="2" autocomplete="<?php echo empty(getDolGlobalInt('MAIN_LOGIN_ENABLE_PASSWORD_AUTOCOMPLETE')) ? 'off' : 'on'; ?>" />
+									</div>
 
-							<div class="loginplus-fieldrow">
-								<label for="username" class="paddingright">
-									<i class="fa fa-user"></i>
-									<?php echo (getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?' '.$langs->trans("Login"):''); ?>
-								</label>
-								<input type="text" id="username" name="username" placeholder="<?php echo $langs->trans("Login"); ?>" class="" value="<?php echo dol_escape_htmltag($login); ?>" tabindex="1" autofocus="autofocus" />
-							</div>
-							<div class="loginplus-fieldrow">
-								<label for="password">
-									<i class="fa fa-key"></i>
-									<?php echo (getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?' '.$langs->trans("Password"):''); ?>
-								</label>
-								<input id="password" placeholder="<?php echo $langs->trans("Password"); ?>" name="password" class="" type="password" value="<?php echo dol_escape_htmltag($password); ?>" tabindex="2" autocomplete="<?php echo empty(getDolGlobalInt('MAIN_LOGIN_ENABLE_PASSWORD_AUTOCOMPLETE')) ? 'off' : 'on'; ?>" />
-							</div>
+									<?php if ($captcha):
+										$php_self = preg_replace('/[&\?]time=(\d+)/', '', $php_self); // Remove param time
+										if (preg_match('/\?/', $php_self)): $php_self .= '&time='.dol_print_date(dol_now(), 'dayhourlog');
+										else: $php_self .= '?time='.dol_print_date(dol_now(), 'dayhourlog'); endif; ?>
 
-							<?php if ($captcha):
-								$php_self = preg_replace('/[&\?]time=(\d+)/', '', $php_self); // Remove param time
-								if (preg_match('/\?/', $php_self)): $php_self .= '&time='.dol_print_date(dol_now(), 'dayhourlog');
-								else: $php_self .= '?time='.dol_print_date(dol_now(), 'dayhourlog'); endif; ?>
+										<div class="loginplus-fieldrow row-captcha tagtable">
+											<label for="securitycode">
+												<i class="fa fa-unlock"></i>
+												<?php echo (getDolGlobalInt('LOGINPLUS_SHOW_FORMLABELS')?' '.$langs->trans("SecurityCode"):''); ?>
+											</label>
+											
+											<div class="loginplus-captcha">
+												<input id="securitycode" placeholder="<?php echo $langs->trans("SecurityCode"); ?>" class="" type="text" maxlength="5" name="code" tabindex="3" />											
+												<img class="inline-block valignmiddle" src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
+												<a class="inline-block valignmiddle captcha-link" href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a>
+											</div>
+										</div>									
+									<?php endif; ?>
 
-								<div class="field-row tagtable">
-									<label for="securitycode"><i class="fa fa-unlock"></i> <?php echo $langs->trans("SecurityCode"); ?></label>
-									<div class="lgp-flex">
-										<span class="span-icon-security inline-block">
-										<input id="securitycode" placeholder="<?php echo $langs->trans("SecurityCode"); ?>" class="flat input-icon-security width150" type="text" maxlength="5" name="code" tabindex="3" />
-									</span>
-									<span class="nowrap inline-block">
-										<img class="inline-block valignmiddle" src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
-										<a class="inline-block valignmiddle captcha-link" href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a>
-									</span>
-									</div>										
-								</div>									
-							<?php endif; ?>
-
-							<?php // MORELOGINCONTENT ?>
-							<?php if (!empty($morelogincontent)): 
-								if (is_array($morelogincontent)):
-									foreach ($morelogincontent as $format => $option):
-										if ($format == 'table'):
+									<?php // MORELOGINCONTENT ?>
+									<?php if (!empty($morelogincontent)): 
+										if (is_array($morelogincontent)):
+											foreach ($morelogincontent as $format => $option):
+												if ($format == 'table'):
+													echo '<!-- Option by hook -->';
+													echo $option;
+												endif;
+											endforeach;
+										else:
 											echo '<!-- Option by hook -->';
-											echo $option;
+											echo $morelogincontent;
 										endif;
-									endforeach;
-								else:
-									echo '<!-- Option by hook -->';
-									echo $morelogincontent;
-								endif;
-							endif; ?>
-						</div>
+									endif; ?>
+								</div>
+							</div>
+							<div id="login_line2" class="loginplus-submit">
+								<div class="field-row align-center">
+									<input type="submit" id="" name="" value="<?php echo $langs->trans('Connection'); ?>" tabindex="5">
+								</div>
+								<div class="field-row align-center center"></div>
+							</div>
+						<?php endif; ?>
 
-						<div class="loginplus-submit">
-							<input type="submit" name="" value="<?php echo $langs->trans('Connection'); ?>">
-						</div>
+						<?php // Auth by OpenID ?>
+						<?php if (isset($conf->file->main_authentication) && preg_match('/openid/', $conf->file->main_authentication)): 
 
+							$langs->load("users");
+							$url = $conf->global->MAIN_AUTHENTICATION_OPENID_URL; ?>
+							<?php if (!empty($url)): ?>
+								<div class="loginplus-externals">
+									<div class="loginbuttonexternal">
+										<a class="loginplus-external-button" href="<?php echo $url; ?>"><?php echo $langs->trans("LoginUsingOpenID"); ?></a>
+									</div>
+								</div>
+							<?php else: $langs->load("errors"); ?>									
+								<div class="loginplus-warning-msg"><?php echo $langs->trans("ErrorOpenIDSetupNotComplete", 'MAIN_AUTHENTICATION_OPENID_URL'); ?></div>
+							<?php endif; ?>
+						<?php endif; ?>
+
+						<?php // Auth by Google ?>
+						<?php if (isset($conf->file->main_authentication) && preg_match('/google/', $conf->file->main_authentication) && strpos($conf->browser->ua, 'DoliDroid') === false):
+
+							$langs->load("users"); ?>
+							<div class="loginplus-externals">
+								<div class="loginbuttonexternal">
+									<input type="hidden" name="beforeoauthloginredirect" id="beforeoauthloginredirect" value="">
+									<a class="loginplus-external-button" href="#" onclick="jQuery('#beforeoauthloginredirect').val(1); $(this).closest('form').submit(); ">
+										<?php echo img_picto('', 'google', 'class="pictofixedwidth"').' '.$langs->trans("LoginWith", "Google"); ?>
+									</a>
+								</div>
+							</div>
+						<?php endif; ?>
 					</form>
 
 					<?php // AFFICHAGE DES MESSAGES D'ERREURS
@@ -264,17 +328,20 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 						</div>
 					<?php endif; ?>
 
-					<div class="loginplus-helplinks">	
-						<?php if ($forgetpasslink): $url = DOL_URL_ROOT.'/user/passwordforgotten.php'.$moreparam;
-							if (!empty(getDolGlobalString('MAIN_PASSWORD_FORGOTLINK'))): $url = getDolGlobalString('MAIN_PASSWORD_FORGOTLINK'); endif;
-							echo '<a class="alogin" href="'.dol_escape_htmltag($url).'">'.$langs->trans('PasswordForgotten').'</a>';
-						endif; ?>
-						<?php if ($forgetpasslink && $helpcenterlink): echo ' - '; endif; ?>
-						<?php if ($helpcenterlink): $url = DOL_URL_ROOT.'/support/index.php'.$moreparam;
-							if (!empty(getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE'))) $url = getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE');
-							echo '<a class="alogin" href="'.dol_escape_htmltag($url).'" target="_blank">'.$langs->trans('NeedHelpCenter').'</a>';
-						endif; ?>
-					</div>
+					<?php if(!getDolGlobalInt('LOGINPLUS_HIDE_ALLFORM')): ?>
+						<?php if (isset($conf->file->main_authentication) && $conf->file->main_authentication == 'googleoauth'): $forgetpasslink = ''; endif; ?>
+						<div class="loginplus-helplinks">
+							<?php if ($forgetpasslink): $url = DOL_URL_ROOT.'/user/passwordforgotten.php'.$moreparam;
+								if (!empty(getDolGlobalString('MAIN_PASSWORD_FORGOTLINK'))): $url = getDolGlobalString('MAIN_PASSWORD_FORGOTLINK'); endif;
+								echo '<a class="alogin" href="'.dol_escape_htmltag($url).'">'.$langs->trans('PasswordForgotten').'</a>';
+							endif; ?>
+							<?php if ($forgetpasslink && $helpcenterlink): echo ' - '; endif; ?>
+							<?php if ($helpcenterlink): $url = DOL_URL_ROOT.'/support/index.php'.$moreparam;
+								if (!empty(getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE'))) $url = getDolGlobalString('MAIN_HELPCENTER_LINKTOUSE');
+								echo '<a class="alogin" href="'.dol_escape_htmltag($url).'" target="_blank">'.$langs->trans('NeedHelpCenter').'</a>';
+							endif; ?>
+						</div>
+					<?php endif; ?>
 
 					<?php //if (!empty(getDolGlobalString('MAIN_HTML_FOOTER'))): print getDolGlobalString('MAIN_HTML_FOOTER'); endif; ?>
 
@@ -292,7 +359,7 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 		endif; ?>
 
 		<?php // Google Analytics
-		if (!empty($conf->google->enabled) && !empty(getDolGlobalString('MAIN_GOOGLE_AN_ID'))):
+		if (isModEnabled('google') && !empty(getDolGlobalString('MAIN_GOOGLE_AN_ID'))):
 
 			$tmptagarray = explode(',', getDolGlobalString('MAIN_GOOGLE_AN_ID'));
 			foreach ($tmptagarray as $tmptag):
@@ -312,6 +379,43 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 			endforeach;
 		endif; ?>
 
+		<?php // Google Adsense (need Google module)
+		if (isModEnabled('google') && !empty($conf->global->MAIN_GOOGLE_AD_CLIENT) && !empty($conf->global->MAIN_GOOGLE_AD_SLOT)):
+			if (empty($conf->dol_use_jmobile)): ?>
+			<div class="center"><br>
+				<script><!--
+					google_ad_client = "<?php echo $conf->global->MAIN_GOOGLE_AD_CLIENT ?>";
+					google_ad_slot = "<?php echo $conf->global->MAIN_GOOGLE_AD_SLOT ?>";
+					google_ad_width = <?php echo $conf->global->MAIN_GOOGLE_AD_WIDTH ?>;
+					google_ad_height = <?php echo $conf->global->MAIN_GOOGLE_AD_HEIGHT ?>;
+					//-->
+				</script>
+				<script src="//pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+			</div> <?php
+			endif;
+		endif; ?>
+
+		<script type="text/javascript">
+			let lp_loginform = document.querySelector('#login');
+			let lp_formsubmit = lp_loginform.querySelector('input[type=submit]');
+			lp_formsubmit.addEventListener('click', function (a){
+				setTimeout(function(e){
+					const element = document.querySelector('#totp');
+					if (element) {element.focus();}
+				},300);	
+			});
+
+			$(document).ready(function(){
+				$(document).on('input','#totp',function(e){
+					var lptotpcode = $(this).val();
+					if(lptotpcode.length == 6){
+						setTimeout(function(e){
+							$('#totp-submit-button').click();
+						},300);
+					}
+				});
+			});
+		</script>
 	</body>	
 	</html>
 	<!-- END PHP TEMPLATE -->
