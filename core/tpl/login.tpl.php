@@ -28,6 +28,8 @@ if (empty($conf) || !is_object($conf)) { print "Error, template page can't be ca
 
 if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 
+	$moreparam = "";
+
 	// DDOS protection
 	$size = (empty($_SERVER['CONTENT_LENGTH']) ? 0 : (int) $_SERVER['CONTENT_LENGTH']);
 	if ($size > 10000) {

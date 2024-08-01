@@ -1142,12 +1142,6 @@ $calc_radius = intval(getDolGlobalInt('LOGINPLUS_BOX_RADIUS')) / 2;
         theme: 'polaroid',
     });
     Coloris.setInstance('.color-alpha', { alpha: true });
-
-    //
-    
-
-
-
 </script>
 
 <?php llxFooter(); $db->close(); ?>
