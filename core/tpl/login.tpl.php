@@ -75,10 +75,12 @@ if(getDolGlobalInt('LOGINPLUS_ACTIVELOGINTPL')):
 	$php_self = preg_replace('/(\?|&amp;|&)token=[^&]+/', '\1', $php_self);
 
 	// Javascript code on logon page only to detect user tz, dst_observed, dst_first, dst_second
-	$arrayofjs = array(
-		'/includes/jstz/jstz.min.js'.(empty($conf->dol_use_jmobile) ? '' : '?version='.urlencode(DOL_VERSION)),
-		'/core/js/dst.js'.(empty($conf->dol_use_jmobile) ? '' : '?version='.urlencode(DOL_VERSION))
-	);
+	// The jstz library was removed from Dolibarr 20.0 (dst.js no longer needs it): load it only where it still exists
+	$arrayofjs = array();
+	if (is_file(DOL_DOCUMENT_ROOT.'/includes/jstz/jstz.min.js')) {
+		$arrayofjs[] = '/includes/jstz/jstz.min.js'.(empty($conf->dol_use_jmobile) ? '' : '?version='.urlencode(DOL_VERSION));
+	}
+	$arrayofjs[] = '/core/js/dst.js'.(empty($conf->dol_use_jmobile) ? '' : '?version='.urlencode(DOL_VERSION));
 	$titleofloginpage = $langs->trans('Login').' @ '.$titletruedolibarrversion; // $titletruedolibarrversion is defined by dol_loginfunction in security2.lib.php. We must keep the @, some tools use it to know it is login page and find true dolibarr version.
 
 	$disablenofollow = 1;
